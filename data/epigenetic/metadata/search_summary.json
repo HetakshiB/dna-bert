@@ -1,0 +1,50 @@
+{
+  "K562": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  },
+  "HepG2": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  },
+  "CD14_monocytes": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  },
+  "ARPE19": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  },
+  "CD34_HSC": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  },
+  "iPSC": {
+    "H3K4me3": 0,
+    "H3K27ac": 0,
+    "H3K27me3": 0,
+    "H3K9me3": 0,
+    "ATAC-seq": 0,
+    "DNase-seq": 0
+  }
+}

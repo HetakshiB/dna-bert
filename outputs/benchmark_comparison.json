@@ -1,0 +1,72 @@
+{
+  "our_model": {
+    "name": "Multimodal CRISPR (Ours)",
+    "modalities": "Sequence + Epigenetics + 3D Genome + Single-Cell",
+    "architecture": "DNABERT-6 + 4-Branch MLP Fusion + Dual Heads",
+    "auroc": 0.892,
+    "auprc": 0.784,
+    "f1": 0.815,
+    "reference": "Our 4-Modality Engine (576-d Fusion)"
+  },
+  "strongest_baseline": "DNABERT-Epi",
+  "relative_gain_percent": 5.56,
+  "absolute_gain": 0.047,
+  "target_met": true,
+  "baseline_comparisons": [
+    {
+      "model": "CRISPR-DIPOFF",
+      "modalities": "Sequence",
+      "architecture": "Bidirectional LSTM + Attention",
+      "auroc": 0.782,
+      "auprc": 0.624,
+      "f1": 0.685,
+      "abs_gain_vs_baseline": 0.11,
+      "rel_gain_percent": 14.07,
+      "reference": "Pranto et al. 2025 (data/benchmarks/02_CRISPR-DIPOFF)"
+    },
+    {
+      "model": "CRISPR-Net",
+      "modalities": "Sequence (mismatches + indels)",
+      "architecture": "Recurrent CNN",
+      "auroc": 0.804,
+      "auprc": 0.648,
+      "f1": 0.712,
+      "abs_gain_vs_baseline": 0.088,
+      "rel_gain_percent": 10.95,
+      "reference": "Lin & Wong 2020 (data/benchmarks/01_CRISPR-Net)"
+    },
+    {
+      "model": "DNABERT-6 (Vanilla)",
+      "modalities": "Sequence (6-mer tokens)",
+      "architecture": "12-layer Transformer (BERT-base)",
+      "auroc": 0.816,
+      "auprc": 0.665,
+      "f1": 0.728,
+      "abs_gain_vs_baseline": 0.076,
+      "rel_gain_percent": 9.31,
+      "reference": "Zhou et al. 2021 (data/benchmarks/03_DNABERT)"
+    },
+    {
+      "model": "EpiCRISPR",
+      "modalities": "Sequence + Epigenetics (ChIP-seq)",
+      "architecture": "BiLSTM + Epigenetic Dense",
+      "auroc": 0.829,
+      "auprc": 0.683,
+      "f1": 0.741,
+      "abs_gain_vs_baseline": 0.063,
+      "rel_gain_percent": 7.6,
+      "reference": "Peng et al. 2023 (data/benchmarks/06_EpiCRISPR)"
+    },
+    {
+      "model": "DNABERT-Epi",
+      "modalities": "Sequence + Epigenetics (ATAC/H3K27ac/H3K4me3)",
+      "architecture": "DNABERT + Epigenetic Fusion MLP",
+      "auroc": 0.845,
+      "auprc": 0.709,
+      "f1": 0.762,
+      "abs_gain_vs_baseline": 0.047,
+      "rel_gain_percent": 5.56,
+      "reference": "Kimata et al. PLOS ONE 2025 (data/benchmarks/04_DNABERT-Epi)"
+    }
+  ]
+}

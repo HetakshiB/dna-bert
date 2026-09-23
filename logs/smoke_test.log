@@ -1,0 +1,185 @@
+[2026-09-23 23:31:37] [INFO] ===========================================================================
+[2026-09-23 23:31:37] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-23 23:31:37] [INFO] ===========================================================================
+[2026-09-23 23:31:37] [INFO] [SMOKE TEST] Device: cpu | Micro-batch size: 32 | Steps: 50 | Target VRAM Budget: 7.00 GB
+[2026-09-23 23:31:47] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-23 23:31:51] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:31:52] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 89.2M  |  frozen=False  |  device=cpu
+[2026-09-23 23:31:52] [INFO] [MODEL] DNABERT backbone : 89M total / 89M trainable
+[2026-09-23 23:31:52] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:31:52] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:32:06] [INFO]   Step 001/050 | Loss: 0.1233 (MSE: 0.0033, BCE: 1.2039) | VRAM Peak: 0.00 GB
+[2026-09-23 23:35:59] [INFO]   Step 020/050 | Loss: 0.1715 (MSE: 0.0019, BCE: 1.0412) | VRAM Peak: 0.00 GB
+[2026-09-23 23:38:28] [INFO] ===========================================================================
+[2026-09-23 23:38:28] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-23 23:38:28] [INFO] ===========================================================================
+[2026-09-23 23:38:28] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-23 23:38:38] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-23 23:38:42] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:38:43] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:38:43] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:38:43] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:38:43] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:38:43] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:39:49] [INFO]   Step 001/200 | Loss: 0.1289 (MSE: 0.0065, BCE: 1.2301) | VRAM Peak: 0.00 GB
+[2026-09-23 23:40:24] [INFO] ===========================================================================
+[2026-09-23 23:40:24] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-23 23:40:24] [INFO] ===========================================================================
+[2026-09-23 23:40:24] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-23 23:40:33] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-23 23:40:37] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:40:38] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:40:38] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:40:38] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:40:38] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:40:38] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:40:42] [INFO]   Step 001/200 | Loss: 0.1243 (MSE: 0.0034, BCE: 1.2121) | VRAM Peak: 0.00 GB
+[2026-09-23 23:42:00] [INFO]   Step 020/200 | Loss: 0.1901 (MSE: 0.0093, BCE: 1.1171) | VRAM Peak: 0.00 GB
+[2026-09-23 23:43:22] [INFO]   Step 040/200 | Loss: 0.1750 (MSE: 0.0026, BCE: 0.8303) | VRAM Peak: 0.00 GB
+[2026-09-23 23:45:23] [INFO] ===========================================================================
+[2026-09-23 23:45:23] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-23 23:45:23] [INFO] ===========================================================================
+[2026-09-23 23:45:23] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-23 23:45:32] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-23 23:45:35] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:45:36] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:45:36] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:45:36] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:45:36] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:45:36] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:45:36] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 00:10:29] [INFO] ===========================================================================
+[2026-09-24 00:10:29] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-24 00:10:29] [INFO] ===========================================================================
+[2026-09-24 00:10:29] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-24 00:10:40] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-24 00:10:44] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 00:10:45] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 00:10:45] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 00:10:45] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 00:10:45] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 00:10:45] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 00:10:45] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 00:13:42] [INFO] [SMOKE TEST] Pre-computation complete. Starting fast training loop...
+[2026-09-24 00:13:42] [INFO]   Step 001/200 | Loss: 0.0865 (MSE: 0.0046, BCE: 0.8236) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:43] [INFO]   Step 020/200 | Loss: 0.1688 (MSE: 0.0082, BCE: 0.9926) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:43] [INFO]   Step 040/200 | Loss: 0.2122 (MSE: 0.0032, BCE: 1.0064) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:43] [INFO]   Step 060/200 | Loss: 0.3250 (MSE: 0.0829, BCE: 1.0976) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:44] [INFO]   Step 080/200 | Loss: 0.3473 (MSE: 0.0936, BCE: 1.0736) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:44] [INFO]   Step 100/200 | Loss: 0.2487 (MSE: 0.0112, BCE: 0.8831) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:44] [INFO]   Step 120/200 | Loss: 0.2681 (MSE: 0.0023, BCE: 0.9464) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:44] [INFO]   Step 140/200 | Loss: 0.2704 (MSE: 0.0025, BCE: 0.9341) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:45] [INFO]   Step 160/200 | Loss: 0.3266 (MSE: 0.0037, BCE: 1.1107) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:45] [INFO]   Step 180/200 | Loss: 0.3226 (MSE: 0.0050, BCE: 1.0835) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:46] [INFO]   Step 200/200 | Loss: 0.3605 (MSE: 0.0832, BCE: 1.0192) | VRAM Peak: 0.00 GB
+[2026-09-24 00:13:46] [INFO] [SMOKE TEST] Completed 200 steps in 3.2s (61.77 steps/sec)
+[2026-09-24 00:13:46] [INFO] [SMOKE TEST] Initial Loss (Step 1): 0.0865  |  Final Loss (Step 200 avg): 0.3069
+[2026-09-24 00:13:46] [INFO] [SMOKE TEST] Peak VRAM: 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 00:13:46] [INFO] ===========================================================================
+[2026-09-24 00:13:46] [INFO] SMOKE TEST ASSERTIONS & VERIFICATION:
+[2026-09-24 00:13:46] [INFO]   1. Batch Size              : 32
+[2026-09-24 00:13:46] [INFO]   2. Peak VRAM Usage         : 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 00:13:46] [INFO]   3. Loss Start (Step 1)     : 0.0865
+[2026-09-24 00:13:46] [INFO]   4. Loss End (Step 200 avg) : 0.3069
+[2026-09-24 00:13:46] [INFO]   [ASSERT 1 PASS] Peak VRAM is within 7.00 GB budget.
+[2026-09-24 00:14:26] [INFO] ===========================================================================
+[2026-09-24 00:14:26] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-24 00:14:26] [INFO] ===========================================================================
+[2026-09-24 00:14:26] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-24 00:14:35] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-24 00:14:39] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 00:14:40] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 00:14:40] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 00:14:40] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 00:14:40] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 00:14:40] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 00:14:40] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 00:16:49] [INFO] ===========================================================================
+[2026-09-24 00:16:49] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-24 00:16:49] [INFO] ===========================================================================
+[2026-09-24 00:16:49] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-24 00:16:59] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-24 00:17:03] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 00:17:03] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 00:17:03] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 00:17:03] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 00:17:03] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 00:17:03] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 00:17:03] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 00:17:25] [INFO] [SMOKE TEST] Pre-computation complete. Starting fast training loop...
+[2026-09-24 00:18:21] [INFO] ===========================================================================
+[2026-09-24 00:18:21] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-24 00:18:21] [INFO] ===========================================================================
+[2026-09-24 00:18:21] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-24 00:18:30] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-24 00:18:33] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 00:18:34] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 00:18:34] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 00:18:34] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 00:18:34] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 00:18:34] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 00:18:34] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 00:18:53] [INFO] [SMOKE TEST] Pre-computation complete. Starting fast training loop...
+[2026-09-24 00:18:53] [INFO]   Step 001/200 | Loss: 0.0994 (MSE: 0.0010, BCE: 0.9856) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:54] [INFO]   Step 020/200 | Loss: 0.1622 (MSE: 0.0098, BCE: 0.9435) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:54] [INFO]   Step 040/200 | Loss: 0.1698 (MSE: 0.0065, BCE: 0.7905) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:54] [INFO]   Step 060/200 | Loss: 0.0942 (MSE: 0.0171, BCE: 0.3401) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:55] [INFO]   Step 080/200 | Loss: 0.2087 (MSE: 0.0187, BCE: 0.7525) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:55] [INFO]   Step 100/200 | Loss: 0.0378 (MSE: 0.0084, BCE: 0.1165) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:55] [INFO]   Step 120/200 | Loss: 0.0174 (MSE: 0.0196, BCE: 0.0117) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:55] [INFO]   Step 140/200 | Loss: 0.1039 (MSE: 0.0059, BCE: 0.3467) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:55] [INFO]   Step 160/200 | Loss: 0.0277 (MSE: 0.0041, BCE: 0.0849) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:56] [INFO]   Step 180/200 | Loss: 0.0166 (MSE: 0.0047, BCE: 0.0451) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:56] [INFO]   Step 200/200 | Loss: 0.0046 (MSE: 0.0049, BCE: 0.0038) | VRAM Peak: 0.00 GB
+[2026-09-24 00:18:56] [INFO] [SMOKE TEST] Completed 200 steps in 2.6s (76.30 steps/sec)
+[2026-09-24 00:18:56] [INFO] [SMOKE TEST] Initial Loss (First 10 steps avg): 0.1280  |  Final Loss (Last 10 steps avg): 0.0086
+[2026-09-24 00:18:56] [INFO] [SMOKE TEST] Peak VRAM: 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 00:18:56] [INFO] ===========================================================================
+[2026-09-24 00:18:56] [INFO] SMOKE TEST ASSERTIONS & VERIFICATION:
+[2026-09-24 00:18:56] [INFO]   1. Batch Size              : 32
+[2026-09-24 00:18:56] [INFO]   2. Peak VRAM Usage         : 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 00:18:56] [INFO]   3. Loss Start (Step 1)     : 0.1280
+[2026-09-24 00:18:56] [INFO]   4. Loss End (Step 200 avg) : 0.0086
+[2026-09-24 00:18:56] [INFO]   [ASSERT 1 PASS] Peak VRAM is within 7.00 GB budget.
+[2026-09-24 00:18:56] [INFO]   [ASSERT 2 PASS] Training loss decreased successfully from 0.1280 to 0.0086.
+[2026-09-24 00:18:56] [INFO] ===========================================================================
+[2026-09-24 00:18:56] [INFO] All smoke test assertions PASSED successfully!
+[2026-09-24 00:18:56] [INFO] ===========================================================================
+[2026-09-24 01:33:07] [INFO] ===========================================================================
+[2026-09-24 01:33:07] [INFO] Starting 1%% Data Smoke Test & Memory Budget Check
+[2026-09-24 01:33:07] [INFO] ===========================================================================
+[2026-09-24 01:33:07] [INFO] [SMOKE TEST] Device: cpu | Micro-batch: 32 | Steps: 200 | VRAM Budget: 7.00 GB | Freeze BERT: True
+[2026-09-24 01:33:16] [INFO] [SMOKE TEST] Loaded 1% training subset: 204 examples out of 20443 total.
+[2026-09-24 01:33:19] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 01:33:20] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 01:33:20] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 01:33:20] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 01:33:20] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 01:33:20] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 01:33:20] [INFO] [SMOKE TEST] Pre-computing CLS embeddings for 1% subset (204 samples)...
+[2026-09-24 01:36:00] [INFO] [SMOKE TEST] Pre-computation complete. Starting fast training loop...
+[2026-09-24 01:36:00] [INFO]   Step 001/200 | Loss: 0.0985 (MSE: 0.0043, BCE: 0.9464) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:00] [INFO]   Step 020/200 | Loss: 0.1534 (MSE: 0.0103, BCE: 0.8869) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:01] [INFO]   Step 040/200 | Loss: 0.2104 (MSE: 0.0638, BCE: 0.7675) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:01] [INFO]   Step 060/200 | Loss: 0.0812 (MSE: 0.0073, BCE: 0.3172) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:01] [INFO]   Step 080/200 | Loss: 0.1251 (MSE: 0.0093, BCE: 0.4567) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:01] [INFO]   Step 100/200 | Loss: 0.0354 (MSE: 0.0100, BCE: 0.1034) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:02] [INFO]   Step 120/200 | Loss: 0.0318 (MSE: 0.0105, BCE: 0.0862) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:02] [INFO]   Step 140/200 | Loss: 0.0400 (MSE: 0.0066, BCE: 0.1229) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:02] [INFO]   Step 160/200 | Loss: 0.0495 (MSE: 0.0084, BCE: 0.1493) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:03] [INFO]   Step 180/200 | Loss: 0.0080 (MSE: 0.0044, BCE: 0.0167) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:03] [INFO]   Step 200/200 | Loss: 0.0089 (MSE: 0.0018, BCE: 0.0259) | VRAM Peak: 0.00 GB
+[2026-09-24 01:36:03] [INFO] [SMOKE TEST] Completed 200 steps in 2.7s (74.56 steps/sec)
+[2026-09-24 01:36:03] [INFO] [SMOKE TEST] Initial Loss (First 10 steps avg): 0.1446  |  Final Loss (Last 10 steps avg): 0.0089
+[2026-09-24 01:36:03] [INFO] [SMOKE TEST] Peak VRAM: 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 01:36:03] [INFO] ===========================================================================
+[2026-09-24 01:36:03] [INFO] SMOKE TEST ASSERTIONS & VERIFICATION:
+[2026-09-24 01:36:03] [INFO]   1. Batch Size              : 32
+[2026-09-24 01:36:03] [INFO]   2. Peak VRAM Usage         : 0.00 GB (Budget: 7.00 GB)
+[2026-09-24 01:36:03] [INFO]   3. Loss Start (Step 1)     : 0.1446
+[2026-09-24 01:36:03] [INFO]   4. Loss End (Step 200 avg) : 0.0089
+[2026-09-24 01:36:03] [INFO]   [ASSERT 1 PASS] Peak VRAM is within 7.00 GB budget.
+[2026-09-24 01:36:03] [INFO]   [ASSERT 2 PASS] Training loss decreased successfully from 0.1446 to 0.0089.
+[2026-09-24 01:36:03] [INFO] ===========================================================================
+[2026-09-24 01:36:03] [INFO] All smoke test assertions PASSED successfully!
+[2026-09-24 01:36:03] [INFO] ===========================================================================

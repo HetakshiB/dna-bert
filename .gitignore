@@ -1,0 +1,34 @@
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Large binary checkpoints & tensor archives (>50-100MB, fetched on demand)
+models/dnabert-base/*.safetensors
+models/dnabert-base/*.bin
+models/dnabert-base/models--*
+outputs/*.pt
+outputs/checkpoints/*.pt
+outputs/tensors/*.pt
+
+# Track output figures and evaluation reports
+!outputs/*.png
+!outputs/*.json
+
+# Logs
+logs/tensorboard/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+*.swp

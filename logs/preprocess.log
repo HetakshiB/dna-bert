@@ -1,0 +1,264 @@
+[2026-09-23 21:21:55] [INFO] ================================================================================
+[2026-09-23 21:21:55] [INFO] Starting Dataset Inventory & Provenance Verification
+[2026-09-23 21:21:55] [INFO] Project Data Root: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data
+[2026-09-23 21:21:55] [INFO] Logging to       : C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\preprocess.log
+[2026-09-23 21:21:55] [INFO] ================================================================================
+[2026-09-23 21:21:55] [INFO] [EXISTS] sequence/crispr_offt.h5 (367.1 KB) - CRISPR-OFFT pre-trained weights (Lin & Wong 2018)
+[2026-09-23 21:21:55] [INFO] [EXISTS] sequence/crispr_offt_README.md (1.4 KB) - CRISPR-ONT/OFFT README notes
+[2026-09-23 21:21:55] [INFO] [EXISTS] sequence/test_offt.csv (60.0 B) - Validated off-target test split
+[2026-09-23 21:21:55] [INFO] [EXISTS] sequence/test_ont.csv (32.0 B) - Validated on-target test split
+[2026-09-23 21:21:55] [INFO] [EXISTS] sequence/crisprSQL_extracted/100720.csv (16.4 MB) - crisprSQL 25k guide-target pair table
+[2026-09-23 21:21:55] [INFO] [MISSING] epigenetic/metadata/celltypes_all.json - ENCODE metadata index across 6 cell types and 6 histone/chromatin marks
+[2026-09-23 21:21:55] [INFO] [EXISTS] epigenetic/metadata/search_summary.json (836.0 B) - ENCODE assay search summary counts
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_HiCCUPS_looplist.txt.gz (827.1 KB) - GM12878 chromatin loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_TAD_domains.txt.gz (242.3 KB) - GM12878 TAD domain calls (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_subcompartments.bed.gz (31.1 KB) - GM12878 A/B subcompartment annotations (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_K562_HiCCUPS_looplist.txt.gz (472.9 KB) - K562 chromatin loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_K562_TAD_domains.txt.gz (151.9 KB) - K562 TAD domain calls (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_HUVEC_loops.txt.gz (279.3 KB) - HUVEC loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_HUVEC_TADs.txt.gz (107.7 KB) - HUVEC TAD domains (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_IMR90_loops.txt.gz (657.7 KB) - IMR90 fibroblast loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] 3dgenome/GSE63525_IMR90_TADs.txt.gz (195.3 KB) - IMR90 fibroblast TADs (Rao et al. 2014 GSE63525)
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/pbmc_10k_v3_filtered_feature_bc_matrix.h5 (35.8 MB) - 10x Genomics PBMC 10k v3 filtered feature matrix
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/pbmc_1k_v3_filtered_feature_bc_matrix.h5 (5.1 MB) - 10x Genomics PBMC 1k v3 filtered feature matrix
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/pbmc_3k_filtered_gene_bc_matrices.tar.gz (7.3 MB) - 10x Genomics PBMC 3k filtered gene matrices (tar.gz)
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/atac_pbmc_5k_singlecell.csv (27.1 MB) - 10x Genomics PBMC 5k scATAC-seq cell summary
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/heart_1k_v3_filtered_feature_bc_matrix.h5 (5.1 MB) - 10x Genomics Heart 1k v3 filtered feature matrix
+[2026-09-23 21:21:55] [INFO] [MISSING] singlecell/GSE101498_RAW.tar - GEO GSE101498 raw cohort scRNA-seq
+[2026-09-23 21:21:55] [INFO] [EXISTS] singlecell/tabula_sapiens_data.html (60.2 KB) - Tabula Sapiens reference portal entry
+[2026-09-23 21:21:55] [INFO] [EXISTS] benchmarks/09_Genome_Refs/hg38.chrom.sizes (11.4 KB) - UCSC hg38 chromosome sizes table
+[2026-09-23 21:21:55] [INFO] [MISSING] benchmarks/10_Gencode/gencode.v44.primary_assembly.annotation.gtf.gz - GENCODE v44 human primary assembly annotations (~1.4 GB)
+[2026-09-23 21:21:55] [INFO] ================================================================================
+[2026-09-23 21:21:55] [INFO] Dataset Verification Summary:
+[2026-09-23 21:21:55] [INFO]   Total items checked     : 25
+[2026-09-23 21:21:55] [INFO]   Already present (cached): 22
+[2026-09-23 21:21:55] [INFO]   Successfully fetched    : 0
+[2026-09-23 21:21:55] [INFO]   Manual / Derived files  : 0
+[2026-09-23 21:21:55] [INFO]   Failed / Unreachable    : 3
+[2026-09-23 21:21:55] [INFO] ================================================================================
+[2026-09-23 21:21:55] [INFO] Full log written to: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\preprocess.log
+[2026-09-23 21:44:18] [INFO] ================================================================================
+[2026-09-23 21:44:18] [INFO] Starting Dataset Inventory & Provenance Verification
+[2026-09-23 21:44:18] [INFO] Project Data Root: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data
+[2026-09-23 21:44:18] [INFO] Logging to       : C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\preprocess.log
+[2026-09-23 21:44:18] [INFO] ================================================================================
+[2026-09-23 21:44:18] [INFO] [EXISTS] sequence/crispr_offt.h5 (367.1 KB) - CRISPR-OFFT pre-trained weights (Lin & Wong 2018)
+[2026-09-23 21:44:18] [INFO] [EXISTS] sequence/crispr_offt_README.md (1.4 KB) - CRISPR-ONT/OFFT README notes
+[2026-09-23 21:44:18] [INFO] [EXISTS] sequence/test_offt.csv (60.0 B) - Validated off-target test split
+[2026-09-23 21:44:18] [INFO] [EXISTS] sequence/test_ont.csv (32.0 B) - Validated on-target test split
+[2026-09-23 21:44:18] [INFO] [EXISTS] sequence/crisprSQL_extracted/100720.csv (16.4 MB) - crisprSQL 25k guide-target pair table
+[2026-09-23 21:44:18] [INFO] [SYNTHESIZING] epigenetic/metadata/celltypes_all.json from local ENCODE metadata...
+[2026-09-23 21:44:18] [INFO] [SYNTHESIZED] celltypes_all.json from 36 ENCODE metadata files.
+[2026-09-23 21:44:18] [INFO] [EXISTS] epigenetic/metadata/search_summary.json (836.0 B) - ENCODE assay search summary counts
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_HiCCUPS_looplist.txt.gz (827.1 KB) - GM12878 chromatin loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_TAD_domains.txt.gz (242.3 KB) - GM12878 TAD domain calls (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_GM12878_subcompartments.bed.gz (31.1 KB) - GM12878 A/B subcompartment annotations (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_K562_HiCCUPS_looplist.txt.gz (472.9 KB) - K562 chromatin loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_K562_TAD_domains.txt.gz (151.9 KB) - K562 TAD domain calls (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_HUVEC_loops.txt.gz (279.3 KB) - HUVEC loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_HUVEC_TADs.txt.gz (107.7 KB) - HUVEC TAD domains (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_IMR90_loops.txt.gz (657.7 KB) - IMR90 fibroblast loops (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] 3dgenome/GSE63525_IMR90_TADs.txt.gz (195.3 KB) - IMR90 fibroblast TADs (Rao et al. 2014 GSE63525)
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/pbmc_10k_v3_filtered_feature_bc_matrix.h5 (35.8 MB) - 10x Genomics PBMC 10k v3 filtered feature matrix
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/pbmc_1k_v3_filtered_feature_bc_matrix.h5 (5.1 MB) - 10x Genomics PBMC 1k v3 filtered feature matrix
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/pbmc_3k_filtered_gene_bc_matrices.tar.gz (7.3 MB) - 10x Genomics PBMC 3k filtered gene matrices (tar.gz)
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/atac_pbmc_5k_singlecell.csv (27.1 MB) - 10x Genomics PBMC 5k scATAC-seq cell summary
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/heart_1k_v3_filtered_feature_bc_matrix.h5 (5.1 MB) - 10x Genomics Heart 1k v3 filtered feature matrix
+[2026-09-23 21:44:18] [INFO] [MISSING] singlecell/GSE101498_RAW.tar - GEO GSE101498 raw cohort scRNA-seq
+[2026-09-23 21:44:18] [INFO] [EXISTS] singlecell/tabula_sapiens_data.html (60.2 KB) - Tabula Sapiens reference portal entry
+[2026-09-23 21:44:18] [INFO] [EXISTS] benchmarks/09_Genome_Refs/hg38.chrom.sizes (11.4 KB) - UCSC hg38 chromosome sizes table
+[2026-09-23 21:44:18] [INFO] [MISSING] benchmarks/10_Gencode/gencode.v44.primary_assembly.annotation.gtf.gz - GENCODE v44 human primary assembly annotations (~1.4 GB)
+[2026-09-23 21:44:18] [INFO] ================================================================================
+[2026-09-23 21:44:18] [INFO] Dataset Verification Summary:
+[2026-09-23 21:44:18] [INFO]   Total items checked     : 25
+[2026-09-23 21:44:18] [INFO]   Already present (cached): 23
+[2026-09-23 21:44:18] [INFO]   Successfully fetched    : 0
+[2026-09-23 21:44:18] [INFO]   Synthesized from local  : 1
+[2026-09-23 21:44:18] [INFO]   Manual / Derived files  : 0
+[2026-09-23 21:44:18] [INFO]   Failed / Unreachable    : 2
+[2026-09-23 21:44:18] [INFO] ================================================================================
+[2026-09-23 21:44:18] [INFO] Full log written to: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\preprocess.log
+[2026-09-23 22:10:48] [INFO] ======================================================================
+[2026-09-23 22:10:48] [INFO] CRISPR Off-Target Predictor — Sequence Preprocessing Pipeline
+[2026-09-23 22:10:48] [INFO] ======================================================================
+[2026-09-23 22:10:48] [INFO] [INIT] Loading DNABERT-6 tokenizer ...
+[2026-09-23 22:10:48] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 22:10:50] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 22:10:50] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 22:10:50] [INFO] [LOAD] Reading C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\sequence\crisprSQL_extracted\100720.csv ...
+[2026-09-23 22:10:50] [INFO] [LOAD] Raw shape: (25632, 29)
+[2026-09-23 22:10:50] [INFO] [CLEAN] Dropped 0 rows with missing/empty target_sequence.
+[2026-09-23 22:10:50] [INFO] [CLEAN] Dropped 78 rows with NaN cleavage_freq.
+[2026-09-23 22:10:50] [INFO] [CLEAN] Clipping 685 negative cleavage_freq values to 0.
+[2026-09-23 22:10:50] [INFO] [LOAD] Subsampled to 200 rows.
+[2026-09-23 22:10:51] [INFO] [LOAD] Clean shape: (200, 29)
+[2026-09-23 22:10:51] [INFO] [LABEL] 75th-pct threshold = 0.000286  |  high_eff=1: 50  |  high_eff=0: 150  (ratio 25.00%)
+[2026-09-23 22:10:51] [INFO] [TOKENISE] Tokenising 200 sequences (max_length=512) ...
+[2026-09-23 22:10:51] [INFO] [TOKENISE] Done. input_ids: (200, 512)  |  attention_mask: (200, 512)
+[2026-09-23 22:10:51] [INFO] [SAVE] Tensors written to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:10:51] [INFO]   input_ids.pt       : (200, 512)  dtype=torch.int64
+[2026-09-23 22:10:51] [INFO]   attention_mask.pt  : (200, 512)  dtype=torch.int64
+[2026-09-23 22:10:51] [INFO]   labels.pt          : (200,)  dtype=torch.int64
+[2026-09-23 22:10:51] [INFO]   cleavage_freq.pt   : (200,)  dtype=torch.float32
+[2026-09-23 22:10:51] [INFO]   meta.csv           : 200 rows
+[2026-09-23 22:10:51] [INFO] ------------------------------------------------------------
+[2026-09-23 22:10:51] [INFO] [TESTS] Running unit tests ...
+[2026-09-23 22:10:51] [INFO]   [TEST 1] PASS — No NaN in cleavage_freq.
+[2026-09-23 22:10:51] [INFO]   [TEST 2] PASS — No empty target_sequence.
+[2026-09-23 22:10:51] [INFO]   [TEST 3] PASS — high_eff is strictly binary {0, 1}.
+[2026-09-23 22:10:51] [INFO]   [TEST 4] PASS — input_ids shape (200, 512), all non-negative.
+[2026-09-23 22:10:51] [INFO]   [TEST 5] PASS — attention_mask is binary.
+[2026-09-23 22:10:51] [INFO]   [TEST 6] PASS — labels shape (200,).
+[2026-09-23 22:10:51] [INFO]   [TEST 7] PASS — CLS token attended in all rows.
+[2026-09-23 22:10:51] [INFO]   [TEST 8] PASS — cleavage_freq tensor has no NaN.
+[2026-09-23 22:10:51] [INFO]   [TEST 9] PASS — Label counts sum correctly: +50 / -150 = 200 rows.
+[2026-09-23 22:10:51] [INFO] ------------------------------------------------------------
+[2026-09-23 22:10:51] [INFO]   All 9 unit tests PASSED.
+[2026-09-23 22:10:51] [INFO] ======================================================================
+[2026-09-23 22:10:51] [INFO] Preprocessing complete. Tensors at: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:10:51] [INFO] ======================================================================
+[2026-09-23 22:11:16] [INFO] ======================================================================
+[2026-09-23 22:11:16] [INFO] CRISPR Off-Target Predictor — Sequence Preprocessing Pipeline
+[2026-09-23 22:11:16] [INFO] ======================================================================
+[2026-09-23 22:11:16] [INFO] [INIT] Loading DNABERT-6 tokenizer ...
+[2026-09-23 22:11:16] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 22:11:17] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 22:11:17] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 22:11:17] [INFO] [LOAD] Reading C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\sequence\crisprSQL_extracted\100720.csv ...
+[2026-09-23 22:11:18] [INFO] [LOAD] Raw shape: (25632, 29)
+[2026-09-23 22:11:18] [INFO] [CLEAN] Dropped 0 rows with missing/empty target_sequence.
+[2026-09-23 22:11:18] [INFO] [CLEAN] Dropped 78 rows with NaN cleavage_freq.
+[2026-09-23 22:11:18] [INFO] [CLEAN] Clipping 685 negative cleavage_freq values to 0.
+[2026-09-23 22:11:18] [INFO] [LOAD] Clean shape: (25554, 29)
+[2026-09-23 22:11:18] [INFO] [LABEL] 75th-pct threshold = 0.001841  |  high_eff=1: 6389  |  high_eff=0: 19165  (ratio 25.00%)
+[2026-09-23 22:11:18] [INFO] [TOKENISE] Tokenising 25554 sequences (max_length=512) ...
+[2026-09-23 22:11:32] [INFO] [TOKENISE] Done. input_ids: (25554, 512)  |  attention_mask: (25554, 512)
+[2026-09-23 22:11:33] [INFO] [SAVE] Tensors written to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:11:33] [INFO]   input_ids.pt       : (25554, 512)  dtype=torch.int64
+[2026-09-23 22:11:33] [INFO]   attention_mask.pt  : (25554, 512)  dtype=torch.int64
+[2026-09-23 22:11:33] [INFO]   labels.pt          : (25554,)  dtype=torch.int64
+[2026-09-23 22:11:33] [INFO]   cleavage_freq.pt   : (25554,)  dtype=torch.float32
+[2026-09-23 22:11:33] [INFO]   meta.csv           : 25554 rows
+[2026-09-23 22:11:33] [INFO] ------------------------------------------------------------
+[2026-09-23 22:11:33] [INFO] [TESTS] Running unit tests ...
+[2026-09-23 22:11:33] [INFO]   [TEST 1] PASS — No NaN in cleavage_freq.
+[2026-09-23 22:11:33] [INFO]   [TEST 2] PASS — No empty target_sequence.
+[2026-09-23 22:11:33] [INFO]   [TEST 3] PASS — high_eff is strictly binary {0, 1}.
+[2026-09-23 22:11:33] [INFO]   [TEST 4] PASS — input_ids shape (25554, 512), all non-negative.
+[2026-09-23 22:11:33] [INFO]   [TEST 5] PASS — attention_mask is binary.
+[2026-09-23 22:11:33] [INFO]   [TEST 6] PASS — labels shape (25554,).
+[2026-09-23 22:11:33] [INFO]   [TEST 7] PASS — CLS token attended in all rows.
+[2026-09-23 22:11:33] [INFO]   [TEST 8] PASS — cleavage_freq tensor has no NaN.
+[2026-09-23 22:11:33] [INFO]   [TEST 9] PASS — Label counts sum correctly: +6389 / -19165 = 25554 rows.
+[2026-09-23 22:11:33] [INFO] ------------------------------------------------------------
+[2026-09-23 22:11:33] [INFO]   All 9 unit tests PASSED.
+[2026-09-23 22:11:33] [INFO] ======================================================================
+[2026-09-23 22:11:33] [INFO] Preprocessing complete. Tensors at: C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:11:33] [INFO] ======================================================================
+[2026-09-23 22:41:37] [INFO] ========================================================================
+[2026-09-23 22:41:37] [INFO] CRISPR Off-Target Predictor — Multimodal Preprocessing Pipeline
+[2026-09-23 22:41:37] [INFO] ========================================================================
+[2026-09-23 22:41:37] [INFO] [INIT] Loading DNABERT-6 tokenizer ...
+[2026-09-23 22:41:37] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 22:41:37] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 22:41:37] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 22:41:37] [INFO] [LOAD] Reading C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\sequence\crisprSQL_extracted\100720.csv ...
+[2026-09-23 22:41:38] [INFO] [LOAD] Raw shape: (25632, 29)
+[2026-09-23 22:41:38] [INFO] [CLEAN] Dropped 0 rows with missing target_sequence.
+[2026-09-23 22:41:38] [INFO] [CLEAN] Dropped 78 rows with NaN cleavage_freq.
+[2026-09-23 22:41:38] [INFO] [CLEAN] Clipping 685 negative cleavage_freq values to 0.
+[2026-09-23 22:41:38] [INFO] [LOAD] Subsampled to 300 rows.
+[2026-09-23 22:41:38] [INFO] [LOAD] Clean shape: (300, 29)
+[2026-09-23 22:41:38] [INFO] [LABEL] threshold=0.000289 | +74 / -226 (24.7%)
+[2026-09-23 22:41:38] [INFO] [TOKENISE] 300 sequences (max_length=512) ...
+[2026-09-23 22:41:38] [INFO] [EPIGEN] Building epigenetic feature matrix (300 rows x 6 marks) ...
+[2026-09-23 22:41:38] [WARNING] [EPIGEN] No local bigWig files found. Returning zero vectors.
+[2026-09-23 22:41:38] [WARNING] [EPIGEN] Download bigWig files into data/epigenetic/bigwig/ using:
+[2026-09-23 22:41:38] [WARNING] [EPIGEN] python scripts/fetch_data.py and add bigWig URLs to DATASET_REGISTRY.
+[2026-09-23 22:41:38] [INFO] [EPIGEN] Done. shape=(300, 6), mean=-0.0000, std=0.7071
+[2026-09-23 22:41:38] [INFO] [3DGENOME] Loading Hi-C reference files ...
+[2026-09-23 22:41:38] [INFO] [3DGENOME] Loaded 23 chromosomes of loops, 23 of TADs, 22 of compartments.
+[2026-09-23 22:41:38] [INFO] [3DGENOME] Done. shape=(300, 8)
+[2026-09-23 22:41:38] [INFO] [SINGLECELL] Loading PBMC 10k atlas from C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\singlecell\pbmc_10k_v3_filtered_feature_bc_matrix.h5 ...
+[2026-09-23 22:41:44] [INFO] [SINGLECELL] Atlas genes: 33538 | Rows with gene_id: 204
+[2026-09-23 22:41:44] [INFO] [SINGLECELL] Done. Matched 157 / 300 rows to atlas genes.
+[2026-09-23 22:41:44] [INFO] [TESTS] Running 14 unit tests ...
+[2026-09-23 22:41:44] [INFO]   [T1 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T2 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T3 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T4 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T5 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T6 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T7 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T8 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T9 ] PASS
+[2026-09-23 22:41:44] [INFO]   [T10] PASS
+[2026-09-23 22:41:44] [INFO]   [T11] PASS
+[2026-09-23 22:41:44] [INFO]   [T12] PASS
+[2026-09-23 22:41:44] [INFO]   [T13] PASS
+[2026-09-23 22:41:44] [INFO]   [T14] PASS
+[2026-09-23 22:41:44] [INFO] ------------------------------------------------------------
+[2026-09-23 22:41:44] [INFO]   All 14 unit tests PASSED.
+[2026-09-23 22:41:44] [INFO] [SPLIT] Building 300 per-example feature dicts ...
+[2026-09-23 22:41:44] [INFO] [SPLIT] train=240  val=30  test=30
+[2026-09-23 22:41:44] [INFO] [SAVE] train.pt — 240 examples  |  high_eff=1: 59  |  high_eff=0: 181
+[2026-09-23 22:41:44] [INFO] [SAVE] val.pt — 30 examples  |  high_eff=1: 8  |  high_eff=0: 22
+[2026-09-23 22:41:44] [INFO] [SAVE] test.pt — 30 examples  |  high_eff=1: 7  |  high_eff=0: 23
+[2026-09-23 22:41:44] [INFO] [SAVE] All tensors and split files written to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:41:44] [INFO] ========================================================================
+[2026-09-23 22:41:44] [INFO] Multimodal preprocessing complete.
+[2026-09-23 22:41:44] [INFO]   outputs/tensors/train.pt  val.pt  test.pt
+[2026-09-23 22:41:44] [INFO] ========================================================================
+[2026-09-23 22:42:21] [INFO] ========================================================================
+[2026-09-23 22:42:21] [INFO] CRISPR Off-Target Predictor — Multimodal Preprocessing Pipeline
+[2026-09-23 22:42:21] [INFO] ========================================================================
+[2026-09-23 22:42:21] [INFO] [INIT] Loading DNABERT-6 tokenizer ...
+[2026-09-23 22:42:21] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 22:42:22] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 22:42:22] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 22:42:22] [INFO] [LOAD] Reading C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\sequence\crisprSQL_extracted\100720.csv ...
+[2026-09-23 22:42:22] [INFO] [LOAD] Raw shape: (25632, 29)
+[2026-09-23 22:42:22] [INFO] [CLEAN] Dropped 0 rows with missing target_sequence.
+[2026-09-23 22:42:22] [INFO] [CLEAN] Dropped 78 rows with NaN cleavage_freq.
+[2026-09-23 22:42:22] [INFO] [CLEAN] Clipping 685 negative cleavage_freq values to 0.
+[2026-09-23 22:42:22] [INFO] [LOAD] Clean shape: (25554, 29)
+[2026-09-23 22:42:22] [INFO] [LABEL] threshold=0.001841 | +6389 / -19165 (25.0%)
+[2026-09-23 22:42:22] [INFO] [TOKENISE] 25554 sequences (max_length=512) ...
+[2026-09-23 22:42:37] [INFO] [EPIGEN] Building epigenetic feature matrix (25554 rows x 6 marks) ...
+[2026-09-23 22:42:37] [WARNING] [EPIGEN] No local bigWig files found. Returning zero vectors.
+[2026-09-23 22:42:37] [WARNING] [EPIGEN] Download bigWig files into data/epigenetic/bigwig/ using:
+[2026-09-23 22:42:37] [WARNING] [EPIGEN] python scripts/fetch_data.py and add bigWig URLs to DATASET_REGISTRY.
+[2026-09-23 22:42:38] [INFO] [EPIGEN] Done. shape=(25554, 6), mean=-0.0000, std=0.7071
+[2026-09-23 22:42:38] [INFO] [3DGENOME] Loading Hi-C reference files ...
+[2026-09-23 22:42:38] [INFO] [3DGENOME] Loaded 23 chromosomes of loops, 23 of TADs, 22 of compartments.
+[2026-09-23 22:42:40] [INFO] [3DGENOME] Done. shape=(25554, 8)
+[2026-09-23 22:42:40] [INFO] [SINGLECELL] Loading PBMC 10k atlas from C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\data\singlecell\pbmc_10k_v3_filtered_feature_bc_matrix.h5 ...
+[2026-09-23 22:42:47] [INFO] [SINGLECELL] Atlas genes: 33538 | Rows with gene_id: 7047
+[2026-09-23 22:42:47] [INFO] [SINGLECELL] Done. Matched 5507 / 25554 rows to atlas genes.
+[2026-09-23 22:42:47] [INFO] [TESTS] Running 14 unit tests ...
+[2026-09-23 22:42:47] [INFO]   [T1 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T2 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T3 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T4 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T5 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T6 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T7 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T8 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T9 ] PASS
+[2026-09-23 22:42:47] [INFO]   [T10] PASS
+[2026-09-23 22:42:47] [INFO]   [T11] PASS
+[2026-09-23 22:42:47] [INFO]   [T12] PASS
+[2026-09-23 22:42:47] [INFO]   [T13] PASS
+[2026-09-23 22:42:47] [INFO]   [T14] PASS
+[2026-09-23 22:42:47] [INFO] ------------------------------------------------------------
+[2026-09-23 22:42:47] [INFO]   All 14 unit tests PASSED.
+[2026-09-23 22:42:47] [INFO] [SPLIT] Building 25554 per-example feature dicts ...
+[2026-09-23 22:42:47] [INFO] [SPLIT] train=20443  val=2555  test=2556
+[2026-09-23 22:42:54] [INFO] [SAVE] train.pt — 20443 examples  |  high_eff=1: 5111  |  high_eff=0: 15332
+[2026-09-23 22:42:55] [INFO] [SAVE] val.pt — 2555 examples  |  high_eff=1: 639  |  high_eff=0: 1916
+[2026-09-23 22:42:56] [INFO] [SAVE] test.pt — 2556 examples  |  high_eff=1: 639  |  high_eff=0: 1917
+[2026-09-23 22:42:57] [INFO] [SAVE] All tensors and split files written to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\tensors
+[2026-09-23 22:42:57] [INFO] ========================================================================
+[2026-09-23 22:42:57] [INFO] Multimodal preprocessing complete.
+[2026-09-23 22:42:57] [INFO]   outputs/tensors/train.pt  val.pt  test.pt
+[2026-09-23 22:42:57] [INFO] ========================================================================

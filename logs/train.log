@@ -1,0 +1,217 @@
+[2026-09-23 23:10:58] [INFO] ===========================================================================
+[2026-09-23 23:10:58] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-23 23:10:58] [INFO] ===========================================================================
+[2026-09-23 23:10:58] [INFO] Target Training Device: cpu
+[2026-09-23 23:11:16] [INFO] [SMOKE TEST] Subsampled datasets to train=128, val=64, test=64
+[2026-09-23 23:11:16] [INFO] DataLoader ready: train_samples=128, batches=4, steps_per_epoch=2
+[2026-09-23 23:11:21] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:11:22] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:11:22] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:11:22] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:11:22] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:11:22] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:11:22] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-23 23:11:22] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:11:22] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-23 23:11:22] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:11:22] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 2 (warmup: 1)
+[2026-09-23 23:13:55] [INFO] ===========================================================================
+[2026-09-23 23:13:55] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-23 23:13:55] [INFO] ===========================================================================
+[2026-09-23 23:13:55] [INFO] Target Training Device: cpu
+[2026-09-23 23:14:07] [INFO] [SMOKE TEST] Subsampled datasets to train=128, val=64, test=64
+[2026-09-23 23:14:07] [INFO] DataLoader ready: train_samples=128, batches=4, steps_per_epoch=2
+[2026-09-23 23:14:11] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:14:11] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:14:11] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:14:11] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:14:11] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:14:11] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:14:11] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-23 23:14:11] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:14:11] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-23 23:14:11] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:14:11] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 2 (warmup: 1)
+[2026-09-23 23:16:45] [INFO] ===========================================================================
+[2026-09-23 23:16:45] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-23 23:16:45] [INFO] ===========================================================================
+[2026-09-23 23:16:45] [INFO] Target Training Device: cpu
+[2026-09-23 23:16:57] [INFO] [SMOKE TEST] Subsampled datasets to train=128, val=64, test=64
+[2026-09-23 23:16:57] [INFO] DataLoader ready: train_samples=128, batches=4, steps_per_epoch=2
+[2026-09-23 23:17:01] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:17:01] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:17:01] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:17:01] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:17:01] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:17:01] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:17:01] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-23 23:17:01] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:17:01] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-23 23:17:01] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:17:01] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 2 (warmup: 1)
+[2026-09-23 23:21:27] [INFO] ===========================================================================
+[2026-09-23 23:21:27] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-23 23:21:27] [INFO] ===========================================================================
+[2026-09-23 23:21:27] [INFO] Target Training Device: cpu
+[2026-09-23 23:21:39] [INFO] [SMOKE TEST] Subsampled datasets to train=64, val=32, test=32 (seq_len=64)
+[2026-09-23 23:21:39] [INFO] DataLoader ready: train_samples=64, batches=2, steps_per_epoch=1
+[2026-09-23 23:21:42] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:21:43] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:21:43] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:21:43] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:21:43] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:21:43] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:21:43] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-23 23:21:43] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:21:43] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-23 23:21:43] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:21:43] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:21:54] [INFO] Epoch 01/03 (Stage 0) [8.3s] | Train Loss: 0.1560 (MSE: 0.0055, BCE: 0.9520) | Val Loss: 0.3432 | Pearson R: 0.0059 | ROC-AUC: 0.5700 | PR-AUC: 0.4176 | F1: 0.4390
+[2026-09-23 23:21:55] [INFO]   --> Saved best model checkpoint (Val Loss: 0.3432) to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\best_model.pt
+[2026-09-23 23:21:55] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:21:55] [INFO] STAGE 1 START | Epochs: 2..2 (1 epochs) | Backbone LR: 2.000000e-05 | Head LR: 5.000000e-04
+[2026-09-23 23:21:55] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:21:55] [INFO] Optimizer initialized: 86 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:22:11] [INFO] Epoch 02/03 (Stage 1) [13.6s] | Train Loss: 0.2707 (MSE: 0.0060, BCE: 0.9446) | Val Loss: 0.3669 | Pearson R: 0.0059 | ROC-AUC: 0.5700 | PR-AUC: 0.4176 | F1: 0.4390
+[2026-09-23 23:22:11] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:22:11] [INFO] STAGE 2 START | Epochs: 3..3 (1 epochs) | Backbone LR: 3.000000e-05 | Head LR: 3.000000e-04
+[2026-09-23 23:22:11] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:22:11] [INFO] Optimizer initialized: 221 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:22:40] [INFO] Epoch 03/03 (Stage 2) [25.9s] | Train Loss: 0.2856 (MSE: 0.0057, BCE: 0.9465) | Val Loss: 0.3701 | Pearson R: 0.0059 | ROC-AUC: 0.5700 | PR-AUC: 0.4176 | F1: 0.4390
+[2026-09-23 23:22:40] [INFO] Saved final model checkpoint to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\final_model.pt
+[2026-09-23 23:22:40] [INFO] ===========================================================================
+[2026-09-23 23:22:40] [INFO] Evaluating Best Model on Test Set...
+[2026-09-23 23:22:44] [INFO] TEST RESULTS:
+[2026-09-23 23:22:44] [INFO]   Test Loss    : 0.2563
+[2026-09-23 23:22:44] [INFO]   Test RMSE    : 0.0619
+[2026-09-23 23:22:44] [INFO]   Pearson R    : -0.3573
+[2026-09-23 23:22:44] [INFO]   ROC-AUC      : 0.4253
+[2026-09-23 23:22:44] [INFO]   PR-AUC       : 0.0748
+[2026-09-23 23:22:44] [INFO]   F1 Score     : 0.1714
+[2026-09-23 23:22:44] [INFO] ===========================================================================
+[2026-09-23 23:25:07] [INFO] ===========================================================================
+[2026-09-23 23:25:07] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-23 23:25:07] [INFO] ===========================================================================
+[2026-09-23 23:25:07] [INFO] Target Training Device: cpu
+[2026-09-23 23:25:18] [INFO] [SMOKE TEST] Subsampled datasets to train=64, val=32, test=32 (seq_len=64)
+[2026-09-23 23:25:18] [INFO] DataLoader ready: train_samples=64, batches=2, steps_per_epoch=1
+[2026-09-23 23:25:22] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:25:23] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-23 23:25:23] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-23 23:25:23] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-23 23:25:23] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:25:23] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:25:23] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-23 23:25:23] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:23] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-23 23:25:23] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:23] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:25:34] [INFO] Epoch 01/03 (Stage 0) [8.1s] | Train Loss: 0.1425 (MSE: 0.0023, BCE: 0.9362) | Val Loss: 0.3380 | RMSE: 0.2410 | AUROC: 0.4493 | PR-AUC: 0.2345 | F1: 0.3704
+[2026-09-23 23:25:35] [INFO]   --> Saved resumable best model (Val Loss: 0.3380) to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\model_best.pt
+[2026-09-23 23:25:35] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:35] [INFO] STAGE 1 START | Epochs: 1..2 (1 epochs) | Backbone LR: 2.000000e-05 | Head LR: 5.000000e-04
+[2026-09-23 23:25:35] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:35] [INFO] Optimizer initialized: 86 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:25:51] [INFO] Epoch 01/03 (Stage 1) [13.0s] | Train Loss: 0.2649 (MSE: 0.0012, BCE: 0.9374) | Val Loss: 0.3620 | RMSE: 0.2410 | AUROC: 0.4493 | PR-AUC: 0.2345 | F1: 0.3704
+[2026-09-23 23:25:51] [INFO]   [EARLY STOPPING] Patience counter: 1/3 (Best Val Loss: 0.3380)
+[2026-09-23 23:25:51] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:51] [INFO] STAGE 2 START | Epochs: 1..3 (1 epochs) | Backbone LR: 3.000000e-05 | Head LR: 3.000000e-04
+[2026-09-23 23:25:51] [INFO] ---------------------------------------------------------------------------
+[2026-09-23 23:25:51] [INFO] Optimizer initialized: 221 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-23 23:26:18] [INFO] Epoch 01/03 (Stage 2) [24.1s] | Train Loss: 0.2790 (MSE: 0.0020, BCE: 0.9334) | Val Loss: 0.3653 | RMSE: 0.2410 | AUROC: 0.4493 | PR-AUC: 0.2345 | F1: 0.3704
+[2026-09-23 23:26:19] [INFO]   [EARLY STOPPING] Patience counter: 2/3 (Best Val Loss: 0.3380)
+[2026-09-23 23:26:20] [INFO] Saved final model checkpoint to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\final_model.pt
+[2026-09-23 23:26:20] [INFO] Running Stage-2 Stochastic Weight Averaging (SWA)...
+[2026-09-23 23:26:20] [INFO] ===========================================================================
+[2026-09-23 23:26:20] [INFO] [SWA] Starting Stochastic Weight Averaging over 1 Stage-2 checkpoints...
+[2026-09-23 23:26:20] [INFO] [SWA] Loading checkpoint 1/1: epoch_01.pt
+[2026-09-23 23:26:20] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-23 23:26:22] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 89.2M  |  frozen=False  |  device=cpu
+[2026-09-23 23:26:22] [INFO] [MODEL] DNABERT backbone : 89M total / 89M trainable
+[2026-09-23 23:26:22] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-23 23:26:22] [INFO] [MODEL] Grand total       : 89M
+[2026-09-23 23:26:22] [INFO] [SWA] Updating LayerNorm/BatchNorm statistics with pass over training set...
+[2026-09-23 23:26:33] [INFO] [SWA] Statistics update complete.
+[2026-09-23 23:26:33] [INFO] Saved SWA model to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\swa_model.pt
+[2026-09-23 23:26:33] [INFO] ===========================================================================
+[2026-09-23 23:26:33] [INFO] Evaluating SWA Model on Test Set...
+[2026-09-23 23:26:36] [INFO] SWA TEST RESULTS:
+[2026-09-23 23:26:36] [INFO]   Test Loss    : 0.2471
+[2026-09-23 23:26:36] [INFO]   Test RMSE    : 0.0226
+[2026-09-23 23:26:36] [INFO]   Pearson R    : -0.1377
+[2026-09-23 23:26:36] [INFO]   ROC-AUC      : 0.6092
+[2026-09-23 23:26:36] [INFO]   PR-AUC       : 0.4351
+[2026-09-23 23:26:36] [INFO]   F1 Score     : 0.1667
+[2026-09-23 23:26:36] [INFO] ===========================================================================
+[2026-09-23 23:26:36] [INFO] Evaluating Best Model (model_best.pt) on Test Set...
+[2026-09-23 23:26:40] [INFO] BEST MODEL TEST RESULTS:
+[2026-09-23 23:26:40] [INFO]   Test Loss    : 0.2471
+[2026-09-23 23:26:40] [INFO]   Test RMSE    : 0.0226
+[2026-09-23 23:26:40] [INFO]   Pearson R    : -0.1377
+[2026-09-23 23:26:40] [INFO]   ROC-AUC      : 0.6092
+[2026-09-23 23:26:40] [INFO]   PR-AUC       : 0.4351
+[2026-09-23 23:26:40] [INFO]   F1 Score     : 0.1667
+[2026-09-23 23:26:40] [INFO] ===========================================================================
+[2026-09-24 01:41:37] [INFO] ===========================================================================
+[2026-09-24 01:41:37] [INFO] Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training
+[2026-09-24 01:41:37] [INFO] ===========================================================================
+[2026-09-24 01:41:37] [INFO] Target Training Device: cpu
+[2026-09-24 01:41:51] [INFO] [SMOKE TEST] Subsampled datasets to train=64, val=32, test=32 (seq_len=64)
+[2026-09-24 01:41:51] [INFO] DataLoader ready: train_samples=64, batches=2, steps_per_epoch=1
+[2026-09-24 01:41:55] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 01:41:56] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 01:41:56] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 01:41:56] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 01:41:56] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 01:41:56] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 01:41:56] [INFO] Training Schedule: 3 total epochs across 3 stages.
+[2026-09-24 01:41:56] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:41:56] [INFO] STAGE 0 START | Epochs: 1..1 (1 epochs) | Backbone LR: 0.000000e+00 | Head LR: 1.000000e-03
+[2026-09-24 01:41:56] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:41:56] [INFO] Optimizer initialized: 22 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-24 01:42:11] [INFO] Epoch 01/03 (Stage 0) [11.1s] | Train Loss: 0.1648 (MSE: 0.0040, BCE: 0.9267) | Val Loss: 0.3451 | RMSE: 0.2611 | AUROC: 0.5990 | PR-AUC: 0.3307 | F1: 0.1667
+[2026-09-24 01:42:12] [INFO]   --> Saved resumable best model (Val Loss: 0.3451) to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\model_best.pt
+[2026-09-24 01:42:12] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:42:12] [INFO] STAGE 1 START | Epochs: 1..2 (1 epochs) | Backbone LR: 2.000000e-05 | Head LR: 5.000000e-04
+[2026-09-24 01:42:12] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:42:12] [INFO] Optimizer initialized: 86 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-24 01:42:29] [INFO] Epoch 01/03 (Stage 1) [13.6s] | Train Loss: 0.2644 (MSE: 0.0041, BCE: 0.9308) | Val Loss: 0.3688 | RMSE: 0.2611 | AUROC: 0.5990 | PR-AUC: 0.3307 | F1: 0.1667
+[2026-09-24 01:42:30] [INFO]   [EARLY STOPPING] Patience counter: 1/3 (Best Val Loss: 0.3451)
+[2026-09-24 01:42:30] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:42:30] [INFO] STAGE 2 START | Epochs: 1..3 (1 epochs) | Backbone LR: 3.000000e-05 | Head LR: 3.000000e-04
+[2026-09-24 01:42:30] [INFO] ---------------------------------------------------------------------------
+[2026-09-24 01:42:30] [INFO] Optimizer initialized: 221 parameter groups. Stage steps: 1 (warmup: 1)
+[2026-09-24 01:42:59] [INFO] Epoch 01/03 (Stage 2) [26.0s] | Train Loss: 0.2795 (MSE: 0.0049, BCE: 0.9274) | Val Loss: 0.3720 | RMSE: 0.2611 | AUROC: 0.5990 | PR-AUC: 0.3307 | F1: 0.1667
+[2026-09-24 01:43:01] [INFO]   [EARLY STOPPING] Patience counter: 2/3 (Best Val Loss: 0.3451)
+[2026-09-24 01:43:01] [INFO] Saved final model checkpoint to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\final_model.pt
+[2026-09-24 01:43:01] [INFO] Running Stage-2 Stochastic Weight Averaging (SWA)...
+[2026-09-24 01:43:01] [INFO] ===========================================================================
+[2026-09-24 01:43:01] [INFO] [SWA] Starting Stochastic Weight Averaging over 1 Stage-2 checkpoints...
+[2026-09-24 01:43:02] [INFO] [SWA] Loading checkpoint 1/1: epoch_01.pt
+[2026-09-24 01:43:02] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 01:43:03] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 89.2M  |  frozen=False  |  device=cpu
+[2026-09-24 01:43:03] [INFO] [MODEL] DNABERT backbone : 89M total / 89M trainable
+[2026-09-24 01:43:03] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 01:43:03] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 01:43:04] [INFO] [SWA] Updating LayerNorm/BatchNorm statistics with pass over training set...
+[2026-09-24 01:43:18] [INFO] [SWA] Statistics update complete.
+[2026-09-24 01:43:19] [INFO] Saved SWA model to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\checkpoints\swa_model.pt
+[2026-09-24 01:43:19] [INFO] ===========================================================================
+[2026-09-24 01:43:19] [INFO] Evaluating SWA Model on Test Set...
+[2026-09-24 01:43:23] [INFO] SWA TEST RESULTS:
+[2026-09-24 01:43:23] [INFO]   Test Loss    : 0.2478
+[2026-09-24 01:43:23] [INFO]   Test RMSE    : 0.0570
+[2026-09-24 01:43:23] [INFO]   Pearson R    : 0.2522
+[2026-09-24 01:43:23] [INFO]   ROC-AUC      : 0.1609
+[2026-09-24 01:43:23] [INFO]   PR-AUC       : 0.0539
+[2026-09-24 01:43:23] [INFO]   F1 Score     : 0.0000
+[2026-09-24 01:43:23] [INFO] ===========================================================================
+[2026-09-24 01:43:23] [INFO] Evaluating Best Model (model_best.pt) on Test Set...
+[2026-09-24 01:43:30] [INFO] BEST MODEL TEST RESULTS:
+[2026-09-24 01:43:30] [INFO]   Test Loss    : 0.2478
+[2026-09-24 01:43:30] [INFO]   Test RMSE    : 0.0570
+[2026-09-24 01:43:30] [INFO]   Pearson R    : 0.2522
+[2026-09-24 01:43:30] [INFO]   ROC-AUC      : 0.1609
+[2026-09-24 01:43:30] [INFO]   PR-AUC       : 0.0539
+[2026-09-24 01:43:30] [INFO]   F1 Score     : 0.0000
+[2026-09-24 01:43:30] [INFO] ===========================================================================
