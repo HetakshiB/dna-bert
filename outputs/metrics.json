@@ -1,28 +1,28 @@
 {
   "regression": {
-    "rmse": 0.149347,
-    "pearson_r": -0.200849
+    "rmse": 0.129619,
+    "pearson_r": -0.082503
   },
   "classification": {
-    "auroc": 0.392463,
-    "auprc": 0.227543,
-    "f1_at_0.5": 0.193548,
-    "brier_score": 0.247161
+    "auroc": 0.380117,
+    "auprc": 0.149006,
+    "f1_at_0.5": 0.26506,
+    "brier_score": 0.25171
   },
   "checkpoint_used": "C:\\Users\\dhana\\OneDrive\\Desktop\\AI_CRISPR Project\\outputs\\model_best.pt",
   "test_samples": 100,
   "attribution_summary": {
     "sequence": {
-      "top_seq_cls_dim": 640,
-      "top_seq_cls_attr": 0.002870583441108465
+      "top_seq_cls_dim": 95,
+      "top_seq_cls_attr": 0.002884896704927087
     },
     "epigenetic_3d": {
       "top_epigenetic_mark": "H3K4me3",
-      "top_epigenetic_shap": 0.00011737851068852901,
+      "top_epigenetic_shap": 0.0001424837502995658,
       "top_3dgenome_feature": "tad_dist",
-      "top_3dgenome_shap": 0.0024668124599109614,
+      "top_3dgenome_shap": 0.003787693372957226,
       "mean_epigenetic_shap": {
-        "H3K4me3": 0.00011737851068852901,
+        "H3K4me3": 0.0001424837502995658,
         "H3K27ac": 0.0,
         "H3K27me3": 0.0,
         "H3K9me3": 0.0,
@@ -30,14 +30,14 @@
         "DNase-seq": 0.0
       },
       "mean_3dgenome_shap": {
-        "loop_count": 0.000701616610065758,
-        "tad_dist": 0.0024668124599109614,
-        "A1": 2.7471738106981834e-05,
-        "A2": 0.0001641450976249711,
-        "B1": 0.0002808924381171517,
-        "B2": 3.78170665004925e-05,
-        "B3": 5.534740884007557e-05,
-        "NA": 0.00021249452658976927
+        "loop_count": 0.0009530740439166291,
+        "tad_dist": 0.003787693372957226,
+        "A1": 0.00011554583487241186,
+        "A2": 9.750419093072978e-05,
+        "B1": 8.504386313929e-05,
+        "B2": 0.00013217338786580555,
+        "B3": 0.00011578203913626829,
+        "NA": 0.0004017777855579394
       }
     }
   }

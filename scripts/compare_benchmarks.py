@@ -28,6 +28,8 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import torch
+from torch.utils.tensorboard import SummaryWriter
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
@@ -203,6 +205,50 @@ def run_benchmark_comparison() -> Dict[str, Any]:
     fig.savefig(BENCHMARK_PLOT, dpi=300)
     plt.close(fig)
     log.info("Saved benchmark comparison figure to %s", BENCHMARK_PLOT)
+
+    # -------------------------------------------------------------
+    # TensorBoard Logging
+    # -------------------------------------------------------------
+    try:
+        tb_log_dir = PROJECT_ROOT / "logs" / "tensorboard"
+        tb_writer = SummaryWriter(log_dir=str(tb_log_dir))
+
+        # 1. Scalars
+        tb_writer.add_scalar("Benchmarks/Relative_AUROC_Gain_Pct", relative_gain, 0)
+        tb_writer.add_scalar("Benchmarks/Absolute_AUROC_Gain", absolute_gain, 0)
+        tb_writer.add_scalar("Benchmarks/Target_AUROC", our_auroc, 0)
+        tb_writer.add_scalar("Benchmarks/Strongest_Baseline_AUROC", strongest_baseline_auroc, 0)
+
+        for r in comparison_records:
+            model_tag = r["model"].replace(" ", "_").replace("(", "").replace(")", "")
+            tb_writer.add_scalar(f"Benchmarks/AUROC/{model_tag}", r["auroc"], 0)
+            tb_writer.add_scalar(f"Benchmarks/AUPRC/{model_tag}", r["auprc"], 0)
+            tb_writer.add_scalar(f"Benchmarks/F1/{model_tag}", r["f1"], 0)
+
+        # 2. Image
+        img_arr = plt.imread(str(BENCHMARK_PLOT))
+        img_tensor = torch.from_numpy(img_arr).float()
+        if img_tensor.ndim == 3:
+            img_tensor = img_tensor.permute(2, 0, 1)[:3]
+            if img_tensor.max() > 1.0:
+                img_tensor = img_tensor / 255.0
+            tb_writer.add_image("Benchmarks/Baseline_Comparison_Plot", img_tensor, 0)
+
+        # 3. Markdown Text Table
+        md_table = "### Benchmark Comparison vs Published State-of-the-Art Baselines\n\n"
+        md_table += "| Model | Modalities | Architecture | AUROC | AUPRC | F1 | Gain vs Ours |\n"
+        md_table += "| :--- | :--- | :--- | :---: | :---: | :---: | :---: |\n"
+        for r in comparison_records:
+            md_table += f"| **{r['model']}** | {r['modalities']} | {r['architecture']} | {r['auroc']:.4f} | {r['auprc']:.4f} | {r['f1']:.4f} | +{r['rel_gain_percent']:.1f}% |\n"
+        md_table += f"| **{OUR_MULTIMODAL_MODEL['name']}** | {OUR_MULTIMODAL_MODEL['modalities']} | {OUR_MULTIMODAL_MODEL['architecture']} | **{OUR_MULTIMODAL_MODEL['auroc']:.4f}** | **{OUR_MULTIMODAL_MODEL['auprc']:.4f}** | **{OUR_MULTIMODAL_MODEL['f1']:.4f}** | **(Ours)** |\n\n"
+        md_table += f"**Key Finding**: Relative AUROC gain over strongest baseline (`{strongest_baseline_name}`) is **+{relative_gain:.2f}%** (target >= +5.0% met: **{relative_gain >= 5.0}**).\n"
+
+        tb_writer.add_text("Benchmarks/Comparison_Report", md_table, 0)
+        tb_writer.flush()
+        tb_writer.close()
+        log.info("Successfully logged benchmark comparisons and plots to TensorBoard (%s)", tb_log_dir)
+    except Exception as tb_err:
+        log.warning("TensorBoard logging failed for benchmark comparison: %s", tb_err)
 
     return output_data
 

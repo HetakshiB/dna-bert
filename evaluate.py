@@ -57,12 +57,32 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 TENSOR_DIR = PROJECT_ROOT / "outputs" / "tensors"
 OUTPUT_DIR = PROJECT_ROOT / "outputs"
 LOG_DIR = PROJECT_ROOT / "logs"
+TB_DIR = LOG_DIR / "tensorboard"
 BEST_MODEL_PATH = OUTPUT_DIR / "model_best.pt"
 FALLBACK_CKPT_PATH = OUTPUT_DIR / "checkpoints" / "best_model.pt"
 METRICS_JSON_PATH = OUTPUT_DIR / "metrics.json"
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)
+TB_DIR.mkdir(parents=True, exist_ok=True)
+
+from torch.utils.tensorboard import SummaryWriter
+
+def log_image_to_tb(writer: SummaryWriter, tag: str, img_path: Path) -> None:
+    """Read an image from disk and log as [C, H, W] tensor in TensorBoard."""
+    if not img_path.exists():
+        return
+    try:
+        arr = plt.imread(str(img_path))
+        if arr.dtype == np.uint8:
+            t = torch.from_numpy(arr).float() / 255.0
+        else:
+            t = torch.from_numpy(arr).float()
+        if t.ndim == 3 and t.shape[-1] in (3, 4):
+            t = t.permute(2, 0, 1)[:3]  # take RGB channels
+        writer.add_image(tag, t)
+    except Exception as e:
+        log.warning("[TB] Could not log image %s: %s", img_path.name, e)
 
 # ---------------------------------------------------------------------------
 # Logging Setup
@@ -556,6 +576,53 @@ def main() -> None:
 
     with open(METRICS_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(metrics_summary, f, indent=2)
+
+    # 7. Comprehensive TensorBoard Logging
+    tb_writer = SummaryWriter(log_dir=str(TB_DIR))
+
+    # (a) Log Scalars
+    tb_writer.add_scalar("Evaluation/RMSE", metrics_summary["regression"]["rmse"])
+    tb_writer.add_scalar("Evaluation/Pearson_R", metrics_summary["regression"]["pearson_r"])
+    tb_writer.add_scalar("Evaluation/AUROC", metrics_summary["classification"]["auroc"])
+    tb_writer.add_scalar("Evaluation/AUPRC", metrics_summary["classification"]["auprc"])
+    tb_writer.add_scalar("Evaluation/F1_at_0.5", metrics_summary["classification"]["f1_at_0.5"])
+    tb_writer.add_scalar("Evaluation/Brier_Score", metrics_summary["classification"]["brier_score"])
+
+    # (b) Log PR Curve
+    try:
+        tb_writer.add_pr_curve("Evaluation/PR_Curve", results["cls_targets"], results["cls_probs"])
+    except Exception as e:
+        log.warning("[TB] Could not log PR curve: %s", e)
+
+    # (c) Log Images
+    log_image_to_tb(tb_writer, "Evaluation/Plots/01_Reliability_Diagram", OUTPUT_DIR / "reliability_diagram.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/02_Sequence_Integrated_Gradients", OUTPUT_DIR / "attribution_seq.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/03_Epigenetic_and_3D_Genome_SHAP", OUTPUT_DIR / "attribution_epigen_3d.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/04_Benchmark_Comparison", OUTPUT_DIR / "benchmark_comparison.png")
+
+    # (d) Log Markdown Summaries
+    eval_markdown = f"""### Multimodal CRISPR Evaluation Summary
+- **Test Samples**: {len(test_ds)}
+- **Checkpoint Used**: `{ckpt_path.name}`
+
+| Task | Metric | Value |
+|---|---|---|
+| **Regression** | RMSE | {metrics_summary['regression']['rmse']:.4f} |
+| **Regression** | Pearson r | {metrics_summary['regression']['pearson_r']:.4f} |
+| **Classification** | AUROC | {metrics_summary['classification']['auroc']:.4f} |
+| **Classification** | AUPRC | {metrics_summary['classification']['auprc']:.4f} |
+| **Classification** | F1 @ 0.5 | {metrics_summary['classification']['f1_at_0.5']:.4f} |
+| **Calibration** | Brier Score | {metrics_summary['classification']['brier_score']:.4f} |
+
+#### Key Attribution Insights
+- **Top Sequence Hidden Dimension**: Dim {seq_attr_summary['top_seq_cls_dim']} (Mean |Attribution| = {seq_attr_summary['top_seq_cls_attr']:.6f})
+- **Top Epigenetic Mark**: `{shap_attr_summary['top_epigenetic_mark']}` (Mean |SHAP| = {shap_attr_summary['top_epigenetic_shap']:.6f})
+- **Top 3D Structural Feature**: `{shap_attr_summary['top_3dgenome_feature']}` (Mean |SHAP| = {shap_attr_summary['top_3dgenome_shap']:.6f})
+"""
+    tb_writer.add_text("Evaluation/Summary_Report", eval_markdown)
+    tb_writer.flush()
+    tb_writer.close()
+    log.info("[TB] Successfully logged metrics, PR curve, images, and text report to TensorBoard (%s)", TB_DIR)
 
     log.info("=" * 75)
     log.info("Successfully exported evaluation summary to %s", METRICS_JSON_PATH)

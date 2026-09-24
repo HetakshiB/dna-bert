@@ -568,13 +568,24 @@ def train(
             )
 
             # TensorBoard Logging
-            tb_writer.add_scalar("Loss/train", train_loss, current_epoch)
-            tb_writer.add_scalar("Loss/val", val_metrics["val_loss"], current_epoch)
+            tb_writer.add_scalar("Loss/train_total", train_loss, current_epoch)
+            tb_writer.add_scalar("Loss/val_total", val_metrics["val_loss"], current_epoch)
+            tb_writer.add_scalar("Loss_Components/train_mse", train_mse, current_epoch)
+            tb_writer.add_scalar("Loss_Components/train_bce", train_bce, current_epoch)
+            tb_writer.add_scalar("Loss_Components/val_mse", val_metrics["val_mse"], current_epoch)
+            tb_writer.add_scalar("Loss_Components/val_bce", val_metrics["val_bce"], current_epoch)
             tb_writer.add_scalar("Metrics/val_rmse", val_metrics["rmse"], current_epoch)
             tb_writer.add_scalar("Metrics/val_auroc", val_metrics["roc_auc"], current_epoch)
             tb_writer.add_scalar("Metrics/val_pr_auc", val_metrics["pr_auc"], current_epoch)
             tb_writer.add_scalar("Metrics/val_f1", val_metrics["f1"], current_epoch)
-            tb_writer.add_scalar("Learning_Rate", current_lr, current_epoch)
+            tb_writer.add_scalar("Hyperparameters/learning_rate", current_lr, current_epoch)
+            tb_writer.add_scalar("Hyperparameters/stage", stage_id, current_epoch)
+
+            # Parameter Histograms for trainable heads
+            for p_name, param in model.named_parameters():
+                if param.requires_grad and "dnabert" not in p_name:
+                    clean_name = p_name.replace(".", "/")
+                    tb_writer.add_histogram(f"Parameters/{clean_name}", param.data, current_epoch)
 
             # CSV Logging
             log_metrics_to_csv(CSV_METRICS_PATH, {
@@ -684,6 +695,21 @@ def train(
     log.info("  F1 Score     : %.4f", test_metrics["f1"])
     log.info("=" * 75)
 
+    # TensorBoard Training Summary
+    train_summary_md = f"""### Multimodal CRISPR Training Complete
+- **Final Epochs Completed**: {current_epoch}
+- **Device**: `{device}`
+- **Best Model Checkpoint**: `{BEST_MODEL_PATH.name}`
+
+| Model Evaluated | Test Loss | Test RMSE | Pearson r | Test AUROC | Test AUPRC | Test F1 |
+|---|---|---|---|---|---|---|
+| **Best Model** | {test_metrics['val_loss']:.4f} | {test_metrics['rmse']:.4f} | {test_metrics['pearson_r']:.4f} | {test_metrics['roc_auc']:.4f} | {test_metrics['pr_auc']:.4f} | {test_metrics['f1']:.4f} |
+"""
+    if enable_swa and 'swa_test_metrics' in locals():
+        train_summary_md += f"| **SWA Model** | {swa_test_metrics['val_loss']:.4f} | {swa_test_metrics['rmse']:.4f} | {swa_test_metrics['pearson_r']:.4f} | {swa_test_metrics['roc_auc']:.4f} | {swa_test_metrics['pr_auc']:.4f} | {swa_test_metrics['f1']:.4f} |\n"
+
+    tb_writer.add_text("Summary/Training_Report", train_summary_md)
+    tb_writer.flush()
     tb_writer.close()
 
 

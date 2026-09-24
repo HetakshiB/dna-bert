@@ -183,6 +183,9 @@ python evaluate.py --sample 100
 
 # 5. Run Benchmark Comparison against Published Baselines
 python scripts/compare_benchmarks.py
+
+# 6. Launch Real-time Interactive TensorBoard Dashboard
+tensorboard --logdir logs/tensorboard --port 6006
 ```
 
 ### Windows PowerShell:
@@ -192,7 +195,19 @@ python scripts/test_dataloaders.py
 python train.py --smoke-test
 python evaluate.py --sample 100
 python scripts/compare_benchmarks.py
+tensorboard --logdir logs/tensorboard --port 6006
 ```
+
+### Interactive TensorBoard Visual Dashboard:
+Every model run writes scalars, histograms, precision-recall curves, high-resolution plots, and Markdown text reports directly to `logs/tensorboard/`. Launching `tensorboard --logdir logs/tensorboard --port 6006` unlocks 5 specialized visual tabs:
+
+| TensorBoard Tab | Logged Content | Purpose |
+| :--- | :--- | :--- |
+| **IMAGES** | `Evaluation/Plots/*` (Reliability Diagram, Integrated Gradients, SHAP, Benchmark Bar Chart) | Inspect high-resolution publication-quality figures directly in the browser. |
+| **SCALARS** | Multi-task losses (`train_total`, `val_total`, `MSE`, `BCE`), validation metrics (`RMSE`, `AUROC`, `AUPRC`, `F1`), and `learning_rate` schedule | Monitor loss convergence, over-fitting prevention, and dynamic learning rate decays across all 3 training stages. |
+| **HISTOGRAMS** | Layer weights & biases (`fusion`, `fc_reg`, `fc_cls`, `bn_*`) | Track weight distributions and gradient stability throughout training to prevent dead neurons. |
+| **PR CURVES** | `Evaluation/PR_Curve` | Interactive slider to evaluate precision-recall trade-offs at varying classification probability cutoffs. |
+| **TEXT** | `Summary/Training_Report`, `Evaluation/Summary_Report`, `Benchmarks/Comparison_Report` | Full Markdown experiment metadata, device specs, hyperparameter configs, and delta-gain assertions vs. baselines. |
 
 ### Custom Scale Full Training:
 ```bash
