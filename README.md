@@ -13,12 +13,12 @@ A multimodal CRISPR off-target safety engine that unifies **four biological sign
 
 | 1. Baseline Benchmark Comparison | 2. Reliability & Calibration Diagram |
 | :---: | :---: |
-| ![Benchmark Comparison](outputs/benchmark_comparison.png) | ![Reliability Diagram](outputs/reliability_diagram.png) |
+| ![Benchmark Comparison](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/benchmark_comparison.png) | ![Reliability Diagram](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/reliability_diagram.png) |
 | *Multimodal model achieves **0.8920 AUROC (+5.56% gain)** over the best published baseline (DNABERT-Epi 0.8450).* | *10-bin calibration curve measuring predicted probabilities vs. empirical positive fraction (Brier Score: 0.2472).* |
 
 | 3. Sequence Integrated Gradients Attribution | 4. Epigenetic & 3D Genome SHAP Attributions |
 | :---: | :---: |
-| ![Sequence Attribution](outputs/attribution_seq.png) | ![Epigenetic and 3D SHAP](outputs/attribution_epigen_3d.png) |
+| ![Sequence Attribution](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/attribution_seq.png) | ![Epigenetic and 3D SHAP](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/attribution_epigen_3d.png) |
 | *Captum Integrated Gradients attributions identifying top sequence hidden dimensions driving Cas9 off-target cleavage.* | *KernelExplainer SHAP values quantifying relative importance across 6 ENCODE marks and 8 Hi-C topological features.* |
 
 ---
