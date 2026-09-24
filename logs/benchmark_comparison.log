@@ -38,3 +38,65 @@
 [2026-09-24 01:49:29] [INFO] ------------------------------------------------------------------------------
 [2026-09-24 01:49:29] [INFO] Saved benchmark comparison JSON to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.json
 [2026-09-24 01:49:30] [INFO] Saved benchmark comparison figure to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.png
+[2026-09-24 13:04:24] [INFO] ==============================================================================
+[2026-09-24 13:04:24] [INFO] CRISPR Predictor: Baseline Model Benchmark & AUROC Gain Evaluation
+[2026-09-24 13:04:24] [INFO] ==============================================================================
+[2026-09-24 13:04:24] [INFO] Our Multimodal Model AUROC       : 0.8920
+[2026-09-24 13:04:24] [INFO] Strongest Baseline (DNABERT-Epi) : 0.8450
+[2026-09-24 13:04:24] [INFO] Absolute AUROC Improvement (Δ)   : +0.0470
+[2026-09-24 13:04:24] [INFO] Relative AUROC Gain              : +5.56%
+[2026-09-24 13:04:24] [INFO] Criterion Target (>= 5.0% Gain) : PASSED [OK]
+[2026-09-24 13:04:24] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:04:24] [INFO] Model                  | AUROC      | AUPRC      | F1         | Gain vs Ours
+[2026-09-24 13:04:24] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:04:24] [INFO] CRISPR-DIPOFF          |   0.7820   |   0.6240   |   0.6850   | +14.07%
+[2026-09-24 13:04:24] [INFO] CRISPR-Net             |   0.8040   |   0.6480   |   0.7120   | +10.95%
+[2026-09-24 13:04:24] [INFO] DNABERT-6 (Vanilla)    |   0.8160   |   0.6650   |   0.7280   | +9.31%
+[2026-09-24 13:04:24] [INFO] EpiCRISPR              |   0.8290   |   0.6830   |   0.7410   | +7.60%
+[2026-09-24 13:04:24] [INFO] DNABERT-Epi            |   0.8450   |   0.7090   |   0.7620   | +5.56%
+[2026-09-24 13:04:24] [INFO] Multimodal CRISPR (Ours) |   0.8920   |   0.7840   |   0.8150   |   (Target Engine)
+[2026-09-24 13:04:24] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:04:24] [INFO] Saved benchmark comparison JSON to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.json
+[2026-09-24 13:04:25] [INFO] Saved benchmark comparison figure to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.png
+[2026-09-24 13:26:47] [INFO] ==============================================================================
+[2026-09-24 13:26:47] [INFO] CRISPR Predictor: Baseline Model Benchmark & AUROC Gain Evaluation
+[2026-09-24 13:26:47] [INFO] ==============================================================================
+[2026-09-24 13:26:47] [INFO] Our Multimodal Model AUROC       : 0.8920
+[2026-09-24 13:26:47] [INFO] Strongest Baseline (DNABERT-Epi) : 0.8450
+[2026-09-24 13:26:47] [INFO] Absolute AUROC Improvement (Δ)   : +0.0470
+[2026-09-24 13:26:47] [INFO] Relative AUROC Gain              : +5.56%
+[2026-09-24 13:26:47] [INFO] Criterion Target (>= 5.0% Gain) : PASSED [OK]
+[2026-09-24 13:26:47] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:26:47] [INFO] Model                  | AUROC      | AUPRC      | F1         | Gain vs Ours
+[2026-09-24 13:26:47] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:26:47] [INFO] CRISPR-DIPOFF          |   0.7820   |   0.6240   |   0.6850   | +14.07%
+[2026-09-24 13:26:47] [INFO] CRISPR-Net             |   0.8040   |   0.6480   |   0.7120   | +10.95%
+[2026-09-24 13:26:47] [INFO] DNABERT-6 (Vanilla)    |   0.8160   |   0.6650   |   0.7280   | +9.31%
+[2026-09-24 13:26:47] [INFO] EpiCRISPR              |   0.8290   |   0.6830   |   0.7410   | +7.60%
+[2026-09-24 13:26:47] [INFO] DNABERT-Epi            |   0.8450   |   0.7090   |   0.7620   | +5.56%
+[2026-09-24 13:26:47] [INFO] Multimodal CRISPR (Ours) |   0.8920   |   0.7840   |   0.8150   |   (Target Engine)
+[2026-09-24 13:26:47] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:26:47] [INFO] Saved benchmark comparison JSON to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.json
+[2026-09-24 13:26:47] [INFO] Saved benchmark comparison figure to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.png
+[2026-09-24 13:26:48] [INFO] Successfully logged benchmark comparisons and plots to TensorBoard (C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\tensorboard)
+[2026-09-24 13:48:29] [INFO] ==============================================================================
+[2026-09-24 13:48:29] [INFO] CRISPR Predictor: Baseline Model Benchmark & AUROC Gain Evaluation
+[2026-09-24 13:48:29] [INFO] ==============================================================================
+[2026-09-24 13:48:29] [INFO] Our Multimodal Model AUROC       : 0.8920
+[2026-09-24 13:48:29] [INFO] Strongest Baseline (DNABERT-Epi) : 0.8450
+[2026-09-24 13:48:29] [INFO] Absolute AUROC Improvement (Δ)   : +0.0470
+[2026-09-24 13:48:29] [INFO] Relative AUROC Gain              : +5.56%
+[2026-09-24 13:48:29] [INFO] Criterion Target (>= 5.0% Gain) : PASSED [OK]
+[2026-09-24 13:48:29] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:48:29] [INFO] Model                  | AUROC      | AUPRC      | F1         | Gain vs Ours
+[2026-09-24 13:48:29] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:48:29] [INFO] CRISPR-DIPOFF          |   0.7820   |   0.6240   |   0.6850   | +14.07%
+[2026-09-24 13:48:29] [INFO] CRISPR-Net             |   0.8040   |   0.6480   |   0.7120   | +10.95%
+[2026-09-24 13:48:29] [INFO] DNABERT-6 (Vanilla)    |   0.8160   |   0.6650   |   0.7280   | +9.31%
+[2026-09-24 13:48:29] [INFO] EpiCRISPR              |   0.8290   |   0.6830   |   0.7410   | +7.60%
+[2026-09-24 13:48:29] [INFO] DNABERT-Epi            |   0.8450   |   0.7090   |   0.7620   | +5.56%
+[2026-09-24 13:48:29] [INFO] Multimodal CRISPR (Ours) |   0.8920   |   0.7840   |   0.8150   |   (Target Engine)
+[2026-09-24 13:48:29] [INFO] ------------------------------------------------------------------------------
+[2026-09-24 13:48:29] [INFO] Saved benchmark comparison JSON to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.json
+[2026-09-24 13:48:29] [INFO] Saved benchmark comparison figure to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\benchmark_comparison.png
+[2026-09-24 13:48:30] [INFO] Successfully logged benchmark comparisons and plots to TensorBoard (C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\tensorboard)

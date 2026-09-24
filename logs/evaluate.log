@@ -626,3 +626,914 @@
 [2026-09-24 01:48:06] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
 [2026-09-24 01:48:06] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
 [2026-09-24 01:48:06] [INFO] ===========================================================================
+[2026-09-24 13:00:19] [INFO] ===========================================================================
+[2026-09-24 13:00:19] [INFO] Starting Multimodal CRISPR Predictor Full Evaluation & Attribution
+[2026-09-24 13:00:19] [INFO] ===========================================================================
+[2026-09-24 13:00:19] [INFO] [EVAL] Loading model checkpoint from C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\model_best.pt ...
+[2026-09-24 13:00:22] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 13:00:23] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 13:00:23] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 13:00:23] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 13:00:23] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 13:00:23] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 13:00:24] [INFO] [EVAL] Model loaded successfully onto cpu.
+[2026-09-24 13:00:25] [INFO] [EVAL] Subsampled test split to 100 examples.
+[2026-09-24 13:01:40] [INFO] [EVAL] Saved reliability diagram to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:01:40] [INFO] ===========================================================================
+[2026-09-24 13:01:40] [INFO] QUANTITATIVE TEST METRICS:
+[2026-09-24 13:01:40] [INFO]   Regression  : RMSE = 0.1397 | Pearson r = 0.0867
+[2026-09-24 13:01:40] [INFO]   Classification: AUROC = 0.4379 | AUPRC = 0.2406 | F1@0.5 = 0.3220 | Brier = 0.2586
+[2026-09-24 13:01:40] [INFO] ===========================================================================
+[2026-09-24 13:01:40] [INFO] [ATTRIBUTION] Computing Integrated Gradients on sequence branch (50 samples)...
+[2026-09-24 13:02:20] [INFO] [ATTRIBUTION] Saved sequence attribution plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:02:20] [INFO] [SHAP] Computing SHAP values on Epigenetic & 3D Genome branches...
+[2026-09-24 13:03:53] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([-9.64989762e-04,  5.89241087e-04,  3.05974483e-04,  1.10739718e-04,
+        7.43903220e-05, -3.23736668e-04])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([-5.36297758e-04,  1.31456504e-03, -2.53173212e-05,  1.41466409e-04,
+       -8.00738732e-05, -4.10348177e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([-3.05433323e-04,  1.54221480e-03, -2.70751615e-05,  1.50989989e-04,
+       -2.35920896e-04, -4.64707613e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 2.20920841e-04,  1.00485057e-03, -4.62291638e-05, -1.21070663e-03,
+        1.30188515e-04,  3.64542504e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 2.52411664e-04,  6.92851742e-04, -2.62904664e-05,  1.59176836e-04,
+       -2.66218285e-04,  0.00000000e+00])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 2.53740450e-04,  1.86798722e-03, -3.22063764e-05,  1.64500872e-04,
+       -3.02002827e-04,  9.60528851e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([-4.55888609e-05,  1.38917093e-03, -2.50423948e-05,  1.57031169e-04,
+       -3.08884432e-04, -1.01208687e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([-6.12772803e-04,  1.20414118e-03, -3.66812448e-05, -9.88044540e-04,
+        1.13027096e-04, -1.82020615e-04])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:54] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:54] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:54] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:03:54] [INFO] phi = array([-8.20809772e-04,  6.75335630e-04, -7.23720270e-04, -2.44939588e-05,
+        8.80458817e-05,  3.66689510e-05, -9.88134644e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:54] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:54] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:54] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:54] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-6.77055369e-04,  4.09360975e-04, -2.74896622e-05,  1.24229242e-04,
+        4.79218860e-05, -2.59631872e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:55] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:55] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:55] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-1.19045756e-03,  1.05229156e-04, -6.10078944e-04, -3.58631036e-05,
+        8.76192146e-05, -3.10308613e-05, -2.06245453e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-2.41859183e-03,  1.07068146e-03,  2.23253916e-04,  8.29840700e-05,
+        2.85185874e-05, -3.27000022e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-3.12729180e-04,  1.44266089e-03, -2.64498095e-05,  1.50278956e-04,
+       -2.34253208e-04, -5.65975904e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:55] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:55] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:55] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:03:55] [INFO] phi = array([-7.07451473e-04,  6.45892183e-04, -4.45823192e-05,  1.24512643e-04,
+       -5.42064592e-04,  9.46375811e-05, -1.34628128e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-1.02901484e-03,  9.65121140e-04,  3.07535877e-04,  1.09747797e-04,
+        9.17404890e-05, -2.84200907e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:55] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:55] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:55] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([-8.14562544e-04,  6.82807270e-04, -3.88921856e-05,  1.17318687e-04,
+       -5.09171336e-04,  1.03735574e-04, -1.35615963e-04])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:55] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:55] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:55] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:55] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 1
+[2026-09-24 13:03:56] [INFO] remaining_weight_vector = array([0.39215686, 0.31372549, 0.29411765])
+[2026-09-24 13:03:56] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:56] [INFO] weight_left = np.float64(0.559228650137741)
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(8.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([-1.46038434e-03, -5.29891776e-04,  5.58290925e-04, -7.24434451e-04,
+       -5.31088742e-05,  3.86967343e-05,  0.00000000e+00, -2.44470619e-04])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([-6.03385965e-04,  5.12183507e-04, -2.45198111e-05,  1.35021210e-04,
+        0.00000000e+00, -1.75466090e-04])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:56] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:56] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:56] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999997)
+[2026-09-24 13:03:56] [INFO] phi = array([-4.40748066e-04,  8.46055908e-04, -8.45018327e-04, -2.77215787e-05,
+        9.36621984e-05,  6.72530433e-05, -5.99355155e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:56] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:56] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:56] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:03:56] [INFO] phi = array([-3.53765049e-04,  1.03318119e-03, -3.80032258e-05,  1.27260364e-04,
+       -6.90917157e-04,  1.35855886e-04, -5.04770779e-05])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 2
+[2026-09-24 13:03:56] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:03:56] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:03:56] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.999999999999998)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:03:56] [INFO] phi = array([-7.93087539e-04,  9.53681953e-04, -2.81786315e-05,  1.12531628e-04,
+       -5.37036326e-04,  9.59509354e-05, -1.20544477e-04])
+[2026-09-24 13:03:56] [INFO] num_full_subsets = 3
+[2026-09-24 13:03:56] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:03:56] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:03:56] [INFO] phi = array([ 1.43400629e-04, -8.01852047e-04,  0.00000000e+00,  1.08137031e-04,
+        7.15243816e-05,  3.77126535e-05])
+[2026-09-24 13:03:57] [INFO] [SHAP] Saved epigenetic & 3D genome SHAP plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:03:57] [INFO] ===========================================================================
+[2026-09-24 13:03:57] [INFO] Successfully exported evaluation summary to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\metrics.json
+[2026-09-24 13:03:57] [INFO] Generated Plots:
+[2026-09-24 13:03:57] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:03:57] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:03:57] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:03:57] [INFO] ===========================================================================
+[2026-09-24 13:22:55] [INFO] ===========================================================================
+[2026-09-24 13:22:55] [INFO] Starting Multimodal CRISPR Predictor Full Evaluation & Attribution
+[2026-09-24 13:22:55] [INFO] ===========================================================================
+[2026-09-24 13:22:55] [INFO] [EVAL] Loading model checkpoint from C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\model_best.pt ...
+[2026-09-24 13:23:00] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 13:23:01] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 13:23:01] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 13:23:01] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 13:23:01] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 13:23:01] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 13:23:02] [INFO] [EVAL] Model loaded successfully onto cpu.
+[2026-09-24 13:23:04] [INFO] [EVAL] Subsampled test split to 100 examples.
+[2026-09-24 13:24:25] [INFO] [EVAL] Saved reliability diagram to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:24:25] [INFO] ===========================================================================
+[2026-09-24 13:24:25] [INFO] QUANTITATIVE TEST METRICS:
+[2026-09-24 13:24:25] [INFO]   Regression  : RMSE = 0.1296 | Pearson r = -0.0825
+[2026-09-24 13:24:25] [INFO]   Classification: AUROC = 0.3801 | AUPRC = 0.1490 | F1@0.5 = 0.2651 | Brier = 0.2517
+[2026-09-24 13:24:25] [INFO] ===========================================================================
+[2026-09-24 13:24:25] [INFO] [ATTRIBUTION] Computing Integrated Gradients on sequence branch (50 samples)...
+[2026-09-24 13:25:08] [INFO] [ATTRIBUTION] Saved sequence attribution plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:25:08] [INFO] [SHAP] Computing SHAP values on Epigenetic & 3D Genome branches...
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([ 2.04026736e-03, -1.70811228e-03, -8.36511826e-04, -6.84453795e-05,
+       -1.35314465e-04,  4.08609211e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([ 1.87586670e-03, -5.70225368e-03,  3.62752626e-05, -8.65867982e-05,
+       -3.26837103e-05,  5.40593266e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([ 1.39360035e-03, -6.22134378e-03,  4.08443809e-05, -7.02327242e-05,
+        0.00000000e+00,  5.50493523e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:25] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:25] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:25] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:25] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.86991633e-04, -5.12595711e-03,  2.32937435e-05,  5.14320408e-04,
+       -1.25807151e-04,  5.12897968e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.67219680e-04, -3.11336371e-03,  0.00000000e+00, -7.53237804e-05,
+       -4.44699600e-04,  4.48619549e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.43773572e-04, -6.16285592e-03,  2.33998895e-05, -5.47830264e-05,
+        0.00000000e+00,  4.95266517e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 8.47222780e-04, -5.58775105e-03,  3.32331906e-05, -5.46557208e-05,
+       -8.22706769e-05,  5.37225604e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 1.92020610e-03, -5.37479942e-03,  4.91853803e-05,  5.95772763e-04,
+       -1.59513578e-04,  5.36182523e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.999999999999999)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:26:26] [INFO] phi = array([ 1.52701427e-03, -4.67724325e-03, -1.44576554e-03,  6.41401130e-05,
+       -5.59289502e-05, -1.16027894e-04,  4.27064744e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 2.35336311e-03, -2.90661765e-03,  2.74511675e-05, -8.31093639e-05,
+       -3.91370927e-04,  4.55115736e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.999999999999998)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999997)
+[2026-09-24 13:26:26] [INFO] phi = array([ 2.11120505e-03, -2.00393879e-03, -1.60846096e-03,  7.13824055e-05,
+       -7.64724673e-05, -1.62678141e-05,  4.04047577e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 2.40505127e-03, -2.61584185e-03, -9.76307814e-04, -8.65026067e-05,
+       -1.81941440e-04,  3.92410159e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 1.40637656e-03, -5.98648041e-03,  3.76387189e-05, -7.04858452e-05,
+       -2.11015344e-05,  5.43540716e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:26:26] [INFO] phi = array([ 1.36594587e-03, -5.22125627e-03,  0.00000000e+00, -6.69093206e-05,
+       -1.66261642e-03, -2.02913781e-04,  6.06890358e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 2.01697896e-03, -2.84187620e-03, -8.61172875e-04, -8.11116149e-05,
+       -1.68353940e-04,  4.10854816e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:26:26] [INFO] phi = array([ 1.51390018e-03, -5.36721740e-03,  1.86537793e-05, -7.72360098e-05,
+       -1.66348566e-03, -2.23129352e-04,  6.20784146e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 1
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([0.39215686, 0.31372549, 0.29411765])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.559228650137741)
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(7.999999999999998)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:26:26] [INFO] phi = array([-0.00712419,  0.00196002, -0.00299447, -0.0013563 ,  0.00016179,
+       -0.00010882, -0.00014392,  0.00039528])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:26] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:26] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:26] [INFO] phi = array([ 2.19667281e-03, -3.33354647e-03,  2.53630181e-05, -8.55291883e-05,
+       -3.75558684e-04,  4.58414853e-04])
+[2026-09-24 13:26:26] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:26] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:26] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:26] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(6.999999999999998)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:26:27] [INFO] phi = array([ 1.08293241e-03, -5.44769736e-03, -1.36676060e-03,  3.73794624e-05,
+       -6.03449441e-05, -1.27899913e-04,  3.97666893e-04])
+[2026-09-24 13:26:27] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:27] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:27] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:27] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:27] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:27] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:27] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:27] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999996)
+[2026-09-24 13:26:27] [INFO] phi = array([ 1.02817518e-03, -6.55223683e-03,  2.00940143e-05, -8.75892288e-05,
+       -1.60791634e-03, -2.35294311e-04,  5.97614078e-04])
+[2026-09-24 13:26:27] [INFO] num_full_subsets = 2
+[2026-09-24 13:26:27] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:26:27] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:26:27] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:26:27] [INFO] phi = array([ 1.49889523e-03, -6.19409355e-03,  2.97053809e-05, -1.04533487e-04,
+       -1.67465098e-03, -2.31384536e-04,  6.14752363e-04])
+[2026-09-24 13:26:27] [INFO] num_full_subsets = 3
+[2026-09-24 13:26:27] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:26:27] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:26:27] [INFO] phi = array([-5.31448921e-04,  3.24985236e-03,  5.17719736e-05, -5.81895312e-05,
+        8.18499674e-05, -3.35674733e-04])
+[2026-09-24 13:26:27] [INFO] [SHAP] Saved epigenetic & 3D genome SHAP plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:26:29] [INFO] [TB] Successfully logged metrics, PR curve, images, and text report to TensorBoard (C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\tensorboard)
+[2026-09-24 13:26:29] [INFO] ===========================================================================
+[2026-09-24 13:26:29] [INFO] Successfully exported evaluation summary to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\metrics.json
+[2026-09-24 13:26:29] [INFO] Generated Plots:
+[2026-09-24 13:26:29] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:26:29] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:26:29] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:26:29] [INFO] ===========================================================================
+[2026-09-24 13:45:05] [INFO] ===========================================================================
+[2026-09-24 13:45:05] [INFO] Starting Multimodal CRISPR Predictor Full Evaluation & Attribution
+[2026-09-24 13:45:05] [INFO] ===========================================================================
+[2026-09-24 13:45:05] [INFO] [EVAL] Loading model checkpoint from C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\model_best.pt ...
+[2026-09-24 13:45:09] [INFO] [DNABERT] Loading from local cache  C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\models\dnabert-base ...
+[2026-09-24 13:45:10] [INFO] [DNABERT] All BERT weights frozen (requires_grad=False).
+[2026-09-24 13:45:10] [INFO] [DNABERT] Model loaded. Total params: 89.2M  |  Trainable: 0.0M  |  frozen=True  |  device=cpu
+[2026-09-24 13:45:10] [INFO] [MODEL] DNABERT backbone : 89M total / 0M trainable
+[2026-09-24 13:45:10] [INFO] [MODEL] Head parameters   : 454466 total / 454466 trainable
+[2026-09-24 13:45:10] [INFO] [MODEL] Grand total       : 89M
+[2026-09-24 13:45:11] [INFO] [EVAL] Model loaded successfully onto cpu.
+[2026-09-24 13:45:12] [INFO] [EVAL] Subsampled test split to 100 examples.
+[2026-09-24 13:46:29] [INFO] [EVAL] Saved reliability diagram to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:46:29] [INFO] ===========================================================================
+[2026-09-24 13:46:29] [INFO] QUANTITATIVE TEST METRICS:
+[2026-09-24 13:46:29] [INFO]   Regression  : RMSE = 0.1382 | Pearson r = -0.1283
+[2026-09-24 13:46:29] [INFO]   Classification: AUROC = 0.6257 | AUPRC = 0.3129 | F1@0.5 = 0.2500 | Brier = 0.2454
+[2026-09-24 13:46:29] [INFO] ===========================================================================
+[2026-09-24 13:46:29] [INFO] [ATTRIBUTION] Computing Integrated Gradients on sequence branch (50 samples)...
+[2026-09-24 13:47:08] [INFO] [ATTRIBUTION] Saved sequence attribution plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:47:08] [INFO] [SHAP] Computing SHAP values on Epigenetic & 3D Genome branches...
+[2026-09-24 13:48:18] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:18] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:18] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:18] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:18] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:18] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:18] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:18] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:18] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:18] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:18] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:18] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.19656030e-04, -3.43854725e-04,  2.37313410e-05, -5.39464255e-05,
+        2.10169951e-04, -9.04765725e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-4.04247269e-04, -2.94350497e-03, -2.19690303e-05, -6.08271609e-05,
+       -1.13372381e-04, -9.86297429e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.77978679e-04, -3.17144394e-03, -2.43321061e-05, -6.07353946e-05,
+       -1.54644003e-04, -9.96086001e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 1.02029741e-04, -2.27309416e-03, -1.99567527e-05,  7.62728850e-04,
+        2.82288715e-04, -7.74335861e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 3.20627044e-05, -2.08032814e-03, -2.31893112e-05, -7.49990344e-05,
+       -5.87005168e-05, -7.72362947e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 1.23409306e-04, -3.18055190e-03, -2.94761111e-05, -4.82854744e-05,
+       -1.65849055e-04, -8.84145498e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.15789924e-05, -2.94176675e-03, -2.35848129e-05, -5.50705940e-05,
+       -1.09129523e-04, -8.86186957e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-4.92258867e-04, -2.25940719e-03, -2.24355608e-05,  6.38850778e-04,
+        2.04978262e-04, -8.79994035e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:19] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:19] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:19] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999996)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.82280662e-04, -2.16268779e-03, -6.10812904e-04, -2.07660512e-05,
+       -4.05578327e-05,  1.49008005e-04, -7.24467136e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.27566063e-04, -1.53782715e-03, -1.69950227e-05, -7.52317409e-05,
+        3.74535720e-05, -1.05837733e-03])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:19] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:19] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:19] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:19] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:19] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:48:19] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:48:19] [INFO] phi = array([-2.09536710e-04, -8.53840940e-04, -6.36159848e-04, -1.85190652e-05,
+       -6.31189887e-05,  1.02899508e-04, -9.27874464e-04])
+[2026-09-24 13:48:19] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([-9.71539194e-04, -5.62097505e-04, -1.60517668e-04, -6.49472078e-05,
+        2.40595763e-04, -8.92052054e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([-2.42041424e-04, -3.07105345e-03, -2.36577044e-05, -5.94255825e-05,
+       -1.37660528e-04, -9.73014534e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.999999999999999)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:48:20] [INFO] phi = array([-1.48635357e-04, -2.56440915e-03, -2.19093829e-05, -5.68684889e-05,
+        1.02535471e-03,  2.24537438e-04, -8.98459756e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([-4.15078675e-04, -1.00424277e-03,  7.03996668e-05, -5.49197197e-05,
+        2.14399522e-04, -8.82829726e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999997)
+[2026-09-24 13:48:20] [INFO] phi = array([-1.95293321e-04, -2.57226775e-03, -4.79096597e-05, -3.38149084e-05,
+        1.07953255e-03,  2.09053820e-04, -9.01684843e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 1
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([0.39215686, 0.31372549, 0.29411765])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.559228650137741)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(8.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:48:20] [INFO] phi = array([-4.48552030e-03,  1.19748560e-04, -1.82293491e-03, -6.74662281e-04,
+       -3.11279137e-05, -1.16851338e-04,  1.32333566e-04, -1.08383512e-03])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([-2.12684025e-04, -1.82587827e-03, -1.63144122e-05, -7.00621555e-05,
+        4.95617588e-05, -1.01768374e-03])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999999)
+[2026-09-24 13:48:20] [INFO] phi = array([-3.87091143e-05, -2.30405018e-03, -5.63172374e-04, -2.63076365e-05,
+       -3.89664271e-05,  1.78765342e-04, -6.42602112e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.999999999999999)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999998)
+[2026-09-24 13:48:20] [INFO] phi = array([-6.30291392e-05, -2.85164696e-03, -3.72825062e-05, -6.52750219e-05,
+        1.00516601e-03,  2.72263065e-04, -8.90307017e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 2
+[2026-09-24 13:48:20] [INFO] remaining_weight_vector = array([1.])
+[2026-09-24 13:48:20] [INFO] num_paired_subset_sizes = 3
+[2026-09-24 13:48:20] [INFO] weight_left = np.float64(0.23809523809523808)
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(7.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(0.9999999999999996)
+[2026-09-24 13:48:20] [INFO] phi = array([-2.84103942e-04, -2.74824486e-03, -4.87253315e-05, -3.98906731e-05,
+        1.11268968e-03,  2.35493021e-04, -9.37020883e-04])
+[2026-09-24 13:48:20] [INFO] num_full_subsets = 3
+[2026-09-24 13:48:20] [INFO] np.sum(w_aug) = np.float64(6.0)
+[2026-09-24 13:48:20] [INFO] np.sum(self.kernelWeights) = np.float64(1.0)
+[2026-09-24 13:48:20] [INFO] phi = array([ 9.49224830e-05,  1.59790029e-03,  1.01720045e-05, -8.89053196e-05,
+        0.00000000e+00,  5.88752180e-04])
+[2026-09-24 13:48:21] [INFO] [SHAP] Saved epigenetic & 3D genome SHAP plot to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:48:22] [INFO] [TB] Successfully logged metrics, PR curve, images, and text report to TensorBoard (C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\logs\tensorboard)
+[2026-09-24 13:48:22] [INFO] ===========================================================================
+[2026-09-24 13:48:22] [INFO] Successfully exported evaluation summary to C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\metrics.json
+[2026-09-24 13:48:22] [INFO] Generated Plots:
+[2026-09-24 13:48:22] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\reliability_diagram.png
+[2026-09-24 13:48:22] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_seq.png
+[2026-09-24 13:48:22] [INFO]   - C:\Users\dhana\OneDrive\Desktop\AI_CRISPR Project\outputs\attribution_epigen_3d.png
+[2026-09-24 13:48:22] [INFO] ===========================================================================
