@@ -1,0 +1,140 @@
+{
+  "audit_date": "2026-11-17",
+  "audit_mode": "read-only; no retraining or artifact modification",
+  "split": {
+    "rows": 25535,
+    "sizes": {
+      "train": 20428,
+      "val": 2553,
+      "test": 2554
+    },
+    "complete_unique_partition": true,
+    "metadata_matches_indices": true,
+    "method": "random row split; seed 42; initial train/heldout split unstratified; heldout validation/test stratified where possible",
+    "grouped_by": []
+  },
+  "overlap": {
+    "target_sequence_shared_groups": {
+      "train_val": 860,
+      "train_test": 835,
+      "val_test": 189
+    },
+    "target_sequence_row_pairs": {
+      "train_val": 5970,
+      "train_test": 5222,
+      "val_test": 669
+    },
+    "target_sequence_reverse_complements": {
+      "train_val": 1,
+      "train_test": 2,
+      "val_test": 0
+    },
+    "guide_sequence_shared_groups": {
+      "train_val": 57,
+      "train_test": 69,
+      "val_test": 49
+    },
+    "guide_sequence_reverse_complements": {
+      "train_val": 1,
+      "train_test": 2,
+      "val_test": 1
+    },
+    "target_context_shared_groups": {
+      "train_val": 225,
+      "train_test": 265,
+      "val_test": 59
+    },
+    "target_context_row_pairs": {
+      "train_val": 408,
+      "train_test": 430,
+      "val_test": 67
+    },
+    "target_interval_exact_groups": {
+      "train_val": 200,
+      "train_test": 231,
+      "val_test": 54
+    },
+    "target_interval_exact_row_pairs": {
+      "train_val": 330,
+      "train_test": 344,
+      "val_test": 58
+    },
+    "target_interval_overlapping_row_pairs": {
+      "train_val": 799,
+      "train_test": 684,
+      "val_test": 110
+    },
+    "guide_locus_exact_groups": {
+      "train_val": 71,
+      "train_test": 78,
+      "val_test": 60
+    },
+    "guide_locus_exact_row_pairs": {
+      "train_val": 928109,
+      "train_test": 864115,
+      "val_test": 113495
+    },
+    "guide_locus_overlapping_row_pairs": {
+      "train_val": 1161290,
+      "train_test": 1065980,
+      "val_test": 139305
+    },
+    "coordinate_rows_available": 11355,
+    "coordinate_rows_unavailable": 14180,
+    "row_id_overlap": 0,
+    "row_id_unique": 25535,
+    "sample_experiment_id_available": false,
+    "shared_study_categories_per_split_pair": 17,
+    "shared_nonmissing_cell_line_categories_per_split_pair": 7,
+    "target_gene_groups_shared": {
+      "train_val": 348,
+      "train_test": 375,
+      "val_test": 104
+    },
+    "coordinate_invalid_width_rows": {
+      "target_locus": 13,
+      "guide_target_locus": 27
+    }
+  },
+  "preprocessing": {
+    "high_eff_quantile_threshold": 0.001862,
+    "quantile_fit_split": "train",
+    "all_high_eff_labels_reconstructed": true,
+    "scaler_fit_split": "train",
+    "direct_label_feature_found": false,
+    "test_fitted_normalization_found": false
+  },
+  "features": {
+    "h3k4me3": "CSV fallback epigen_h3k4me3; 1861 rows nonzero; no local BigWig; assay provenance unvalidated",
+    "h3k27ac": "all-zero unavailable tensor dimension",
+    "h3k27me3": "all-zero unavailable tensor dimension",
+    "h3k9me3": "all-zero unavailable tensor dimension",
+    "dnase": "CSV fallback epigen_dnase; 493 rows nonzero",
+    "atac": "same epigen_dnase field as DNase; proxy; standardized tensor columns exactly equal",
+    "genome3d": "GM12878 reference used across sources without assembly/species check",
+    "single_cell": "PBMC 10x mean; 5502 rows provenance-matched; 4892 tensor values nonzero; zeros unmasked",
+    "dimensions": {
+      "sequence_tokens": 512,
+      "epigenetic": 6,
+      "genome": 8,
+      "single_cell": 1,
+      "regression_label": 1,
+      "classification_label": 1
+    },
+    "architecture_dimensions_match": true
+  },
+  "metrics": {
+    "sample_count": 2554,
+    "sequence_length": 256,
+    "rmse": 0.108988,
+    "pearson_r": 0.752398,
+    "roc_auc": 0.916372,
+    "pr_auc": 0.814999,
+    "f1_at_0.5": 0.695355,
+    "brier_score": 0.118236,
+    "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+    "test_tensor_sha256": "4a6ff663e0556cff4d4427531a09b9abf7f01d8b5d64510a0ae369bbcf6f6fb8"
+  },
+  "benchmark_status": "literature references only; baseline code not independently run; no head-to-head claim supported",
+  "conclusion": "The test partition has confirmed cross-split sequence, locus, and source-category overlap. Independent guide/locus/study/sample generalization is not established."
+}

@@ -1,0 +1,5 @@
+{
+  "status": "no_eligible_samples",
+  "reason": "No records meet the strict all-measured-feature requirement: preprocessing provenance marks H3K27ac, H3K27me3, and H3K9me3 unavailable throughout; DNase is reused as the ATAC proxy. The live full_multimodal API requires six epigenetic values and cannot represent per-channel missingness. No inference was run.",
+  "samples": []
+}

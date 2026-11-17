@@ -1,0 +1,37 @@
+{
+  "method": "Assembly/genome label and chromosome must match after trimming and lowercasing. Half-open overlap [start,end): max(starts)<min(ends); overlap bp=min(ends)-max(starts). Exact interval has equal starts and ends. No coordinate lift-over or chromosome alias normalization. Nonpositive-width intervals skipped.",
+  "coordinate_convention_source": "Preprocessing BigWig querying uses [target_start,target_end), consistent with half-open use there; original source CSV coordinate convention was not independently documented.",
+  "training_split": "Original random-row split, unchanged.",
+  "assemblies_observed": {
+    "hg19": 9324,
+    "hg38": 1630,
+    "mm10": 324,
+    "rn5": 43,
+    "mm9": 34
+  },
+  "counts": {
+    "target_interval": {
+      "training_valid_intervals": 9026,
+      "retained_test_valid_intervals": 709,
+      "retained_rows_with_any_training_overlap": 15,
+      "overlapping_training_record_pairs": 50,
+      "exact_interval_test_rows": 0,
+      "exact_interval_training_record_pairs": 0,
+      "coordinate_missing_test_rows": 903
+    },
+    "guide_target_interval": {
+      "training_valid_intervals": 9018,
+      "retained_test_valid_intervals": 705,
+      "retained_rows_with_any_training_overlap": 705,
+      "overlapping_training_record_pairs": 623988,
+      "exact_interval_test_rows": 705,
+      "exact_interval_training_record_pairs": 535430,
+      "coordinate_missing_test_rows": 903
+    }
+  },
+  "limitations": [
+    "Genome labels are mixed and not independently verified against reference assets.",
+    "Chromosome aliases are compared literally after case normalization.",
+    "Coordinates or assembly labels are missing for some samples."
+  ]
+}

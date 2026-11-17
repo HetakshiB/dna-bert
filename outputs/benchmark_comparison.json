@@ -3,15 +3,41 @@
     "name": "Multimodal CRISPR (Ours)",
     "modalities": "Sequence + Epigenetics + 3D Genome + Single-Cell",
     "architecture": "DNABERT-6 + 4-Branch MLP Fusion + Dual Heads",
-    "auroc": 0.892,
-    "auprc": 0.784,
-    "f1": 0.815,
+    "auroc": 0.916372,
+    "auprc": 0.814999,
+    "f1": 0.695355,
     "reference": "Our 4-Modality Engine (576-d Fusion)"
   },
   "strongest_baseline": "DNABERT-Epi",
-  "relative_gain_percent": 5.56,
-  "absolute_gain": 0.047,
-  "target_met": true,
+  "comparison_type": "descriptive comparison; literature-reported baseline references only",
+  "provenance": {
+    "checkpoint_path": "outputs/model_best.pt",
+    "test_tensor_path": "outputs/tensors/test.pt",
+    "evaluated_samples": 2554,
+    "full_test_samples": 2554,
+    "sequence_length": 256,
+    "batch_size": 2,
+    "evaluation_timestamp_utc": "2026-11-17T13:04:33.895118+00:00",
+    "evaluation_scope": "full_test",
+    "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+    "test_tensor_sha256": "4a6ff663e0556cff4d4427531a09b9abf7f01d8b5d64510a0ae369bbcf6f6fb8",
+    "metric_definitions": {
+      "rmse": "sqrt(mean_squared_error(regression_targets, regression_predictions))",
+      "pearson_r": "Pearson correlation between regression targets and predictions; undefined/non-finite maps to 0.0",
+      "roc_auc": "sklearn roc_auc_score(classification_targets, sigmoid_logits); undefined maps to 0.5",
+      "pr_auc": "sklearn auc(recall, precision) from precision_recall_curve; undefined maps to 0.0",
+      "f1_at_0.5": "sklearn f1_score(targets, probabilities >= 0.5, zero_division=0)"
+    },
+    "attribution_samples": {
+      "quantitative_metrics": 2554,
+      "integrated_gradients": 0,
+      "shap_explained": 0,
+      "shap_background": 0
+    }
+  },
+  "warning": "Baseline implementations were not independently run. Different datasets/protocols mean these differences do not establish superiority or meeting a target.",
+  "descriptive_relative_difference_percent": 8.45,
+  "descriptive_absolute_difference": 0.0714,
   "baseline_comparisons": [
     {
       "model": "CRISPR-DIPOFF",
@@ -20,9 +46,10 @@
       "auroc": 0.782,
       "auprc": 0.624,
       "f1": 0.685,
-      "abs_gain_vs_baseline": 0.11,
-      "rel_gain_percent": 14.07,
-      "reference": "Pranto et al. 2025 (data/benchmarks/02_CRISPR-DIPOFF)"
+      "descriptive_auroc_difference_vs_literature_reference": 0.1344,
+      "descriptive_relative_auroc_difference_percent": 17.18,
+      "reference": "Pranto et al. 2025 (data/benchmarks/02_CRISPR-DIPOFF)",
+      "result_type": "literature-reported reference; baseline not independently reproduced"
     },
     {
       "model": "CRISPR-Net",
@@ -31,9 +58,10 @@
       "auroc": 0.804,
       "auprc": 0.648,
       "f1": 0.712,
-      "abs_gain_vs_baseline": 0.088,
-      "rel_gain_percent": 10.95,
-      "reference": "Lin & Wong 2020 (data/benchmarks/01_CRISPR-Net)"
+      "descriptive_auroc_difference_vs_literature_reference": 0.1124,
+      "descriptive_relative_auroc_difference_percent": 13.98,
+      "reference": "Lin & Wong 2020 (data/benchmarks/01_CRISPR-Net)",
+      "result_type": "literature-reported reference; baseline not independently reproduced"
     },
     {
       "model": "DNABERT-6 (Vanilla)",
@@ -42,9 +70,10 @@
       "auroc": 0.816,
       "auprc": 0.665,
       "f1": 0.728,
-      "abs_gain_vs_baseline": 0.076,
-      "rel_gain_percent": 9.31,
-      "reference": "Zhou et al. 2021 (data/benchmarks/03_DNABERT)"
+      "descriptive_auroc_difference_vs_literature_reference": 0.1004,
+      "descriptive_relative_auroc_difference_percent": 12.3,
+      "reference": "Zhou et al. 2021 (data/benchmarks/03_DNABERT)",
+      "result_type": "literature-reported reference; baseline not independently reproduced"
     },
     {
       "model": "EpiCRISPR",
@@ -53,9 +82,10 @@
       "auroc": 0.829,
       "auprc": 0.683,
       "f1": 0.741,
-      "abs_gain_vs_baseline": 0.063,
-      "rel_gain_percent": 7.6,
-      "reference": "Peng et al. 2023 (data/benchmarks/06_EpiCRISPR)"
+      "descriptive_auroc_difference_vs_literature_reference": 0.0874,
+      "descriptive_relative_auroc_difference_percent": 10.54,
+      "reference": "Peng et al. 2023 (data/benchmarks/06_EpiCRISPR)",
+      "result_type": "literature-reported reference; baseline not independently reproduced"
     },
     {
       "model": "DNABERT-Epi",
@@ -64,9 +94,10 @@
       "auroc": 0.845,
       "auprc": 0.709,
       "f1": 0.762,
-      "abs_gain_vs_baseline": 0.047,
-      "rel_gain_percent": 5.56,
-      "reference": "Kimata et al. PLOS ONE 2025 (data/benchmarks/04_DNABERT-Epi)"
+      "descriptive_auroc_difference_vs_literature_reference": 0.0714,
+      "descriptive_relative_auroc_difference_percent": 8.45,
+      "reference": "Kimata et al. PLOS ONE 2025 (data/benchmarks/04_DNABERT-Epi)",
+      "result_type": "literature-reported reference; baseline not independently reproduced"
     }
   ]
 }

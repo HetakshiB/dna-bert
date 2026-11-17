@@ -1,0 +1,75 @@
+{
+  "evaluation_timestamp_utc": "2026-11-17T14:11:56.432079+00:00",
+  "evaluation_type": "sequence-filtered subset of original random-row test split; not grouped or independent",
+  "checkpoint_path": "outputs/model_best.pt",
+  "test_tensor_path": "outputs/tensors/test.pt",
+  "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+  "test_tensor_sha256": "4a6ff663e0556cff4d4427531a09b9abf7f01d8b5d64510a0ae369bbcf6f6fb8",
+  "device": "cuda",
+  "batch_size": 2,
+  "sequence_length": 256,
+  "counts": {
+    "original_test": 2554,
+    "exact_matches_removed": 940,
+    "reverse_complement_matches_removed": 2,
+    "both": 0,
+    "excluded_unique": 942,
+    "retained": 1612,
+    "retained_positive": 335,
+    "retained_negative": 1277,
+    "excluded_positive": 288,
+    "excluded_negative": 654
+  },
+  "filter_definition": "exclude test target_sequence when exact sequence or reverse complement is found in training target_sequence; no fuzzy sequence filter",
+  "metrics": {
+    "rmse": 0.11614767143381449,
+    "pearson_r": 0.7604552331869061,
+    "roc_auc": 0.9218539253614464,
+    "pr_auc": 0.8226466911757279,
+    "f1_at_0.5": 0.6706302021403091,
+    "brier_score": 0.1184736448634886
+  },
+  "original_full_test_metrics": {
+    "rmse": 0.108988,
+    "pearson_r": 0.752398,
+    "roc_auc": 0.916372,
+    "pr_auc": 0.814999,
+    "f1_at_0.5": 0.695355,
+    "brier_score": 0.118236
+  },
+  "filtered_minus_full_test_metric_delta": {
+    "rmse": 0.007159671433814491,
+    "pearson_r": 0.008057233186906099,
+    "roc_auc": 0.005481925361446427,
+    "pr_auc": 0.007647691175727833,
+    "f1_at_0.5": -0.02472479785969084,
+    "brier_score": 0.00023764486348860914
+  },
+  "coordinate_overlap_after_filter": {
+    "target_locus": {
+      "retained_rows_with_valid_coordinates": 709,
+      "training_rows_with_valid_coordinates": 9026,
+      "overlap_with_training_rows": 15,
+      "exact_interval_matches": 0,
+      "retained_invalid_width_rows": 0,
+      "training_invalid_width_rows": 13,
+      "retained_rows_missing_coordinates": 903
+    },
+    "guide_target_locus": {
+      "retained_rows_with_valid_coordinates": 705,
+      "training_rows_with_valid_coordinates": 9018,
+      "overlap_with_training_rows": 705,
+      "exact_interval_matches": 705,
+      "retained_invalid_width_rows": 4,
+      "training_invalid_width_rows": 21,
+      "retained_rows_missing_coordinates": 907
+    }
+  },
+  "limitations": [
+    "Original training remains random row-based.",
+    "Not a grouped, independent, or fully leakage-free evaluation.",
+    "Genomic overlaps remain; coordinates are unavailable for some records.",
+    "Biological sample independence is NOT VERIFIABLE; no sample or replicate IDs.",
+    "Approximate sequence similarity was not tested."
+  ]
+}

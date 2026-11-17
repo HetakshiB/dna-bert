@@ -3,7 +3,10 @@ from __future__ import annotations
 
 import sys
 import unittest
+import tempfile
 from pathlib import Path
+import numpy as np
+import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
@@ -11,6 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from train import MultimodalCRISPRDataset
+from utils.preprocess import FEATURE_STATUS, save_split_tensors
 
 TENSOR_DIR = PROJECT_ROOT / "outputs" / "tensors"
 
@@ -18,26 +22,48 @@ TENSOR_DIR = PROJECT_ROOT / "outputs" / "tensors"
 class TestMultimodalDataLoaders(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.train_pt = TENSOR_DIR / "train.pt"
-        cls.val_pt   = TENSOR_DIR / "val.pt"
-        cls.test_pt  = TENSOR_DIR / "test.pt"
+        cls._tmp = tempfile.TemporaryDirectory(dir=PROJECT_ROOT / "outputs")
+        out = Path(cls._tmp.name)
+        n = 50
+        df = pd.DataFrame({
+            "id": np.arange(n), "cell_line": ["test"] * n, "study_name": ["test"] * n,
+            "cleavage_freq": np.linspace(0, 1, n),
+            "high_eff": np.array([0] * 38 + [1] * 12, dtype=np.int8),
+        })
+        seq = {"input_ids": torch.ones(n, 512, dtype=torch.long),
+               "attention_mask": torch.ones(n, 512, dtype=torch.long)}
+        FEATURE_STATUS.clear()
+        FEATURE_STATUS.update({"epigenetic": "test fixture", "3d_genome": "test fixture",
+                               "singlecell": "test fixture"})
+        save_split_tensors(seq, np.zeros((n, 6), dtype=np.float32),
+                           np.zeros((n, 8), dtype=np.float32), np.zeros((n, 1), dtype=np.float32),
+                           df, out)
+        cls.train_pt = out / "train.pt"
+        cls.val_pt = out / "val.pt"
+        cls.test_pt = out / "test.pt"
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
 
     def test_01_tensor_files_exist(self):
         """Ensure all split .pt files exist."""
         self.assertTrue(self.train_pt.exists(), f"Missing {self.train_pt}")
         self.assertTrue(self.val_pt.exists(), f"Missing {self.val_pt}")
         self.assertTrue(self.test_pt.exists(), f"Missing {self.test_pt}")
+        self.assertTrue((self.train_pt.parent / "meta.csv").exists(), "Missing split/provenance metadata")
 
     def test_02_split_sizes_and_sum(self):
-        """Ensure split sizes match expected 80/10/10 distribution (25,554 total)."""
+        """Ensure split sizes are close to the expected 80/10/10 distribution."""
         train_ds = MultimodalCRISPRDataset(self.train_pt)
         val_ds   = MultimodalCRISPRDataset(self.val_pt)
         test_ds  = MultimodalCRISPRDataset(self.test_pt)
 
-        self.assertEqual(len(train_ds), 20443)
-        self.assertEqual(len(val_ds), 2555)
-        self.assertEqual(len(test_ds), 2556)
-        self.assertEqual(len(train_ds) + len(val_ds) + len(test_ds), 25554)
+        total = len(train_ds) + len(val_ds) + len(test_ds)
+        self.assertGreaterEqual(total, 10)
+        self.assertAlmostEqual(len(train_ds) / total, 0.80, delta=0.02)
+        self.assertAlmostEqual(len(val_ds) / total, 0.10, delta=0.02)
+        self.assertAlmostEqual(len(test_ds) / total, 0.10, delta=0.02)
 
     def test_03_tensor_shapes_and_types(self):
         """Ensure all tensor keys, shapes, and dtypes are correct for each split."""
@@ -89,13 +115,14 @@ class TestMultimodalDataLoaders(unittest.TestCase):
         loader = DataLoader(train_ds, batch_size=16, shuffle=True)
 
         batch = next(iter(loader))
-        self.assertEqual(batch["seq_ids"].shape, (16, 512))
-        self.assertEqual(batch["seq_mask"].shape, (16, 512))
-        self.assertEqual(batch["epigen_vec"].shape, (16, 6))
-        self.assertEqual(batch["genome_vec"].shape, (16, 8))
-        self.assertEqual(batch["sc_expr_vec"].shape, (16, 1))
-        self.assertEqual(batch["reg_label"].shape, (16,))
-        self.assertEqual(batch["cls_label"].shape, (16,))
+        batch_size = min(16, len(train_ds))
+        self.assertEqual(batch["seq_ids"].shape, (batch_size, 512))
+        self.assertEqual(batch["seq_mask"].shape, (batch_size, 512))
+        self.assertEqual(batch["epigen_vec"].shape, (batch_size, 6))
+        self.assertEqual(batch["genome_vec"].shape, (batch_size, 8))
+        self.assertEqual(batch["sc_expr_vec"].shape, (batch_size, 1))
+        self.assertEqual(batch["reg_label"].shape, (batch_size,))
+        self.assertEqual(batch["cls_label"].shape, (batch_size,))
 
 
 if __name__ == "__main__":

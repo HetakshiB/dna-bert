@@ -1,0 +1,35 @@
+{
+  "method": "Ungapped left-aligned identity: compare each retained target sequence with every training target sequence in forward and reverse-complement orientation; matches divided by max(sequence lengths), trailing unmatched bases count as mismatches. No internal indels or local/global alignment.",
+  "training_samples": 20428,
+  "retained_test_samples": 1612,
+  "exact_forward_matches_remaining": 0,
+  "exact_reverse_complement_matches_remaining": 0,
+  "threshold_counts": {
+    "0.70": {
+      "test_samples_at_or_above": 1605,
+      "fraction": 0.9956575682382134,
+      "unique_test_sequences": 1575
+    },
+    "0.80": {
+      "test_samples_at_or_above": 1448,
+      "fraction": 0.8982630272952854,
+      "unique_test_sequences": 1419
+    },
+    "0.90": {
+      "test_samples_at_or_above": 1087,
+      "fraction": 0.674317617866005,
+      "unique_test_sequences": 1063
+    },
+    "0.95": {
+      "test_samples_at_or_above": 962,
+      "fraction": 0.5967741935483871,
+      "unique_test_sequences": 940
+    },
+    "1.00": {
+      "test_samples_at_or_above": 0,
+      "fraction": 0.0,
+      "unique_test_sequences": 0
+    }
+  },
+  "interpretation": "Approximate identity screening, not a full alignment audit; indel-containing similarities may be under- or mis-scored."
+}

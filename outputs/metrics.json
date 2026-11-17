@@ -1,43 +1,99 @@
 {
   "regression": {
-    "rmse": 0.138241,
-    "pearson_r": -0.128252
+    "rmse": 0.108988,
+    "pearson_r": 0.752398
   },
   "classification": {
-    "auroc": 0.625731,
-    "auprc": 0.312861,
-    "f1_at_0.5": 0.25,
-    "brier_score": 0.245432
+    "auroc": 0.916372,
+    "auprc": 0.814999,
+    "f1_at_0.5": 0.695355,
+    "brier_score": 0.118236
   },
-  "checkpoint_used": "C:\\Users\\dhana\\OneDrive\\Desktop\\AI_CRISPR Project\\outputs\\model_best.pt",
-  "test_samples": 100,
+  "training_evaluator_comparison": {
+    "reg_preds": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "reg_targets": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "cls_logits": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "cls_probs": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "cls_targets": {
+      "max_abs_difference": 0.0,
+      "identical": true
+    },
+    "metrics": {
+      "rmse_abs_difference": 3.168068035408478e-07,
+      "pearson_abs_difference": 3.358386120311252e-07,
+      "roc_auc_abs_difference": 4.7477791187411356e-07,
+      "pr_auc_abs_difference": 1.130409180705172e-07,
+      "f1_abs_difference": 1.91256830706088e-07
+    }
+  },
+  "provenance": {
+    "checkpoint_path": "outputs/model_best.pt",
+    "test_tensor_path": "outputs/tensors/test.pt",
+    "evaluated_samples": 2554,
+    "full_test_samples": 2554,
+    "sequence_length": 256,
+    "batch_size": 2,
+    "evaluation_timestamp_utc": "2026-11-17T13:27:37.986087+00:00",
+    "evaluation_scope": "full_test",
+    "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+    "test_tensor_sha256": "4a6ff663e0556cff4d4427531a09b9abf7f01d8b5d64510a0ae369bbcf6f6fb8",
+    "metric_definitions": {
+      "rmse": "sqrt(mean_squared_error(regression_targets, regression_predictions))",
+      "pearson_r": "Pearson correlation between regression targets and predictions; undefined/non-finite maps to 0.0",
+      "roc_auc": "sklearn roc_auc_score(classification_targets, sigmoid_logits); undefined maps to 0.5",
+      "pr_auc": "sklearn auc(recall, precision) from precision_recall_curve; undefined maps to 0.0",
+      "f1_at_0.5": "sklearn f1_score(targets, probabilities >= 0.5, zero_division=0)"
+    },
+    "attribution_samples": {
+      "quantitative_metrics": 2554,
+      "integrated_gradients": 50,
+      "shap_explained": 50,
+      "shap_background": 20
+    }
+  },
+  "test_samples": 2554,
   "attribution_summary": {
     "sequence": {
-      "top_seq_cls_dim": 124,
-      "top_seq_cls_attr": 0.002620481187477708
+      "top_seq_cls_dim": 486,
+      "top_seq_cls_attr": 0.06576813012361526,
+      "samples_used": 50
     },
     "epigenetic_3d": {
+      "samples_used": 50,
+      "background_samples": 20,
       "top_epigenetic_mark": "H3K4me3",
-      "top_epigenetic_shap": 8.971040596535308e-05,
+      "top_epigenetic_shap": 0.003564527077761557,
       "top_3dgenome_feature": "tad_dist",
-      "top_3dgenome_shap": 0.0018282848384350513,
+      "top_3dgenome_shap": 0.06709245802884985,
       "mean_epigenetic_shap": {
-        "H3K4me3": 8.971040596535308e-05,
+        "H3K4me3": 0.003564527077761557,
         "H3K27ac": 0.0,
         "H3K27me3": 0.0,
         "H3K9me3": 0.0,
-        "ATAC-seq": 0.0,
-        "DNase-seq": 0.0
+        "ATAC-seq": 0.0029212749555501062,
+        "DNase-seq": 0.002428527155252806
       },
       "mean_3dgenome_shap": {
-        "loop_count": 0.00015672439563022185,
-        "tad_dist": 0.0018282848384350513,
-        "A1": 4.969614815171736e-05,
-        "A2": 2.0481903547097316e-05,
-        "B1": 0.00010227256129985937,
-        "B2": 8.445485901705749e-05,
-        "B3": 6.966314631426866e-05,
-        "NA": 0.000719763928001095
+        "loop_count": 0.014021817479405762,
+        "tad_dist": 0.06709245802884985,
+        "A1": 0.004075846464547429,
+        "A2": 0.00431191166417641,
+        "B1": 0.0011219986914087392,
+        "B2": 0.0036833494711594385,
+        "B3": 0.007187297582832739,
+        "NA": 0.01877789400917769
       }
     }
   }

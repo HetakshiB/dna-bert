@@ -381,7 +381,7 @@ def build_model(
     bert_model = None
     if load_dnabert:
         from model.backbone import get_dnabert
-        _, bert_model = get_dnabert(freeze=freeze_bert)
+        _, bert_model = get_dnabert(freeze=freeze_bert, device=device)
 
     model = MultimodalCRISPR(
         dnabert_model=bert_model,

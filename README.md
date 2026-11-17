@@ -1,261 +1,289 @@
-# AI CRISPR Engine: Multimodal Off-Target Cleavage & Safety Predictor
+# AI-CRISPR Project
 
-[![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.14.0-ee4c2c.svg)](https://pytorch.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/Repository-GitHub-black.svg)](https://github.com/vaishnavibongane/AI_CRISPR-Project.git)
+A research software project for estimating CRISPR target cleavage frequency and a dataset-defined high-efficiency class from DNA sequence and biological context. The repository contains a DNABERT-6 backbone, a multimodal PyTorch model, preprocessing and evaluation tools, a FastAPI service, and a React/Vite interface.
 
-A multimodal CRISPR off-target safety engine that unifies **four biological signal layers**—DNA sequence, chromatin accessibility & histone marks, 3D genome topology (Hi-C / TADs), and cell-type single-cell transcriptomics—into a **576-dimensional joint representation**. The engine simultaneously predicts continuous off-target cleavage frequency and classifies high-efficiency editing risk with explainable attribution (Captum Integrated Gradients & SHAP).
+> **Current application mode:** The frontend exposes only **Missing Feature Demo** mode. It sends a DNA sequence and explicitly consents to the API zero-filling omitted biological modalities. The output is an exploratory model response, not a full multimodal result or an experimentally validated biological outcome.
 
----
+## Problem and motivation
 
-## Visual Summary & Experimental Results
+CRISPR guide/target sequence models do not capture all factors that may affect cleavage in cells. Chromatin state, genome organization, and gene expression can provide context, but those measurements are incomplete or incompatible across many records in this project. This codebase explores a multi-input architecture while making that data gap visible in its current application.
 
-| 1. Baseline Benchmark Comparison | 2. Reliability & Calibration Diagram |
-| :---: | :---: |
-| ![Benchmark Comparison](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/benchmark_comparison.png) | ![Reliability Diagram](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/reliability_diagram.png) |
-| *Multimodal model achieves **0.8920 AUROC (+5.56% gain)** over the best published baseline (DNABERT-Epi 0.8450).* | *10-bin calibration curve measuring predicted probabilities vs. empirical positive fraction (Brier Score: 0.2472).* |
+The project is not a clinical decision tool and does not establish causal biological relationships.
 
-| 3. Sequence Integrated Gradients Attribution | 4. Epigenetic & 3D Genome SHAP Attributions |
-| :---: | :---: |
-| ![Sequence Attribution](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/attribution_seq.png) | ![Epigenetic and 3D SHAP](https://raw.githubusercontent.com/vaishnavibongane/AI_CRISPR-Project/main/outputs/attribution_epigen_3d.png) |
-| *Captum Integrated Gradients attributions identifying top sequence hidden dimensions driving Cas9 off-target cleavage.* | *KernelExplainer SHAP values quantifying relative importance across 6 ENCODE marks and 8 Hi-C topological features.* |
+## Objectives
 
----
+- Encode DNA target sequences with a pretrained DNABERT-6 transformer.
+- Combine sequence and biological context in a multi-branch neural architecture.
+- Train regression and classification heads against the dataset's recorded labels.
+- Evaluate the existing checkpoint with reproducible held-out and exploratory leakage-filtered reports.
+- Demonstrate application wiring without presenting missing measurements as real data.
 
-## Table of Contents
-1. [The 2-Minute Executive Pitch](#1-the-2-minute-executive-pitch)
-2. [Why Multimodal? (The Biology Behind the Model)](#2-why-multimodal-the-biology-behind-the-model)
-3. [Architecture & Network Topology](#3-architecture--network-topology)
-4. [Multi-Task Loss & 3-Stage Training Dynamics](#4-multi-task-loss--3-stage-training-dynamics)
-5. [Data Provenance & Feature Extraction](#5-data-provenance--feature-extraction)
-6. [Explainability & Interpretability Analysis](#6-explainability--interpretability-analysis)
-7. [Benchmark Comparison vs. Published Baselines](#7-benchmark-comparison-vs-published-baselines)
-8. [Step-by-Step Local Execution Guide](#8-step-by-step-local-execution-guide)
-9. [Project Directory Layout](#9-project-directory-layout)
+## Features and current application capabilities
 
----
+- **Frontend:** responsive React + TypeScript + Vite interface; the visible mode is fixed to Missing Feature Demo.
+- **Consent and provenance:** submission requires explicit consent. The UI identifies epigenetic, 3D genome, and single-cell inputs as unavailable and zero-filled.
+- **Prediction:** reports model-estimated cleavage frequency, probability of the dataset-defined high-efficiency class, and its 0.5-threshold classification.
+- **Model status:** displays API readiness/device, architecture, DNABERT identifier, parameter count, checkpoint path, and checkpoint hash.
+- **Backend:** FastAPI exposes `/health`, `/model-info`, and `/predict`. The backend retains `full_multimodal` schema and inference support for callers that have valid inputs; the current data pipeline does not provide all six epigenetic measurements for every record.
+- **Research tooling:** preprocessing, training, evaluation, attribution, benchmark reporting, and audit scripts are included. Literature baseline values are references only; baseline implementations were not run head-to-head.
 
-## 1. The 2-Minute Executive Pitch
+## System architecture
 
-> **The Problem:** CRISPR/Cas9 therapeutics suffer from dangerous off-target cuts at unintended genomic loci. Traditional machine learning tools (CRISPR-Net, Cas-OFFinder) only look at **sequence mismatches**. But in a living human cell, naked DNA does not exist: chromatin wrapping, 3D looping, and cell-type gene expression determine whether Cas9 can physically access and cleave a site.
->
-> **Our Solution:** We built a 4-modality neural architecture that models the full biological context:
-> 1. **Sequence**: 6-mer tokenized DNA encoded via a 12-layer DNABERT transformer (768-d).
-> 2. **Epigenetics**: 6 ENCODE histone & accessibility marks (H3K4me3, H3K27ac, H3K27me3, H3K9me3, ATAC, DNase) via `pybigtools`.
-> 3. **3D Genome**: Hi-C loop counts, TAD boundary proximity, and A/B subcompartment states (Rao et al. GSE63525).
-> 4. **Single-Cell**: 10x Genomics scRNA-seq mapping target gene baseline expression in therapeutic cell types.
->
-> **The Outcome:** The fused 576-d representation achieves **0.8920 AUROC**, outperforming the strongest state-of-the-art baseline (DNABERT-Epi at 0.8450) by **+5.56%** while providing granular feature attribution via Integrated Gradients and SHAP.
-
----
-
-## 2. Why Multimodal? (The Biology Behind the Model)
-
-| Biological Modality | Dimension | Biological Rationale | Data Source |
-|---|---|---|---|
-| **Branch 1: Sequence** | `512` tokens $\to$ `256-d` | PAM recognition (`NGG`), seed-region tolerance, and mismatch/indel position penalties. | crisprSQL (44 gRNAs, 25,632 pairs) + DNABERT-6 |
-| **Branch 2: Epigenetics** | `6-d` $\to$ `64-d` | Heterochromatin (H3K9me3, H3K27me3) repels Cas9 binding; open chromatin (ATAC-seq, DNase-seq, H3K4me3, H3K27ac) dramatically elevates off-target accessibility. | ENCODE Portal (K562, HepG2, CD14+, CD34+, ARPE-19, iPSC) |
-| **Branch 3: 3D Genome** | `8-d` $\to$ `128-d` | Cleavage risk correlates with high-frequency chromatin loop anchors and TAD boundaries; transcriptionally active A-compartments exhibit higher cleavage rates than repressed B-compartments. | Rao et al. (2014) *Cell*, GSE63525 |
-| **Branch 4: Single-Cell** | `1-d` $\to$ `128-d` | Off-target severity depends on whether the locus resides within an actively expressed gene in the target cell type (e.g. PBMCs for immunotherapy). | 10x Genomics (~11,769 PBMC single cells) |
-
----
-
-## 3. Architecture & Network Topology
-
-```
- DNA Target Sequence (512-nt) ──► DNABERT-6 (768-d CLS) ──► SeqHead (Linear 768->256, ReLU, Drop 0.1) ──────────┐ [256-d]
-                                                                                                                 │
- 6 ENCODE Epigenetic Marks   ──► EpigenHead (Linear 6->128, ReLU, Drop 0.1, Linear 128->64) ────────────────────┤ [64-d]
-                                                                                                                 ├──► Concatenate [576-d] ──► FusionMLP (576->256->256) ──┬──► reg_head (256->1) [Cleavage Freq]
- 8 3D Genome Features (Hi-C) ──► GenomeHead (Linear 8->128, ReLU, Drop 0.1, Linear 128->128) ───────────────────┤ [128-d]                                                │
-                                                                                                                 │                                                        └──► cls_head (256->1) [High-Eff Logit]
- Single-Cell Log Expression   ──► ScHead (Linear 1->128, ReLU, Drop 0.1, Linear 128->128) ────────────────────────┘ [128-d]
+```mermaid
+flowchart LR
+    DNA[DNA target sequence] --> TOK[DNABERT-6 tokenizer<br/>6-mer tokens, max 256 at inference]
+    TOK --> BERT[DNABERT-6<br/>12 layers, hidden size 768]
+    BERT --> SEQ[Sequence head<br/>768 → 256]
+    EPI[Epigenetic vector<br/>6 values] --> EH[Epigenetic head<br/>6 → 128 → 64]
+    GEN[3D genome vector<br/>8 values] --> GH[Genome head<br/>8 → 128 → 128]
+    SC[Single-cell expression<br/>1 value] --> SH[Expression head<br/>1 → 128 → 128]
+    SEQ --> FUSE[Concatenate 576 dimensions<br/>Fusion MLP 576 → 256 → 256]
+    EH --> FUSE
+    GH --> FUSE
+    SH --> FUSE
+    FUSE --> REG[Regression head<br/>cleavage frequency]
+    FUSE --> CLS[Classification head<br/>high_eff logit → sigmoid]
 ```
 
-### Modular Layer Breakdown:
-- **`SeqHead`**: Compresses 768-d transformer CLS representation into a 256-d sequence manifold.
-- **`EpigenHead`**: Expands the 6-mark z-scored vector into 128-d hidden representation before projecting to 64-d.
-- **`GenomeHead`**: Projects 8 structural features (loop count, TAD distance, one-hot compartments A1, A2, B1, B2, B3, NA) to 128-d.
-- **`ScHead`**: Non-linear projection of scalar target gene expression to 128-d.
-- **`FusionMLP`**: Non-linear interaction layer (576 $\to$ 256 $\to$ 256) with Dropout(0.2).
-- **Dual Output Heads**:
-  - `reg_head`: Continuous cleavage frequency (MSE loss).
-  - `cls_head`: Binary logit for high-efficiency classification (Weighted BCE loss, `pos_weight = 3.0`).
+The **live frontend** supplies only the sequence. In Missing Feature Demo mode the API creates zero placeholders for the omitted modalities and returns their unavailable status. This path must not be described as full multimodal inference.
 
----
+## Technologies
 
-## 4. Multi-Task Loss & 3-Stage Training Dynamics
+- Python, PyTorch, Hugging Face Transformers
+- DNABERT-6 and its matching tokenizer
+- NumPy, pandas, scikit-learn, SciPy
+- FastAPI, Pydantic, Uvicorn
+- React 18, TypeScript, Vite, Tailwind CSS, lucide-react
+- Optional preprocessing/interpretability dependencies include Scanpy/AnnData, BigWig readers, Captum, SHAP, Matplotlib, and TensorBoard
+- Docker Desktop with NVIDIA GPU support for the supplied CUDA image
 
-### 4.1 Dynamic Loss Formulation
-$$L(t) = \alpha(t) \cdot \text{MSE}(y_{\text{reg}}, \hat{y}_{\text{reg}}) + (1 - \alpha(t)) \cdot \text{Weighted\_BCE}(y_{\text{cls}}, \hat{y}_{\text{cls}})$$
+The versions used by the Python project are recorded in `requirements.txt`; the API's additional requirements are in `backend/requirements.txt`; frontend dependencies and lockfile are in `frontend/`.
 
-$$\alpha(t) = 0.7 + 0.2 \cdot \exp\left(-\frac{t}{\tau}\right)$$
+## DNABERT-6 backbone
 
-- **Imbalance Handling**: `pos_weight = 3.0` balances the 3:1 negative-to-positive off-target class ratio.
-- **Dynamic Scheduling**: At step $t=0$, $\alpha(0) = 0.9$, heavily prioritizing regression representation learning before smoothly decaying toward $0.7$ as classification supervision stabilizes.
+The backbone identifier is `zhihan1996/DNA_bert_6`, pinned in `model/backbone.py` to revision `c56e67ea5827e0ddc67ef059addcf71569b1216e`. It is a BERT-base-style encoder with 12 layers and a 768-dimensional hidden representation. DNA is converted to overlapping 6-mers and tokenized with the matching DNABERT tokenizer; inference pads/truncates to 256 tokens, including special tokens.
 
-### 4.2 3-Stage Progressive Unfreezing Schedule
+The loader validates model weights, configuration, and tokenizer assets. It downloads the pinned snapshot into `models/dnabert-base/` when needed and refuses to substitute random weights. The large backbone weight file is intentionally excluded from Git. To fetch/check the cache inside the project Docker image:
 
-```
-  Stage 0 (Epochs 1-2)    DNABERT FROZEN       Heads & Fusion Trainable (lr = 1e-3)
-  ─────────────────────────────────────────────────────────────────────────────────
-  Stage 1 (Epochs 3-6)    TOP 4 BLOCKS UNFROZEN  Base Backbone lr = 2e-5 (γ = 0.9), Heads lr = 5e-4
-  ─────────────────────────────────────────────────────────────────────────────────
-  Stage 2 (Epochs 7-15)   FULL BACKBONE UNFROZEN Base Backbone lr = 3e-5 (γ = 0.9), Heads lr = 3e-4
-                          + SWA (Stochastic Weight Averaging over last 3 checkpoints)
-```
-
-- **Discriminative Learning Rates**: Lower transformer layers are fine-tuned with exponential decay:
-  $$\text{lr}_l = \text{base\_lr} \cdot \gamma^{(11 - l)} \quad (\text{where } \gamma = 0.9)$$
-- **Regularization**: AdamW with `weight_decay = 0.01` (biases and LayerNorm excluded from weight decay).
-- **Early Stopping**: Monitored on validation loss with `patience = 3` epochs.
-
----
-
-## 5. Data Provenance & Feature Extraction
-
-| Modality | Raw Source | Extracted Shape | Processing Tool | Feature Details |
-|---|---|---|---|---|
-| **Sequence** | `crisprSQL_extracted/100720.csv` | `[25554, 512]` | DNABERT-6 Tokenizer | 6-mer token IDs + attention masks for 512-nt windows |
-| **Epigenetic** | ENCODE Portal BigWigs | `[25554, 6]` | `pybigtools` (Windows) / `pyBigWig` | Z-scored signal: H3K4me3, H3K27ac, H3K27me3, H3K9me3, ATAC, DNase |
-| **3D Genome** | Rao et al. (GSE63525) | `[25554, 8]` | Genomic Interval Intersect | Loop anchor counts, TAD boundary distances, A/B subcompartment one-hot |
-| **Single-Cell** | 10x Genomics PBMC Atlas | `[25554, 1]` | `scanpy` / `anndata` | Log-normalized mean expression across 11,769 single cells |
-| **Splits** | Stratified 80/10/10 Split | `outputs/tensors/` | `torch.save` | `train.pt` (20,443), `val.pt` (2,555), `test.pt` (2,556) |
-
----
-
-## 6. Explainability & Interpretability Analysis
-
-### 6.1 Integrated Gradients on Sequence Branch
-- Computed via **Captum Integrated Gradients** with 20 interpolation steps and a zero-embedding baseline.
-- Identifies critical latent dimensions in the 768-d CLS representation that correlate with PAM-proximal seed mismatches.
-
-### 6.2 SHAP Values on Epigenetic and 3D Genome Branches
-- Computed via **SHAP KernelExplainer** across 14 combined non-sequence features.
-- **Top Epigenetic Marker**: `H3K4me3` (active promoter mark), indicating that promoter-associated chromatin accessibility strongly increases off-target susceptibility.
-- **Top 3D Structural Feature**: `tad_dist` (distance to TAD boundary), demonstrating that boundary-proximal loci exhibit elevated cleavage vulnerability.
-
----
-
-## 7. Benchmark Comparison vs. Published Baselines
-
-Evaluated under identical test conditions against 5 published baseline models in `data/benchmarks/`:
-
-```
-==============================================================================
-CRISPR Predictor: Baseline Model Benchmark & AUROC Gain Evaluation
-==============================================================================
-Our Multimodal Model AUROC       : 0.8920
-Strongest Baseline (DNABERT-Epi) : 0.8450
-Absolute AUROC Improvement (Δ)   : +0.0470
-Relative AUROC Gain              : +5.56%
-Criterion Target (>= 5.0% Gain)  : PASSED [OK]
-------------------------------------------------------------------------------
-Model                  | AUROC      | AUPRC      | F1         | Gain vs Ours
-------------------------------------------------------------------------------
-CRISPR-DIPOFF          |   0.7820   |   0.6240   |   0.6850   | +14.07%
-CRISPR-Net             |   0.8040   |   0.6480   |   0.7120   | +10.95%
-DNABERT-6 (Vanilla)    |   0.8160   |   0.6650   |   0.7280   | +9.31%
-EpiCRISPR              |   0.8290   |   0.6830   |   0.7410   | +7.60%
-DNABERT-Epi            |   0.8450   |   0.7090   |   0.7620   | +5.56%
-Multimodal CRISPR (Ours) | 0.8920   |   0.7840   |   0.8150   | (Target Engine)
-------------------------------------------------------------------------------
-```
-
----
-
-## 8. Step-by-Step Local Execution Guide
-
-### Git Bash (Recommended):
-```bash
-# 1. Activate virtual environment
-source .venv/Scripts/activate
-
-# 2. Run data loader verification (5 tests across all splits)
-python scripts/test_dataloaders.py
-
-# 3. Run 3-Stage Training (fast smoke-test mode ~2-3 min)
-python train.py --smoke-test
-
-# 4. Run Evaluation, Calibration Diagram & Attributions (IG + SHAP)
-python evaluate.py --sample 100
-
-# 5. Run Benchmark Comparison against Published Baselines
-python scripts/compare_benchmarks.py
-
-# 6. Launch Real-time Interactive TensorBoard Dashboard
-tensorboard --logdir logs/tensorboard --port 6006
-```
-
-### Windows PowerShell:
 ```powershell
-.\.venv\Scripts\Activate.ps1
-python scripts/test_dataloaders.py
-python train.py --smoke-test
-python evaluate.py --sample 100
-python scripts/compare_benchmarks.py
-tensorboard --logdir logs/tensorboard --port 6006
+docker run --rm -it --gpus all `
+  -v "E:\AI_CRISPR-Project:/workspace/AI_CRISPR-Project" `
+  -w /workspace/AI_CRISPR-Project `
+  ghcr.io/hetakshib/ai-crispr:cuda bash -lc "python model/backbone.py"
 ```
 
-### Interactive TensorBoard Visual Dashboard:
-Every model run writes scalars, histograms, precision-recall curves, high-resolution plots, and Markdown text reports directly to `logs/tensorboard/`. Launching `tensorboard --logdir logs/tensorboard --port 6006` unlocks 5 specialized visual tabs:
+This runs the backbone smoke test and may download the pinned model if its complete weights are not already cached. Network access to Hugging Face is needed for the first download. The cache and download remain under the mounted E: project directory.
 
-| TensorBoard Tab | Logged Content | Purpose |
-| :--- | :--- | :--- |
-| **IMAGES** | `Evaluation/Plots/*` (Reliability Diagram, Integrated Gradients, SHAP, Benchmark Bar Chart) | Inspect high-resolution publication-quality figures directly in the browser. |
-| **SCALARS** | Multi-task losses (`train_total`, `val_total`, `MSE`, `BCE`), validation metrics (`RMSE`, `AUROC`, `AUPRC`, `F1`), and `learning_rate` schedule | Monitor loss convergence, over-fitting prevention, and dynamic learning rate decays across all 3 training stages. |
-| **HISTOGRAMS** | Layer weights & biases (`fusion`, `fc_reg`, `fc_cls`, `bn_*`) | Track weight distributions and gradient stability throughout training to prevent dead neurons. |
-| **PR CURVES** | `Evaluation/PR_Curve` | Interactive slider to evaluate precision-recall trade-offs at varying classification probability cutoffs. |
-| **TEXT** | `Summary/Training_Report`, `Evaluation/Summary_Report`, `Benchmarks/Comparison_Report` | Full Markdown experiment metadata, device specs, hyperparameter configs, and delta-gain assertions vs. baselines. |
+## Multimodal model architecture
 
-### Custom Scale Full Training:
-```bash
-# Train on 2,000 samples with 128 token length
-python train.py --sample 2000 --seq-len 128 --batch-size 32
+The trained model retains four input branches:
 
-# Resume training from outputs/model_best.pt
-python train.py --resume
+| Branch | Input | Projection |
+|---|---:|---:|
+| DNA sequence | DNABERT-6 CLS embedding, 768 dimensions | 768 → 256 |
+| Epigenetic features | 6 values in order: H3K4me3, H3K27ac, H3K27me3, H3K9me3, ATAC-seq, DNase-seq | 6 → 128 → 64 |
+| 3D genome | 8 values: loop count, TAD distance, and six compartment indicators (A1, A2, B1, B2, B3, NA) | 8 → 128 → 128 |
+| Single-cell expression | one log-normalized mean expression value | 1 → 128 → 128 |
+
+The branch outputs concatenate to 576 dimensions. A fusion MLP maps 576 → 256 → 256. Two heads produce:
+
+- **Regression:** one unconstrained scalar estimate of `cleavage_freq`.
+- **Classification:** one logit for `high_eff`; sigmoid yields an estimated probability of that dataset-defined class. A threshold of 0.5 produces the displayed binary class.
+
+The probability is **not** a probability of experimental editing success. The regression head is not constrained to nonnegative values, so a negative estimate can occur and should be interpreted as a model output rather than a physical frequency measurement.
+
+## Training and checkpoint
+
+`train.py` implements three stages: epochs 1–2 freeze DNABERT, epochs 3–6 unfreeze its top four blocks, and epochs 7–15 unfreeze the full backbone. It uses AdamW, warmup/cosine scheduling, gradient accumulation, mixed precision where supported, validation-based early stopping, checkpoint resume support, and optional SWA (not asserted here as used for this checkpoint). The recorded checkpoint configuration used CUDA, micro-batch size 2, accumulation steps 16 (effective batch 32), sequence length 256, and patience 3. This README update does not retrain the model.
+
+The existing local checkpoint is `outputs/model_best.pt`. Its recorded SHA-256 is:
+
+```text
+a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558
 ```
 
----
+The checkpoint is excluded from this Git repository by the output tensor/checkpoint ignore rules because model checkpoints are large binary artifacts. A clone must be given the matching checkpoint at `outputs/model_best.pt` separately before the API can load it. The repository does not include a checkpoint download URL.
 
-## 9. Project Directory Layout
+## Dataset and preprocessing
 
+The preprocessing source is `data/sequence/crisprSQL_extracted/100720.csv`. The saved cleaned metadata contains **25,535 rows** split into 20,428 training, 2,553 validation, and 2,554 test records. The saved split is a random row split (seed 42); the held-out validation/test split is stratified where possible. It is not grouped by guide, target locus, study, or biological sample.
+
+`utils/preprocess.py` builds DNABERT token IDs and attention masks, feature tensors, labels, split indices, provenance metadata, and a training-only epigenetic scaler. The regression target is the source `cleavage_freq` annotation. `high_eff` is derived using a 75th-percentile threshold fitted on training labels (recorded threshold: 0.001862); it is not an independently measured outcome.
+
+### Biological feature availability and caveats
+
+- **DNA:** target sequences are tokenized with DNABERT-6. A valid sequence does not by itself establish an unseen guide or locus.
+- **Epigenetics:** the pipeline records H3K27ac, H3K27me3, and H3K9me3 as unavailable; those channels are zero-filled. H3K4me3 has a CSV fallback with nonzero values in 1,861 rows. Where available, ATAC is populated from the same `epigen_dnase` field as DNase (493 rows), so it is a DNase proxy, not an independent ATAC measurement. No local BigWig files were present in the audited preprocessing run, and assay provenance is not independently validated.
+- **3D genome:** loop, TAD, and compartment features use a GM12878 reference as a proxy across source cell lines. Assembly/species compatibility is not checked comprehensively; coordinates are missing for some records and the dataset contains heterogeneous genome labels.
+- **Single-cell expression:** the feature is derived from a PBMC 10x atlas and matched by target gene name for 5,502 of 25,535 rows. Unmatched rows are zero placeholders; zero values are not separately masked, and PBMC expression may not represent the source experiment or cell type.
+- **Normalization:** the recorded epigenetic scaler and high-efficiency threshold were fitted using training rows. Missing measurements and proxies still limit how those channels should be interpreted.
+
+The current frontend avoids requesting fabricated values by using the explicit missing-feature demonstration mode. Backend full multimodal support remains available but requires valid inputs supplied by a caller; the API cannot establish that submitted measurements are biologically appropriate.
+
+## Evaluation methodology and reported metrics
+
+The standalone evaluator and training evaluator were compared using the same checkpoint, the full saved test split, and 256-token truncation. Their reported predictions and targets were identical; metric differences were negligible. The full test split contains 2,554 rows.
+
+| Full test metric | Result |
+|---|---:|
+| RMSE | 0.108988 |
+| Pearson R | 0.752398 |
+| ROC-AUC | 0.916372 |
+| PR-AUC | 0.814999 |
+| F1 at probability threshold 0.5 | 0.695355 |
+| Brier score | 0.118236 |
+
+RMSE is the square root of mean squared error; Pearson R is correlation of regression outputs and targets; ROC-AUC uses sigmoid class probabilities; PR-AUC is trapezoidal area from the precision-recall curve; F1 thresholds probability at 0.5; Brier score is mean squared probability error.
+
+### Exploratory sequence-filtered subset
+
+A separate report excludes test target sequences that exactly match or are reverse complements of training target sequences. It retains **1,612 of 2,554** test rows after removing 940 exact and 2 reverse-complement matches. This is a filtered subset of the original random split, not a newly grouped or independent test.
+
+| Filtered subset metric | Result |
+|---|---:|
+| RMSE | 0.116148 |
+| Pearson R | 0.760455 |
+| ROC-AUC | 0.921854 |
+| PR-AUC | 0.822647 |
+| F1 at probability threshold 0.5 | 0.670630 |
+| Brier score | 0.118474 |
+
+Neither set of metrics establishes independent generalization. The filtered metric changes must not be interpreted as proof of superiority or improved generalization; the subsets and their overlap structure differ.
+
+## Leakage and scientific reporting caveats
+
+The original data split is random by row. The scientific audits report:
+
+- Exact target-sequence overlap between train and test, plus reverse-complement overlap; these motivated the exploratory filtered subset.
+- The filtered subset still has **15 retained target intervals overlapping training intervals**. All **705 retained guide-target intervals with valid coordinates** exactly match training guide-target intervals. Target and guide-target intervals describe different loci and should not be conflated.
+- Approximate sequence similarity remains common in a left-aligned, ungapped screening comparison against training sequences: 99.6% of retained rows reached at least 70% identity, 89.8% at least 80%, 67.4% at least 90%, and 59.7% at least 95%. This is a screening measure, not an alignment-aware assessment.
+- Coordinates/assemblies are unavailable or inconsistent for some records. Stable biological sample, replicate, and experiment identifiers are insufficient to establish source independence; independence is **not verifiable**.
+
+Therefore, neither the full test report nor the sequence-filtered report proves generalization to unseen guides, loci, genomic regions, studies, or experiments. Grouped retraining and evaluation by guide/locus/study will be needed for those claims. Attribution plots summarize model sensitivity on the evaluated inputs; they do not establish biological causation.
+
+Benchmark tables compare the project’s metrics with literature-reported reference values. The baseline implementations were not independently run under the same split and protocol, so these are not reproduced head-to-head experiments and do not prove superiority.
+
+## Missing Feature Demo
+
+The current React interface provides only **Missing Feature Demo**. The user enters DNA and must explicitly consent. The request omits epigenetic, 3D genome, and single-cell fields, sets `mode` to `missing_feature_demo`, and sets `allow_missing_features` to `true`. The API zero-fills those omitted modalities and marks them unavailable in its response.
+
+This is a sequence-only demonstration using a model whose architecture has additional branches. It is not full multimodal inference. Predictions are model estimates, not laboratory measurements; comparing them with source annotations is exploratory. The class probability refers to the dataset-defined `high_eff` label and is not an experimental-success probability.
+
+## Project structure
+
+```text
+backend/                 FastAPI app, Pydantic schemas, service, mocked tests
+frontend/                React + TypeScript + Vite + Tailwind app
+model/                   DNABERT loader, multimodal architecture, losses
+models/dnabert-base/      Local DNABERT config/tokenizer; large weights excluded
+utils/preprocess.py       Feature extraction, split generation, provenance
+scripts/                  Inference, smoke/data checks, dashboard/benchmark tools
+train.py                  Training and checkpoint management
+evaluate.py               Held-out evaluation and attribution pipeline
+data/                     Source data and benchmark references (where present)
+outputs/model_best.pt     Existing local trained checkpoint (not committed)
+outputs/tensors/          Existing local tensor splits (not committed)
+outputs/*audit/           Scientific, leakage, and genomic similarity reports
+outputs/live_demo_samples/Sequence-only demo requests/results and reproduction helper
+logs/                     Local logs and TensorBoard output
 ```
-AI_CRISPR Project/
-├── .gitignore                     Git ignore rules for files >100MB
-├── README.md                      Project documentation with embedded figures
-├── requirements.txt               Pinned dependency specification
-├── run_preprocess.sh / .ps1       Cross-platform preprocessing launchers
-├── train.py                       3-stage progressive unfreezing training pipeline
-├── evaluate.py                    Inference, calibration diagram, IG & SHAP pipeline
-├── model/
-│   ├── backbone.py                DNABERT-6 model loader and local cache manager
-│   ├── losses.py                  Dynamic alpha-scheduled multi-task loss
-│   └── multimodal.py              4-branch multimodal neural architecture
-├── utils/
-│   └── preprocess.py              Multimodal feature extractor & tensor splitter
-├── scripts/
-│   ├── check_cuda.py              Hardware & CUDA diagnostic script
-│   ├── test_dataloaders.py        5-suite data loader unit tests
-│   ├── smoke_test.py              1% dataset smoke test with VRAM monitor & auto-retry
-│   ├── compare_benchmarks.py      Baseline comparison against published benchmarks
-│   └── fetch_data.py              Idempotent dataset inventory fetcher
-├── data/
-│   ├── sequence/                  crisprSQL extracted dataset & Cas-OFFinder FASTAs
-│   ├── epigenetic/                36 ENCODE metadata JSONs across 6 cell types
-│   ├── 3dgenome/                  Rao et al. Hi-C loops, TADs, subcompartments
-│   ├── singlecell/                10x Genomics PBMC single-cell matrix
-│   └── benchmarks/                Published baseline codebases (CRISPR-Net, DNABERT-Epi, etc.)
-└── outputs/
-    ├── model_best.pt              Resumable best model checkpoint
-    ├── metrics.json               Evaluation metrics summary
-    ├── benchmark_comparison.json  Baseline comparison summary
-    ├── reliability_diagram.png    Calibration curve figure
-    ├── attribution_seq.png        Sequence Integrated Gradients figure
-    ├── attribution_epigen_3d.png  SHAP feature importance figure
-    ├── benchmark_comparison.png   Benchmark comparison bar chart
-    ├── checkpoints/               Checkpoints (final_model.pt, swa_model.pt)
-    └── tensors/                   Tensor splits (train.pt, val.pt, test.pt)
+
+Generated tensors, the trained checkpoint, large DNABERT weights, logs, and backup artifacts are not included as Git deliverables. Keep the required checkpoint and data on the E: project directory and do not commit secrets or local environment files.
+
+## Windows 11 + Docker Desktop GPU setup
+
+Prerequisites: Docker Desktop configured for Linux containers, a working NVIDIA driver/GPU passthrough, and the existing image `ghcr.io/hetakshib/ai-crispr:cuda`. The project is mounted from E: so model files, source data, tensors, outputs, and logs remain in the project directory.
+
+### Start the FastAPI backend
+
+Run in PowerShell from any directory:
+
+```powershell
+docker run --rm -it --gpus all -p 8000:8000 `
+  -v "E:\AI_CRISPR-Project:/workspace/AI_CRISPR-Project" `
+  -w /workspace/AI_CRISPR-Project `
+  ghcr.io/hetakshib/ai-crispr:cuda bash -lc "python -m pip install -r backend/requirements.txt && python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000"
 ```
+
+Wait for startup to load the local checkpoint and DNABERT cache. In a second PowerShell window, check readiness and open interactive API documentation:
+
+```powershell
+Invoke-RestMethod -Uri http://127.0.0.1:8000/health | ConvertTo-Json
+Start-Process http://127.0.0.1:8000/docs
+```
+
+The health response reports the selected device; `/model-info` reports the architecture and checkpoint provenance. The local backend uses CUDA when available and reports startup failure if the checkpoint or DNABERT cache is incomplete.
+
+## Start the frontend
+
+Keep the backend running. In another PowerShell window:
+
+```powershell
+Set-Location E:\AI_CRISPR-Project\frontend
+npm install
+npm run dev
+```
+
+Open the application at **http://127.0.0.1:5173**. Vite proxies `/api` requests to `http://127.0.0.1:8000`. Set `VITE_BACKEND_URL` only if the backend is running on a different host or port.
+
+## API endpoints and request example
+
+- `GET /health` — API/model readiness and device.
+- `GET /model-info` — architecture, backbone identifier, checkpoint path/hash, parameter count, device, and token length.
+- `POST /predict` — validated prediction request.
+
+A sequence-only Missing Feature Demo request (the sequence below is from the held-out test examples used for the live demo):
+
+```json
+{
+  "sequence": "GTGATAAGTGGAATAGCACATGTGG",
+  "mode": "missing_feature_demo",
+  "allow_missing_features": true
+}
+```
+
+The request intentionally omits epigenetic, genome, and single-cell values. Do not interpret the response as a full multimodal prediction.
+
+Example response from the existing local checkpoint (trimmed only to show the fields relevant to this demo):
+
+```json
+{
+  "input_mode": "missing_feature_demo",
+  "predicted_cleavage_frequency": -0.007557338103652,
+  "high_efficiency_probability": 0.0004999251686967909,
+  "high_efficiency_prediction": false,
+  "sequence_nucleotides": 25,
+  "sequence_tokens_used": 22,
+  "sequence_length_tokens": 256,
+  "model": {
+    "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+    "pretrained_backbone": "zhihan1996/DNA_bert_6",
+    "checkpoint_path": "outputs/model_best.pt",
+    "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+    "parameter_count": 89645378,
+    "device": "cuda",
+    "sequence_length_tokens": 256
+  },
+  "feature_availability": {
+    "sequence": { "available": true, "provenance": "user sequence encoded with cached DNABERT-6 tokenizer" },
+    "epigenetic": { "available": false, "provenance": "missing; zero placeholder, not measured" },
+    "3d_genome": { "available": false, "provenance": "missing; zero placeholder, not measured" },
+    "singlecell_expression": { "available": false, "provenance": "missing; zero placeholder, not measured" }
+  },
+  "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+}
+```
+
+This is an actual illustrative response from the local demonstration run, not a claim of biological performance. The negative regression output illustrates that the model head is unconstrained.
+## Limitations and future work
+
+- Acquire and validate missing epigenetic assays; avoid treating a duplicated DNase proxy as independent ATAC/DNase evidence.
+- Match 3D genome and expression references to the biological source, cell type, species, and assembly; preserve explicit per-sample availability masks.
+- Obtain stable guide, target-locus, study, replicate, and experiment identifiers and evaluate with grouped splits; assess sequence similarity with an alignment-aware method.
+- Validate calibration and probability meaning on an independent, appropriately grouped dataset.
+- Run baseline implementations under a harmonized protocol before making comparative performance claims.
+- Review attribution stability and biological plausibility; do not infer causation from feature attribution alone.
+
+## Disclaimer
+
+This repository is a research and software demonstration. Its predictions are model estimates based on the data and inputs provided. Missing modalities are zero-filled only in the explicitly consented demo mode. Neither the demo outputs nor the reported exploratory test metrics are experimentally validated outcomes, clinical recommendations, or proof of generalization to independent guides, loci, or experiments.

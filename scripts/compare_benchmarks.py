@@ -1,7 +1,8 @@
-"""Benchmark Comparison and Performance Evaluation vs. Baseline Models.
+"""Descriptive comparison with literature-reported baseline references.
 
-Compares the Multimodal CRISPR Safety Predictor against published baseline models
-stored in data/benchmarks/:
+Compares current metrics from outputs/metrics.json against published baseline
+metrics recorded below. Baseline code in data/benchmarks/ is not run by this script.
+The baseline list includes:
   1. CRISPR-Net (Lin et al. 2020) - Recurrent CNN (Sequence)
   2. CRISPR-DIPOFF (Pranto et al. 2025) - Interpretable RNN (Sequence)
   3. DNABERT-6 (Zhou et al. 2021) - Vanilla DNABERT (Sequence)
@@ -9,8 +10,6 @@ stored in data/benchmarks/:
   5. DNABERT-Epi (Kimata et al. 2025) - DNABERT + Epigenetics (Strongest Baseline)
   6. Multimodal CRISPR (Ours) - Sequence + Epigenetic + 3D Genome + Single-Cell
 
-Asserts:
-  Relative AUROC gain over strongest baseline (DNABERT-Epi) >= 5.0%.
 Outputs:
   - outputs/benchmark_comparison.json
   - outputs/benchmark_comparison.png
@@ -106,18 +105,28 @@ OUR_MULTIMODAL_MODEL = {
     "name": "Multimodal CRISPR (Ours)",
     "modalities": "Sequence + Epigenetics + 3D Genome + Single-Cell",
     "architecture": "DNABERT-6 + 4-Branch MLP Fusion + Dual Heads",
-    "auroc": 0.8920,
-    "auprc": 0.7840,
-    "f1": 0.8150,
+    "auroc": None,
+    "auprc": None,
+    "f1": None,
     "reference": "Our 4-Modality Engine (576-d Fusion)",
 }
 
 
 def run_benchmark_comparison() -> Dict[str, Any]:
     log.info("=" * 78)
-    log.info("CRISPR Predictor: Baseline Model Benchmark & AUROC Gain Evaluation")
+    log.info("CRISPR Predictor: Descriptive Literature Reference Comparison")
     log.info("=" * 78)
 
+    if not METRICS_JSON.is_file():
+        raise FileNotFoundError(f"Run evaluate.py first; model metrics not found: {METRICS_JSON}")
+    with open(METRICS_JSON, encoding="utf-8") as metrics_file:
+        measured = json.load(metrics_file)
+    provenance = measured.get("provenance", {})
+    if provenance.get("evaluation_scope") != "full_test" or provenance.get("evaluated_samples") != provenance.get("full_test_samples"):
+        raise ValueError("Benchmark output requires canonical full-test metrics in outputs/metrics.json; sampled or legacy metrics are not accepted.")
+    OUR_MULTIMODAL_MODEL["auroc"] = float(measured["classification"]["auroc"])
+    OUR_MULTIMODAL_MODEL["auprc"] = float(measured["classification"]["auprc"])
+    OUR_MULTIMODAL_MODEL["f1"] = float(measured["classification"]["f1_at_0.5"])
     our_auroc = OUR_MULTIMODAL_MODEL["auroc"]
     strongest_baseline_name = "DNABERT-Epi"
     strongest_baseline_auroc = BASELINES[strongest_baseline_name]["auroc"]
@@ -125,11 +134,10 @@ def run_benchmark_comparison() -> Dict[str, Any]:
     relative_gain = ((our_auroc - strongest_baseline_auroc) / strongest_baseline_auroc) * 100.0
     absolute_gain = our_auroc - strongest_baseline_auroc
 
-    log.info("Our Multimodal Model AUROC       : %.4f", our_auroc)
-    log.info("Strongest Baseline (DNABERT-Epi) : %.4f", strongest_baseline_auroc)
-    log.info("Absolute AUROC Improvement (Δ)   : +%.4f", absolute_gain)
-    log.info("Relative AUROC Gain              : +%.2f%%", relative_gain)
-    log.info("Criterion Target (>= 5.0%% Gain) : %s", "PASSED [OK]" if relative_gain >= 5.0 else "FAILED")
+    log.info("Current full-test model AUROC: %.4f", our_auroc)
+    log.info("DNABERT-Epi literature-reported AUROC reference: %.4f", strongest_baseline_auroc)
+    log.info("Descriptive numeric difference across reported protocols: %+.4f (%+.2f%%)", absolute_gain, relative_gain)
+    log.warning("Baseline implementations were not independently run; differences are not head-to-head evidence and do not establish superiority or a target result.")
 
     # Build comparison records
     comparison_records = []
@@ -143,33 +151,36 @@ def run_benchmark_comparison() -> Dict[str, Any]:
             "auroc": data["auroc"],
             "auprc": data["auprc"],
             "f1": data["f1"],
-            "abs_gain_vs_baseline": round(abs_g, 4),
-            "rel_gain_percent": round(rel_g, 2),
+            "descriptive_auroc_difference_vs_literature_reference": round(abs_g, 4),
+            "descriptive_relative_auroc_difference_percent": round(rel_g, 2),
             "reference": data["reference"],
+            "result_type": "literature-reported reference; baseline not independently reproduced",
         })
 
     # Summary table
     log.info("-" * 78)
-    log.info("%-22s | %-10s | %-10s | %-10s | %-12s", "Model", "AUROC", "AUPRC", "F1", "Gain vs Ours")
+    log.info("%-22s | %-10s | %-10s | %-10s | %-24s", "Model/reference", "AUROC", "AUPRC", "F1", "Descriptive difference")
     log.info("-" * 78)
     for r in comparison_records:
-        log.info("%-22s |   %.4f   |   %.4f   |   %.4f   | +%.2f%%",
-                 r["model"], r["auroc"], r["auprc"], r["f1"], r["rel_gain_percent"])
-    log.info("%-22s |   %.4f   |   %.4f   |   %.4f   |   (Target Engine)",
+        log.info("%-22s |   %.4f   |   %.4f   |   %.4f   | %+.4f descriptive",
+                 r["model"], r["auroc"], r["auprc"], r["f1"], r["descriptive_auroc_difference_vs_literature_reference"])
+    log.info("%-22s |   %.4f   |   %.4f   |   %.4f   |   (current full-test result)",
              OUR_MULTIMODAL_MODEL["name"], OUR_MULTIMODAL_MODEL["auroc"],
              OUR_MULTIMODAL_MODEL["auprc"], OUR_MULTIMODAL_MODEL["f1"])
     log.info("-" * 78)
 
     # Assert criterion
-    assert relative_gain >= 5.0, f"AUROC relative gain {relative_gain:.2f}% is under 5.0% threshold"
+    log.info("Comparisons use different published protocols and are not reproduced head-to-head experiments.")
 
     # Export JSON
     output_data = {
         "our_model": OUR_MULTIMODAL_MODEL,
         "strongest_baseline": strongest_baseline_name,
-        "relative_gain_percent": round(relative_gain, 2),
-        "absolute_gain": round(absolute_gain, 4),
-        "target_met": bool(relative_gain >= 5.0),
+        "comparison_type": "descriptive comparison; literature-reported baseline references only",
+        "provenance": provenance,
+        "warning": "Baseline implementations were not independently run. Different datasets/protocols mean these differences do not establish superiority or meeting a target.",
+        "descriptive_relative_difference_percent": round(relative_gain, 2),
+        "descriptive_absolute_difference": round(absolute_gain, 4),
         "baseline_comparisons": comparison_records,
     }
     with open(BENCHMARK_JSON, "w", encoding="utf-8") as f:
@@ -185,18 +196,16 @@ def run_benchmark_comparison() -> Dict[str, Any]:
     bars = ax.barh(models, aurocs, color=colors, height=0.6, alpha=0.9, edgecolor="black", linewidth=0.8)
 
     # Reference threshold lines
-    ax.axvline(x=strongest_baseline_auroc, color="grey", linestyle="--", alpha=0.7, label=f"Best Baseline ({strongest_baseline_auroc:.3f})")
+    ax.axvline(x=strongest_baseline_auroc, color="grey", linestyle="--", alpha=0.7, label=f"DNABERT-Epi literature reference ({strongest_baseline_auroc:.3f})")
     ax.set_xlim(0.70, 0.95)
-    ax.set_xlabel("Test AUROC", fontsize=12, fontweight="bold")
-    ax.set_title("CRISPR Off-Target Safety Prediction: Multimodal Model vs. Baselines", fontsize=13, fontweight="bold", pad=12)
+    ax.set_xlabel("AUROC (model and literature-reported references)", fontsize=12, fontweight="bold")
+    ax.set_title("Descriptive AUROC Reference Comparison (Protocols Differ)", fontsize=13, fontweight="bold", pad=12)
 
     # Bar labels
     for bar, auroc in zip(bars, aurocs):
         width = bar.get_width()
-        diff = ((auroc - strongest_baseline_auroc) / strongest_baseline_auroc) * 100.0
-        diff_str = f" (+{diff:.1f}%)" if diff > 0 else (f" ({diff:.1f}%)" if diff < 0 else " (Baseline)")
         ax.text(width + 0.005, bar.get_y() + bar.get_height() / 2,
-                f"{auroc:.4f}{diff_str}",
+                f"{auroc:.4f}",
                 va="center", ha="left", fontsize=10, fontweight="bold")
 
     ax.grid(True, axis="x", linestyle=":", alpha=0.6)
@@ -214,10 +223,10 @@ def run_benchmark_comparison() -> Dict[str, Any]:
         tb_writer = SummaryWriter(log_dir=str(tb_log_dir))
 
         # 1. Scalars
-        tb_writer.add_scalar("Benchmarks/Relative_AUROC_Gain_Pct", relative_gain, 0)
-        tb_writer.add_scalar("Benchmarks/Absolute_AUROC_Gain", absolute_gain, 0)
-        tb_writer.add_scalar("Benchmarks/Target_AUROC", our_auroc, 0)
-        tb_writer.add_scalar("Benchmarks/Strongest_Baseline_AUROC", strongest_baseline_auroc, 0)
+        tb_writer.add_scalar("Benchmarks/Descriptive_Relative_Difference_Pct", relative_gain, 0)
+        tb_writer.add_scalar("Benchmarks/Descriptive_Absolute_Difference", absolute_gain, 0)
+        tb_writer.add_scalar("Benchmarks/Current_Full_Test_AUROC", our_auroc, 0)
+        tb_writer.add_scalar("Benchmarks/DNABERT_Epi_Literature_Reference_AUROC", strongest_baseline_auroc, 0)
 
         for r in comparison_records:
             model_tag = r["model"].replace(" ", "_").replace("(", "").replace(")", "")
@@ -235,13 +244,13 @@ def run_benchmark_comparison() -> Dict[str, Any]:
             tb_writer.add_image("Benchmarks/Baseline_Comparison_Plot", img_tensor, 0)
 
         # 3. Markdown Text Table
-        md_table = "### Benchmark Comparison vs Published State-of-the-Art Baselines\n\n"
-        md_table += "| Model | Modalities | Architecture | AUROC | AUPRC | F1 | Gain vs Ours |\n"
+        md_table = "### Descriptive comparison with literature-reported reference results\n\n"
+        md_table += "Baseline implementations were not independently run. Published datasets and protocols may differ; numeric differences are not head-to-head evidence and do not establish superiority or target attainment.\n\n"
+        md_table += "| Model/reference | Modalities | Architecture | Reported AUROC | Reported AUPRC | Reported F1 | Descriptive AUROC difference |\n"
         md_table += "| :--- | :--- | :--- | :---: | :---: | :---: | :---: |\n"
         for r in comparison_records:
-            md_table += f"| **{r['model']}** | {r['modalities']} | {r['architecture']} | {r['auroc']:.4f} | {r['auprc']:.4f} | {r['f1']:.4f} | +{r['rel_gain_percent']:.1f}% |\n"
-        md_table += f"| **{OUR_MULTIMODAL_MODEL['name']}** | {OUR_MULTIMODAL_MODEL['modalities']} | {OUR_MULTIMODAL_MODEL['architecture']} | **{OUR_MULTIMODAL_MODEL['auroc']:.4f}** | **{OUR_MULTIMODAL_MODEL['auprc']:.4f}** | **{OUR_MULTIMODAL_MODEL['f1']:.4f}** | **(Ours)** |\n\n"
-        md_table += f"**Key Finding**: Relative AUROC gain over strongest baseline (`{strongest_baseline_name}`) is **+{relative_gain:.2f}%** (target >= +5.0% met: **{relative_gain >= 5.0}**).\n"
+            md_table += f"| {r['model']} (literature reference) | {r['modalities']} | {r['architecture']} | {r['auroc']:.4f} | {r['auprc']:.4f} | {r['f1']:.4f} | {r['descriptive_auroc_difference_vs_literature_reference']:+.4f} |\n"
+        md_table += f"| {OUR_MULTIMODAL_MODEL['name']} (current full-test metrics) | {OUR_MULTIMODAL_MODEL['modalities']} | {OUR_MULTIMODAL_MODEL['architecture']} | {OUR_MULTIMODAL_MODEL['auroc']:.4f} | {OUR_MULTIMODAL_MODEL['auprc']:.4f} | {OUR_MULTIMODAL_MODEL['f1']:.4f} | n/a |\n"
 
         tb_writer.add_text("Benchmarks/Comparison_Report", md_table, 0)
         tb_writer.flush()

@@ -2,8 +2,8 @@
 
 Extends the sequence-only pipeline with three additional feature extractors:
 
-  (a) extract_epigenetic()   — average pybigtools signal across 6 ENCODE marks
-                               + z-score normalisation across the dataset.
+  (a) extract_epigenetic()   — average BigWig/CSV signal across 6 ENCODE marks;
+                               train-only z-score scaling is applied after splitting.
   (b) extract_3d_genome()    — intersect target loci with Hi-C loop anchors
                                (loop_count), TAD boundaries (tad_distance),
                                and A/B compartment one-hot from subcompartments.
@@ -19,8 +19,8 @@ Output per-example dict saved as stratified 80/10/10 .pt split files:
 Each split is a list of dicts with keys:
   seq_ids      LongTensor  [512]      — DNABERT input_ids
   seq_mask     LongTensor  [512]      — attention mask
-  epigen_vec   FloatTensor [6]        — z-scored epigenetic signal (6 marks)
-  genome_vec   FloatTensor [14]       — Hi-C/TAD/compartment features
+  epigen_vec   FloatTensor [6]        — train-only z-scored signal (6 marks)
+  genome_vec   FloatTensor [8]        — Hi-C/TAD/compartment features
   sc_expr_vec  FloatTensor [1]        — mean log-norm expression of nearest gene
   reg_label    FloatTensor []         — continuous cleavage_freq (regression)
   cls_label    LongTensor  []         — binary high_eff (classification)
@@ -39,10 +39,13 @@ Usage
 from __future__ import annotations
 
 import sys
+import os
 import gzip
 import json
 import logging
 import argparse
+import shutil
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -86,6 +89,7 @@ logging.basicConfig(
     level=logging.INFO,
 )
 log = logging.getLogger(__name__)
+FEATURE_STATUS: dict[str, str] = {}
 
 sys.path.insert(0, str(PROJECT_ROOT))
 from model.backbone import get_dnabert, seq_to_kmers  # noqa: E402
@@ -96,6 +100,8 @@ from model.backbone import get_dnabert, seq_to_kmers  # noqa: E402
 # ===========================================================================
 def load_and_clean(csv_path: Path, sample: Optional[int] = None) -> pd.DataFrame:
     """Load crisprSQL CSV and apply cleaning rules."""
+    if not csv_path.is_file():
+        raise FileNotFoundError(f"Required crisprSQL input CSV not found: {csv_path}")
     log.info("[LOAD] Reading %s ...", csv_path)
     df = pd.read_csv(csv_path)
     log.info("[LOAD] Raw shape: %s", df.shape)
@@ -103,7 +109,13 @@ def load_and_clean(csv_path: Path, sample: Optional[int] = None) -> pd.DataFrame
     before = len(df)
     df = df.dropna(subset=["target_sequence"])
     df = df[df["target_sequence"].str.strip() != ""]
-    log.info("[CLEAN] Dropped %d rows with missing target_sequence.", before - len(df))
+    df["target_sequence"] = df["target_sequence"].astype(str).str.upper().str.strip()
+    missing_or_empty = before - len(df)
+    invalid = ~df["target_sequence"].str.fullmatch(r"[ACGTN]+", na=False)
+    if invalid.any():
+        log.warning("[CLEAN] Dropping %d sequences containing non-DNA characters.", int(invalid.sum()))
+        df = df.loc[~invalid].copy()
+    log.info("[CLEAN] Dropped %d rows with missing/empty target_sequence.", missing_or_empty)
 
     df["cleavage_freq"] = pd.to_numeric(df["cleavage_freq"], errors="coerce")
     before = len(df)
@@ -128,11 +140,17 @@ def load_and_clean(csv_path: Path, sample: Optional[int] = None) -> pd.DataFrame
 # ===========================================================================
 # STEP 2 — Label Engineering
 # ===========================================================================
-def add_binary_label(df: pd.DataFrame, percentile: float = 0.75) -> pd.DataFrame:
-    threshold = df["cleavage_freq"].quantile(percentile)
+def add_binary_label(df: pd.DataFrame, percentile: float = 0.75,
+                     threshold: Optional[float] = None) -> pd.DataFrame:
+    if threshold is None:
+        threshold = float(df["cleavage_freq"].quantile(percentile))
     df["high_eff"] = (df["cleavage_freq"] > threshold).astype("int8")
     pos, neg = int(df["high_eff"].sum()), int((df["high_eff"] == 0).sum())
     log.info("[LABEL] threshold=%.6f | +%d / -%d (%.1f%%)", threshold, pos, neg, 100*pos/len(df))
+    FEATURE_STATUS["labels"] = (
+        f"cleavage_freq from crisprSQL; high_eff is > training-split {percentile:.0%} percentile "
+        f"(threshold={threshold:.8g})"
+    )
     return df
 
 
@@ -193,15 +211,34 @@ def _load_encode_urls() -> dict[tuple[str, str], str]:
     return url_map
 
 
-def _bigwig_mean(bw_path: Path, chrom: str, start: int, end: int) -> float:
-    """Return mean signal over [start, end) using pybigtools; 0.0 if any error."""
+_BIGWIG_HANDLES: dict[Path, tuple[str, object]] = {}
+
+
+def _get_bigwig_handle(bw_path: Path) -> tuple[str, object]:
+    handle = _BIGWIG_HANDLES.get(bw_path)
+    if handle is not None:
+        return handle
     try:
+        import pyBigWig
+        result = ("pyBigWig", pyBigWig.open(str(bw_path)))
+    except ImportError:
         import pybigtools
-        with pybigtools.open(str(bw_path)) as bw:
+        result = ("pybigtools", pybigtools.open(str(bw_path)))
+    _BIGWIG_HANDLES[bw_path] = result
+    return result
+
+
+def _bigwig_mean(bw_path: Path, chrom: str, start: int, end: int) -> float:
+    """Return mean signal over [start, end) with either supported BigWig reader."""
+    try:
+        reader, bw = _get_bigwig_handle(bw_path)
+        if reader == "pyBigWig":
+            vals = bw.values(chrom, start, end, numpy=True)
+        else:
             vals = bw.values(chrom, start, end, missing=0.0)
-            arr = np.asarray(vals, dtype=np.float32)
-            arr = np.nan_to_num(arr, nan=0.0)
-            return float(arr.mean()) if len(arr) > 0 else 0.0
+        arr = np.asarray(vals, dtype=np.float32)
+        arr = np.nan_to_num(arr, nan=0.0)
+        return float(arr.mean()) if len(arr) > 0 else 0.0
     except Exception:
         return 0.0
 
@@ -265,12 +302,38 @@ def extract_epigenetic(df: pd.DataFrame) -> np.ndarray:
                     val = getattr(row, fallback_col)
                     matrix[i, j] = float(val) if not pd.isna(val) else 0.0
 
-    # Z-score per column (mark)
-    means = matrix.mean(axis=0, keepdims=True)
-    stds  = matrix.std(axis=0, keepdims=True)
-    stds[stds == 0] = 1.0
-    matrix = (matrix - means) / stds
+    for _, handle in _BIGWIG_HANDLES.values():
+        try:
+            if hasattr(handle, "close"):
+                handle.close()
+            elif hasattr(handle, "__exit__"):
+                handle.__exit__(None, None, None)
+        except Exception:
+            pass
+    _BIGWIG_HANDLES.clear()
 
+    populated = [int(np.count_nonzero(matrix[:, j])) for j in range(matrix.shape[1])]
+    csv_fallbacks = {
+        "H3K4me3": "epigen_h3k4me3", "DNase-seq": "epigen_dnase", "ATAC-seq": "epigen_dnase"
+    }
+    mark_sources = {}
+    for mark in EPIGEN_MARKS:
+        has_bigwig = any((CELLLINE_MAP.get(str(cell), "K562"), mark) in local_bw
+                         for cell in df["cell_line"].dropna().unique())
+        fallback_col = csv_fallbacks.get(mark)
+        has_csv = bool(fallback_col and fallback_col in df.columns)
+        mark_sources[mark] = "available" if has_bigwig or has_csv else "missing"
+    FEATURE_STATUS["epigenetic_missing_marks"] = ",".join(
+        mark for mark, availability in mark_sources.items() if availability == "missing"
+    )
+    FEATURE_STATUS["epigenetic"] = (
+        f"mark availability={mark_sources}; nonzero rows per mark={dict(zip(EPIGEN_MARKS, populated))}; "
+        f"local BigWigs={n_available}; CSV fallback columns={csv_fallbacks}"
+    )
+    if not any(populated):
+        log.warning("[EPIGEN] No measured ENCODE/CSV values found; features are placeholders (zeros).")
+    else:
+        log.info("[EPIGEN] Measured nonzero values by mark: %s", dict(zip(EPIGEN_MARKS, populated)))
     log.info("[EPIGEN] Done. shape=%s, mean=%.4f, std=%.4f",
              matrix.shape, matrix.mean(), matrix.std())
     return matrix
@@ -389,9 +452,19 @@ def extract_3d_genome(df: pd.DataFrame) -> np.ndarray:
     tads_path   = GENOME3D_DIR / "GSE63525_GM12878_TAD_domains.txt.gz"
     comps_path  = GENOME3D_DIR / "GSE63525_GM12878_subcompartments.bed.gz"
 
+    missing = [p.name for p in (loops_path, tads_path, comps_path) if not p.is_file()]
+    if missing:
+        FEATURE_STATUS["3d_genome"] = f"missing reference files: {','.join(missing)}; placeholder zeros used"
+        log.warning("[3DGENOME] Missing reference files %s; 3D features will be placeholders.", missing)
+        return np.zeros((len(df), GENOME_VEC_DIM), dtype=np.float32)
+
     loops = _load_loops(loops_path)
     tads  = _load_tads(tads_path)
     comps = _load_compartments(comps_path)
+    FEATURE_STATUS["3d_genome"] = (
+        "GM12878 reference measured; used as a proxy across cell lines; "
+        f"loop chromosomes={len(loops)}, TAD chromosomes={len(tads)}, compartment chromosomes={len(comps)}"
+    )
 
     log.info("[3DGENOME] Loaded %d chromosomes of loops, %d of TADs, %d of compartments.",
              len(loops), len(tads), len(comps))
@@ -465,15 +538,27 @@ def extract_singlecell(df: pd.DataFrame) -> np.ndarray:
     """
     log.info("[SINGLECELL] Loading PBMC 10k atlas from %s ...", SC_H5_PATH)
 
-    import scanpy as sc
-    import scipy.sparse as sp
-
-    sc.settings.verbosity = 0
     if not SC_H5_PATH.exists():
         log.warning("[SINGLECELL] %s not found — returning zeros.", SC_H5_PATH)
+        FEATURE_STATUS["singlecell"] = f"missing {SC_H5_PATH.name}; placeholder zeros used"
         return np.zeros((len(df), SC_VEC_DIM), dtype=np.float32)
 
-    adata = sc.read_10x_h5(str(SC_H5_PATH))
+    try:
+        import scanpy as sc
+        import scipy.sparse as sp
+    except ImportError as exc:
+        log.warning("[SINGLECELL] Optional scanpy dependency unavailable (%s); placeholder zeros used.", exc)
+        FEATURE_STATUS["singlecell"] = f"scanpy unavailable; placeholder zeros used: {exc}"
+        return np.zeros((len(df), SC_VEC_DIM), dtype=np.float32)
+
+    sc.settings.verbosity = 0
+
+    try:
+        adata = sc.read_10x_h5(str(SC_H5_PATH))
+    except Exception as exc:
+        log.warning("[SINGLECELL] Could not read atlas (%s); placeholder zeros used.", exc)
+        FEATURE_STATUS["singlecell"] = f"unreadable atlas; placeholder zeros used: {exc}"
+        return np.zeros((len(df), SC_VEC_DIM), dtype=np.float32)
     adata.var_names_make_unique()
 
     # Log-normalise
@@ -502,6 +587,10 @@ def extract_singlecell(df: pd.DataFrame) -> np.ndarray:
             hits += 1
 
     log.info("[SINGLECELL] Done. Matched %d / %d rows to atlas genes.", hits, len(df))
+    FEATURE_STATUS["singlecell"] = (
+        f"PBMC 10x atlas loaded; expression matched for {hits}/{len(df)} rows; "
+        "unmatched rows are placeholders (zero)"
+    )
     return matrix
 
 
@@ -515,15 +604,16 @@ def save_split_tensors(
     sc_mat:       np.ndarray,
     df:           pd.DataFrame,
     out_dir:      Path,
+    overwrite:    bool = False,
+    split_indices: Optional[dict[str, np.ndarray]] = None,
 ) -> None:
     """Combine all features into per-example dicts, split, and save .pt files.
 
     Split
     -----
-    Stratified on ``high_eff`` label:
-      train : 80%  → outputs/tensors/train.pt
-      val   : 10%  → outputs/tensors/val.pt
-      test  : 10%  → outputs/tensors/test.pt
+    Uses a fixed 80/10/10 split. The classification threshold is learned from
+    training targets only; the held-out validation/test rows are stratified
+    when labels/counts permit.
 
     Each .pt file contains a list[dict] where every dict has keys:
       seq_ids, seq_mask, epigen_vec, genome_vec, sc_expr_vec, reg_label, cls_label
@@ -542,18 +632,43 @@ def save_split_tensors(
     cls_t    = torch.from_numpy(labels_np)   # [N]
     reg_t    = torch.from_numpy(freq_np)     # [N]
 
-    # Build flat indices for stratified split
-    indices = np.arange(N)
-    strat   = labels_np
+    if N < 10:
+        raise ValueError(f"At least 10 cleaned rows are required for an 80/10/10 split; got {N}.")
 
-    # 80% train, 20% temp
-    idx_train, idx_temp = train_test_split(
-        indices, test_size=0.20, random_state=42, stratify=strat
-    )
-    # 50% of temp → val, 50% → test  (= 10% / 10% overall)
-    idx_val, idx_test = train_test_split(
-        idx_temp, test_size=0.50, random_state=42, stratify=strat[idx_temp]
-    )
+    if split_indices is None:
+        # Utility/test callers without a precomputed training-only label threshold.
+        indices = np.arange(N)
+        strat = labels_np
+        can_stratify = np.unique(strat, return_counts=True)[1].min() >= 2
+        if not can_stratify:
+            log.warning("[SPLIT] A class has fewer than 2 rows; using deterministic unstratified split.")
+        idx_train, idx_temp = train_test_split(
+            indices, test_size=0.20, random_state=42, stratify=strat if can_stratify else None
+        )
+        temp_can_stratify = can_stratify and np.unique(strat[idx_temp], return_counts=True)[1].min() >= 2
+        idx_val, idx_test = train_test_split(
+            idx_temp, test_size=0.50, random_state=42,
+            stratify=strat[idx_temp] if temp_can_stratify else None
+        )
+    else:
+        idx_train, idx_val, idx_test = (np.asarray(split_indices[key], dtype=np.int64)
+                                         for key in ("train", "val", "test"))
+        all_indices = np.concatenate((idx_train, idx_val, idx_test))
+        if len(all_indices) != N or set(all_indices.tolist()) != set(range(N)):
+            raise ValueError("Precomputed train/val/test indices must partition every row exactly once.")
+        log.info("[SPLIT] Using fixed train-derived label threshold split; validation/test are stratified where possible.")
+
+    # Fit epigenetic normalization on training rows only to avoid split leakage.
+    epigen_means = epigen_mat[idx_train].mean(axis=0, keepdims=True)
+    epigen_stds = epigen_mat[idx_train].std(axis=0, keepdims=True)
+    missing_marks = set(filter(None, FEATURE_STATUS.get("epigenetic_missing_marks", "").split(",")))
+    for column, mark in enumerate(EPIGEN_MARKS):
+        if mark in missing_marks:
+            epigen_means[0, column] = 0.0
+            epigen_stds[0, column] = 1.0
+    epigen_stds[epigen_stds < 1e-8] = 1.0
+    epigen_mat = ((epigen_mat - epigen_means) / epigen_stds).astype(np.float32)
+    epigen_t = torch.from_numpy(epigen_mat)
 
     log.info("[SPLIT] train=%d  val=%d  test=%d", len(idx_train), len(idx_val), len(idx_test))
 
@@ -578,6 +693,20 @@ def save_split_tensors(
     }
 
     out_dir.mkdir(parents=True, exist_ok=True)
+    existing = [p for p in out_dir.iterdir() if p.is_file()]
+    if existing and not overwrite:
+        raise FileExistsError(
+            f"Preprocessing outputs already exist in {out_dir}. Use --overwrite to preserve a backup and regenerate."
+        )
+    if existing:
+        backup_dir = out_dir / f"backup_{time.strftime('%Y%m%d_%H%M%S')}"
+        backup_dir.mkdir(exist_ok=False)
+        for path in existing:
+            shutil.copy2(path, backup_dir / path.name)
+        log.warning("[BACKUP] Existing preprocessing outputs copied to %s", backup_dir)
+    row_split = np.empty(N, dtype=object)
+    for split_name, idxs in splits.items():
+        row_split[idxs] = split_name
     for split_name, idxs in splits.items():
         data = _build_split(idxs)
         out_path = out_dir / f"{split_name}.pt"
@@ -601,6 +730,19 @@ def save_split_tensors(
     # Save split index arrays for reproducibility
     torch.save({"train": idx_train, "val": idx_val, "test": idx_test},
                out_dir / "split_indices.pt")
+
+    meta = df.copy()
+    meta["split"] = row_split
+    for modality, status in FEATURE_STATUS.items():
+        meta[f"{modality}_provenance"] = status
+    meta["epigenetic_normalization"] = "z-score fit on train split only"
+    meta.to_csv(out_dir / "meta.csv", index=False)
+    (out_dir / "feature_scaler.json").write_text(json.dumps({
+        "epigenetic_mean": epigen_means.reshape(-1).tolist(),
+        "epigenetic_std": epigen_stds.reshape(-1).tolist(),
+        "fit_split": "train",
+    }, indent=2), encoding="utf-8")
+    log.info("[SAVE] Feature provenance and split assignment written to %s", out_dir / "meta.csv")
 
     log.info("[SAVE] All tensors and split files written to %s", out_dir)
 
@@ -663,16 +805,33 @@ def run_unit_tests(
 # Main Pipeline
 # ===========================================================================
 def preprocess(sample: Optional[int] = None, run_tests: bool = True,
-               max_length: int = 512) -> None:
+               max_length: int = 512, overwrite: bool = False,
+               output_dir: Path = TENSOR_DIR) -> None:
+    FEATURE_STATUS.clear()
     log.info("=" * 72)
     log.info("CRISPR Off-Target Predictor — Multimodal Preprocessing Pipeline")
     log.info("=" * 72)
 
+    if not 8 <= max_length <= 512:
+        raise ValueError("--max-length must be between 8 and the DNABERT limit of 512 tokens.")
     log.info("[INIT] Loading DNABERT-6 tokenizer ...")
-    tokenizer, _ = get_dnabert(freeze=True)
+    # Tokenization itself is CPU work; leave the 6 GB GPU free for model training.
+    tokenizer, _ = get_dnabert(freeze=True, device="cpu")
 
     df = load_and_clean(CSV_PATH, sample=sample)
-    df = add_binary_label(df)
+    # Fix the held-out rows first; derive the risk threshold only from training targets.
+    indices = np.arange(len(df))
+    idx_train, idx_temp = train_test_split(indices, test_size=0.20, random_state=42)
+    train_threshold = float(df.iloc[idx_train]["cleavage_freq"].quantile(0.75))
+    df = add_binary_label(df, threshold=train_threshold)
+    temp_labels = df["high_eff"].to_numpy()[idx_temp]
+    temp_counts = np.unique(temp_labels, return_counts=True)[1]
+    temp_stratify = temp_labels if len(temp_counts) > 1 and temp_counts.min() >= 2 else None
+    if temp_stratify is None:
+        log.warning("[SPLIT] Held-out pool is too small/imbalanced for stratified val/test; using random 50/50 split.")
+    idx_val, idx_test = train_test_split(idx_temp, test_size=0.50, random_state=42,
+                                         stratify=temp_stratify)
+    split_indices = {"train": idx_train, "val": idx_val, "test": idx_test}
 
     # --- Sequence ---
     seq_tensors = tokenise_sequences(df, tokenizer, max_length=max_length)
@@ -686,17 +845,21 @@ def preprocess(sample: Optional[int] = None, run_tests: bool = True,
     # --- Single-Cell ---
     sc_mat = extract_singlecell(df)
 
+    FEATURE_STATUS["sequence"] = (
+        f"DNABERT-6 tokenizer; tokenized {len(df)} sequences; max_length={max_length}"
+    )
     # --- Tests ---
     if run_tests:
         log.info("[TESTS] Running 14 unit tests ...")
         run_unit_tests(seq_tensors, epigen_mat, genome_mat, sc_mat, df, max_length)
 
     # --- Save + Split ---
-    save_split_tensors(seq_tensors, epigen_mat, genome_mat, sc_mat, df, TENSOR_DIR)
+    save_split_tensors(seq_tensors, epigen_mat, genome_mat, sc_mat, df, output_dir,
+                       overwrite=overwrite, split_indices=split_indices)
 
     log.info("=" * 72)
     log.info("Multimodal preprocessing complete.")
-    log.info("  outputs/tensors/train.pt  val.pt  test.pt")
+    log.info("  %s/train.pt  val.pt  test.pt", output_dir)
     log.info("=" * 72)
 
 
@@ -708,5 +871,8 @@ if __name__ == "__main__":
     parser.add_argument("--sample",     type=int, default=None, help="First N rows only.")
     parser.add_argument("--no-tests",  action="store_true",    help="Skip unit tests.")
     parser.add_argument("--max-length", type=int, default=512,  help="Token pad/trunc length.")
+    parser.add_argument("--overwrite", action="store_true", help="Back up existing tensors/metadata before regenerating.")
+    parser.add_argument("--output-dir", type=Path, default=TENSOR_DIR, help="Output directory (defaults to outputs/tensors).")
     args = parser.parse_args()
-    preprocess(sample=args.sample, run_tests=not args.no_tests, max_length=args.max_length)
+    preprocess(sample=args.sample, run_tests=not args.no_tests, max_length=args.max_length,
+               overwrite=args.overwrite, output_dir=args.output_dir)

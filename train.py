@@ -36,6 +36,7 @@ Usage:
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 import csv
 import math
@@ -44,6 +45,13 @@ import argparse
 import logging
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+HF_CACHE_DIR = PROJECT_ROOT / "models" / "hf-cache"
+os.environ["HF_HOME"] = str(HF_CACHE_DIR)
+os.environ["HF_HUB_CACHE"] = str(HF_CACHE_DIR / "hub")
+os.environ["HF_MODULES_CACHE"] = str(HF_CACHE_DIR / "modules")
+os.environ["TRANSFORMERS_CACHE"] = str(HF_CACHE_DIR / "hub")
 
 import numpy as np
 import pandas as pd
@@ -56,7 +64,6 @@ from sklearn.metrics import roc_auc_score, precision_recall_curve, auc, f1_score
 from scipy.stats import pearsonr
 from transformers import get_cosine_schedule_with_warmup
 
-PROJECT_ROOT = Path(__file__).resolve().parent
 TENSOR_DIR = PROJECT_ROOT / "outputs" / "tensors"
 CHECKPOINT_DIR = PROJECT_ROOT / "outputs" / "checkpoints"
 LOG_DIR = PROJECT_ROOT / "logs"
@@ -103,7 +110,7 @@ class MultimodalCRISPRDataset(Dataset):
     def __init__(self, pt_path: Path) -> None:
         if not pt_path.exists():
             raise FileNotFoundError(f"Dataset file not found: {pt_path}")
-        self.data: List[Dict[str, torch.Tensor]] = torch.load(pt_path)
+        self.data: List[Dict[str, torch.Tensor]] = torch.load(pt_path, map_location="cpu", weights_only=True)
 
     def __len__(self) -> int:
         return len(self.data)
@@ -197,7 +204,8 @@ def evaluate(
     loss_fn: MultimodalLoss,
     device: torch.device,
     use_amp: bool = False,
-) -> Dict[str, float]:
+    return_predictions: bool = False,
+) -> Dict[str, Any]:
     """Evaluate model on validation/test set and return metrics."""
     model.eval()
 
@@ -210,6 +218,7 @@ def evaluate(
     all_reg_targets: List[float] = []
     all_cls_probs: List[float] = []
     all_cls_targets: List[int] = []
+    all_cls_logits: List[float] = []
 
     autocast_device = "cuda" if device.type == "cuda" else "cpu"
 
@@ -243,6 +252,8 @@ def evaluate(
 
         cls_probs = torch.sigmoid(cls_out.squeeze(-1)).cpu().numpy().tolist()
         all_cls_probs.extend(cls_probs)
+        if return_predictions:
+            all_cls_logits.extend(cls_out.squeeze(-1).cpu().numpy().tolist())
         all_cls_targets.extend(cls_label.cpu().numpy().tolist())
 
     val_loss = total_loss / max(1, count)
@@ -270,7 +281,7 @@ def evaluate(
     preds_binary = [1 if p >= 0.5 else 0 for p in all_cls_probs]
     f1 = float(f1_score(all_cls_targets, preds_binary, zero_division=0))
 
-    return {
+    result: Dict[str, Any] = {
         "val_loss": val_loss,
         "val_mse": val_mse,
         "val_bce": val_bce,
@@ -280,6 +291,15 @@ def evaluate(
         "pr_auc": pr_auc,
         "f1": f1,
     }
+    if return_predictions:
+        result["predictions"] = {
+            "reg_preds": np.asarray(all_reg_preds, dtype=np.float32),
+            "reg_targets": np.asarray(all_reg_targets, dtype=np.float32),
+            "cls_logits": np.asarray(all_cls_logits, dtype=np.float32),
+            "cls_probs": np.asarray(all_cls_probs, dtype=np.float32),
+            "cls_targets": np.asarray(all_cls_targets, dtype=np.int64),
+        }
+    return result
 
 
 # ============================================================================
@@ -300,6 +320,13 @@ def log_metrics_to_csv(csv_path: Path, row_dict: Dict[str, Any]) -> None:
         if not file_exists:
             writer.writeheader()
         writer.writerow(row_dict)
+
+
+def _atomic_torch_save(payload: Any, path: Path) -> None:
+    """Write checkpoints via a sibling temporary file to avoid partial final files."""
+    temporary = path.with_name(path.name + ".partial")
+    torch.save(payload, temporary)
+    os.replace(temporary, path)
 
 
 # ============================================================================
@@ -353,23 +380,46 @@ def run_swa_averaging(
 def train(
     smoke_test: bool = False,
     epochs_override: Optional[int] = None,
-    batch_size: int = 32,
-    accumulation_steps: int = 2,
+    batch_size: int = 2,
+    accumulation_steps: int = 16,
     patience: int = 3,
     resume: bool = False,
-    enable_swa: bool = True,
+    enable_swa: bool = False,
     sample: Optional[int] = None,
-    seq_len: Optional[int] = None,
+    seq_len: Optional[int] = 256,
+    num_workers: int = 0,
+    overwrite_checkpoints: bool = False,
+    device_name: str = "cuda",
 ) -> None:
+    if batch_size < 1 or accumulation_steps < 1 or num_workers < 0:
+        raise ValueError("batch_size and accumulation_steps must be positive; num_workers cannot be negative")
+    if seq_len is not None and not 8 <= seq_len <= 512:
+        raise ValueError("seq_len must be between 8 and 512")
     log.info("=" * 75)
     log.info("Starting Multimodal CRISPR Off-Target Predictor 3-Stage Training")
     log.info("=" * 75)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if device_name == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("CUDA was requested but is unavailable. Check Docker --gpus all and nvidia-smi; CPU fallback is not automatic.")
+    device = torch.device(device_name)
     log.info("Target Training Device: %s", device)
 
     use_amp = (device.type == "cuda")
     scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
+
+    existing_checkpoints = [p for p in [BEST_MODEL_PATH, *CHECKPOINT_DIR.glob("*.pt")] if p.is_file()]
+    if existing_checkpoints and not resume:
+        if not overwrite_checkpoints:
+            raise FileExistsError(
+                f"Existing checkpoints found ({existing_checkpoints[0]}). Use --resume to continue or "
+                "--overwrite-checkpoints to back it up and start a new run."
+            )
+        backup_dir = CHECKPOINT_DIR / f"backup_{time.strftime('%Y%m%d_%H%M%S')}"
+        backup_dir.mkdir(parents=True, exist_ok=False)
+        for path in [BEST_MODEL_PATH, *CHECKPOINT_DIR.glob("*.pt")]:
+            if path.is_file():
+                shutil.copy2(path, backup_dir / path.name)
+        log.warning("[CHECKPOINT] Existing checkpoints backed up to %s", backup_dir)
 
     tb_writer = SummaryWriter(log_dir=str(TB_DIR))
 
@@ -410,9 +460,14 @@ def train(
                 item["seq_mask"] = item["seq_mask"][:seq_len]
         log.info("[SEQ_LEN] Truncated sequence tokens to seq_len=%d", seq_len)
 
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, drop_last=False)
-    val_loader   = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
-    test_loader  = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+    loader_options = {
+        "num_workers": num_workers,
+        "pin_memory": device.type == "cuda",
+        "persistent_workers": num_workers > 0,
+    }
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, drop_last=False, **loader_options)
+    val_loader   = DataLoader(val_ds, batch_size=batch_size, shuffle=False, **loader_options)
+    test_loader  = DataLoader(test_ds, batch_size=batch_size, shuffle=False, **loader_options)
 
     steps_per_epoch = math.ceil(len(train_loader) / accumulation_steps)
     log.info("DataLoader ready: train_samples=%d, batches=%d, steps_per_epoch=%d",
@@ -453,15 +508,25 @@ def train(
     patience_counter = 0
     current_epoch = 1
     stage2_checkpoints: List[Path] = []
+    resume_payload = None
 
     # Handle Resumability
-    if resume and BEST_MODEL_PATH.exists():
-        log.info("[RESUME] Loading checkpoint from %s ...", BEST_MODEL_PATH)
-        ckpt = torch.load(BEST_MODEL_PATH)
-        model.load_state_dict(ckpt["model_state"])
-        best_val_loss = ckpt.get("best_val_loss", best_val_loss)
-        current_epoch = ckpt.get("epoch", 1) + 1
-        log.info("[RESUME] Resuming from Epoch %d (Best Val Loss: %.4f)", current_epoch, best_val_loss)
+    latest_path = CHECKPOINT_DIR / "last_checkpoint.pt"
+    if resume:
+        checkpoint_path = latest_path if latest_path.exists() else BEST_MODEL_PATH
+        if not checkpoint_path.exists():
+            raise FileNotFoundError("--resume requested but no last or best checkpoint exists.")
+        log.info("[RESUME] Loading checkpoint from %s ...", checkpoint_path)
+        resume_payload = torch.load(checkpoint_path, map_location=device, weights_only=False)
+        model.load_state_dict(resume_payload["model_state"])
+        best_val_loss = resume_payload.get("best_val_loss", best_val_loss)
+        current_epoch = resume_payload.get("epoch", 0) + 1
+        patience_counter = resume_payload.get("patience_counter", 0)
+        if "loss_state" in resume_payload:
+            loss_fn.load_state_dict(resume_payload["loss_state"])
+        if "scaler_state" in resume_payload:
+            scaler.load_state_dict(resume_payload["scaler_state"])
+        log.info("[RESUME] Next epoch %d (best val loss %.4f)", current_epoch, best_val_loss)
 
     # Loop over stages
     stage_start_epoch = 1
@@ -498,6 +563,12 @@ def train(
             num_training_steps=total_stage_steps,
         )
 
+        if resume_payload is not None and resume_payload.get("stage") == stage_id:
+            if "optimizer_state" in resume_payload:
+                optimizer.load_state_dict(resume_payload["optimizer_state"])
+            if "scheduler_state" in resume_payload:
+                scheduler.load_state_dict(resume_payload["scheduler_state"])
+
         log.info("Optimizer initialized: %d parameter groups. Stage steps: %d (warmup: %d)",
                  len(param_groups), total_stage_steps, warmup_steps)
 
@@ -530,8 +601,10 @@ def train(
                         genome_vec=genome_vec,
                         sc_expr_vec=sc_expr_vec,
                     )
-                    loss, metrics = loss_fn(reg_out, cls_out, reg_label, cls_label, step_increment=1)
-                    loss = loss / accumulation_steps
+                    loss, metrics = loss_fn(reg_out, cls_out, reg_label, cls_label, step_increment=0)
+                    group_start = (step_idx // accumulation_steps) * accumulation_steps
+                    group_size = min(accumulation_steps, len(train_loader) - group_start)
+                    loss = loss / group_size
 
                 scaler.scale(loss).backward()
 
@@ -548,6 +621,7 @@ def train(
                     scaler.update()
                     optimizer.zero_grad()
                     scheduler.step()
+                    loss_fn.step.add_(1)
 
             elapsed = time.time() - t0
             train_loss = running_loss / max(1, accum_samples)
@@ -605,16 +679,15 @@ def train(
                 "learning_rate": current_lr,
             })
 
-            # Checkpoint per epoch for Stage 2 SWA
-            epoch_ckpt_path = CHECKPOINT_DIR / f"epoch_{current_epoch:02d}.pt"
-            torch.save({
-                "epoch": current_epoch,
-                "stage": stage_id,
-                "model_state": model.state_dict(),
-                "val_metrics": val_metrics,
-            }, epoch_ckpt_path)
-
-            if stage_id == 2:
+            # Keep epoch snapshots only when optional SWA needs them.
+            if enable_swa and stage_id == 2:
+                epoch_ckpt_path = CHECKPOINT_DIR / f"epoch_{current_epoch:02d}.pt"
+                _atomic_torch_save({
+                    "epoch": current_epoch,
+                    "stage": stage_id,
+                    "model_state": model.state_dict(),
+                    "val_metrics": val_metrics,
+                }, epoch_ckpt_path)
                 stage2_checkpoints.append(epoch_ckpt_path)
 
             # Early Stopping Check
@@ -632,13 +705,31 @@ def train(
                     "scheduler_state": scheduler.state_dict(),
                     "best_val_loss": best_val_loss,
                     "val_metrics": val_metrics,
+                    "patience_counter": patience_counter,
+                    "loss_state": loss_fn.state_dict(),
+                    "scaler_state": scaler.state_dict(),
                 }
-                torch.save(resumable_ckpt, BEST_MODEL_PATH)
+                _atomic_torch_save(resumable_ckpt, BEST_MODEL_PATH)
                 log.info("  --> Saved resumable best model (Val Loss: %.4f) to %s", best_val_loss, BEST_MODEL_PATH)
             else:
                 patience_counter += 1
                 log.info("  [EARLY STOPPING] Patience counter: %d/%d (Best Val Loss: %.4f)",
                          patience_counter, patience, best_val_loss)
+
+            last_ckpt = {
+                "epoch": current_epoch,
+                "stage": stage_id,
+                "model_state": model.state_dict(),
+                "optimizer_state": optimizer.state_dict(),
+                "scheduler_state": scheduler.state_dict(),
+                "best_val_loss": best_val_loss,
+                "patience_counter": patience_counter,
+                "val_metrics": val_metrics,
+                "loss_state": loss_fn.state_dict(),
+                "scaler_state": scaler.state_dict(),
+            }
+            _atomic_torch_save(last_ckpt, latest_path)
+            current_epoch += 1
 
             if patience_counter >= patience:
                 log.warning("[EARLY STOPPING] Triggered after %d epochs without val loss improvement.", patience)
@@ -650,7 +741,7 @@ def train(
 
     # Save final model checkpoint
     final_ckpt = CHECKPOINT_DIR / "final_model.pt"
-    torch.save({"epoch": current_epoch - 1, "model_state": model.state_dict()}, final_ckpt)
+    _atomic_torch_save({"epoch": current_epoch - 1, "model_state": model.state_dict()}, final_ckpt)
     log.info("Saved final model checkpoint to %s", final_ckpt)
 
     # Run SWA over last 3 Stage 2 Checkpoints if enabled
@@ -663,7 +754,7 @@ def train(
             device=device,
         )
         swa_ckpt_path = CHECKPOINT_DIR / "swa_model.pt"
-        torch.save({"model_state": swa_model.module.state_dict()}, swa_ckpt_path)
+        _atomic_torch_save({"model_state": swa_model.module.state_dict()}, swa_ckpt_path)
         log.info("Saved SWA model to %s", swa_ckpt_path)
 
         # Evaluate SWA model on Test Set
@@ -697,7 +788,7 @@ def train(
 
     # TensorBoard Training Summary
     train_summary_md = f"""### Multimodal CRISPR Training Complete
-- **Final Epochs Completed**: {current_epoch}
+- **Final Epoch Completed**: {current_epoch - 1}
 - **Device**: `{device}`
 - **Best Model Checkpoint**: `{BEST_MODEL_PATH.name}`
 
@@ -721,13 +812,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train Multimodal CRISPR Predictor.")
     parser.add_argument("--smoke-test", action="store_true", help="Run quick 3-stage smoke test.")
     parser.add_argument("--epochs", type=int, default=None, help="Override total epochs.")
-    parser.add_argument("--batch-size", type=int, default=32, help="Micro-batch size.")
-    parser.add_argument("--accum-steps", type=int, default=2, help="Gradient accumulation steps.")
+    parser.add_argument("--batch-size", type=int, default=2, help="Micro-batch size (RTX 4050 friendly default).")
+    parser.add_argument("--accum-steps", type=int, default=16, help="Gradient accumulation steps.")
     parser.add_argument("--patience", type=int, default=3, help="Early stopping patience epochs.")
     parser.add_argument("--resume", action="store_true", help="Resume from outputs/model_best.pt.")
-    parser.add_argument("--no-swa", action="store_true", help="Disable SWA averaging.")
+    parser.add_argument("--swa", action="store_true", help="Enable optional SWA averaging (uses additional VRAM).")
     parser.add_argument("--sample", type=int, default=None, help="Train on first N examples.")
-    parser.add_argument("--seq-len", type=int, default=None, help="Truncate sequence token length.")
+    parser.add_argument("--seq-len", type=int, default=256, help="Truncate sequence tokens (max 512).")
+    parser.add_argument("--num-workers", type=int, default=0, help="DataLoader workers; 0 is robust in Docker/Windows mounts.")
+    parser.add_argument("--overwrite-checkpoints", action="store_true", help="Back up existing checkpoints before a fresh run.")
+    parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda", help="Training device; default requires CUDA.")
     args = parser.parse_args()
 
     train(
@@ -737,7 +831,10 @@ if __name__ == "__main__":
         accumulation_steps=args.accum_steps,
         patience=args.patience,
         resume=args.resume,
-        enable_swa=not args.no_swa,
+        enable_swa=args.swa,
         sample=args.sample,
         seq_len=args.seq_len,
+        num_workers=args.num_workers,
+        overwrite_checkpoints=args.overwrite_checkpoints,
+        device_name=args.device,
     )

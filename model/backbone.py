@@ -42,9 +42,20 @@ Expected output (approximate):
 from __future__ import annotations
 
 import logging
+import json
+import os
+import shutil
 import sys
 from pathlib import Path
 from typing import Tuple
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+CACHE_DIR = PROJECT_ROOT / "models" / "dnabert-base"
+HF_CACHE_DIR = PROJECT_ROOT / "models" / "hf-cache"
+os.environ["HF_HOME"] = str(HF_CACHE_DIR)
+os.environ["HF_HUB_CACHE"] = str(HF_CACHE_DIR / "hub")
+os.environ["HF_MODULES_CACHE"] = str(HF_CACHE_DIR / "modules")
+os.environ["TRANSFORMERS_CACHE"] = str(HF_CACHE_DIR / "hub")
 
 import torch
 from transformers import AutoModel, AutoTokenizer, BertModel, PreTrainedTokenizerFast
@@ -52,9 +63,63 @@ from transformers import AutoModel, AutoTokenizer, BertModel, PreTrainedTokenize
 # ---------------------------------------------------------------------------
 # Paths & constants
 # ---------------------------------------------------------------------------
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-CACHE_DIR = PROJECT_ROOT / "models" / "dnabert-base"
 HF_MODEL_ID = "zhihan1996/DNA_bert_6"
+HF_REVISION = "c56e67ea5827e0ddc67ef059addcf71569b1216e"
+MIN_EXPECTED_PARAMETERS = 80_000_000
+
+
+def _cache_is_complete(path: Path) -> bool:
+    """Return true only when the cache contains weights and tokenizer assets."""
+    weight_files = [p for name in ("model.safetensors", "pytorch_model.bin")
+                    if (p := path / name).is_file() and p.stat().st_size > 100_000_000]
+    tokenizer_files = ((path / "tokenizer.json").is_file() or (path / "vocab.txt").is_file())
+    required = (path / "config.json").is_file() and (path / "tokenizer_config.json").is_file()
+    if not (weight_files and tokenizer_files and required):
+        return False
+    try:
+        config = json.loads((path / "config.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    if not (config.get("model_type") == "bert" and config.get("hidden_size") == 768
+            and config.get("num_hidden_layers") == 12 and config.get("vocab_size") == 4101):
+        return False
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(
+            str(path), local_files_only=True, trust_remote_code=True
+        )
+        probe = tokenizer("AAAAAA", add_special_tokens=True)["input_ids"]
+        return (len(tokenizer) == config["vocab_size"] and tokenizer.cls_token_id is not None
+                and tokenizer.sep_token_id is not None and len(probe) >= 3)
+    except Exception:
+        return False
+
+
+def _download_complete_snapshot() -> None:
+    """Fetch the pinned repo into a staging directory, then install atomically per file."""
+    from huggingface_hub import snapshot_download
+
+    staging = CACHE_DIR.parent / f".{CACHE_DIR.name}.staging"
+    staging.mkdir(parents=True, exist_ok=True)
+    log.info("[DNABERT] Fetching %s into resumable staging cache %s", HF_MODEL_ID, staging)
+    snapshot_download(repo_id=HF_MODEL_ID, revision=HF_REVISION, local_dir=str(staging))
+    if not _cache_is_complete(staging):
+        raise RuntimeError(
+            f"Downloaded DNABERT snapshot is incomplete at {staging}; expected a valid tokenizer "
+            "and full model.safetensors or pytorch_model.bin. No random weights were initialized."
+        )
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    for source in staging.iterdir():
+        if not source.is_file() or source.name == ".cache":
+            continue
+        target = CACHE_DIR / source.name
+        temporary = target.with_name(target.name + ".partial")
+        shutil.copy2(source, temporary)
+        temporary.replace(target)
+    if not _cache_is_complete(CACHE_DIR):
+        raise RuntimeError(f"DNABERT installation did not validate at {CACHE_DIR}")
+    # The canonical local cache is now complete; remove the duplicate staging copy.
+    shutil.rmtree(staging)
 
 # ---------------------------------------------------------------------------
 # Logger
@@ -91,6 +156,9 @@ def seq_to_kmers(seq: str, k: int = 6) -> str:
     seq = seq.upper().strip()
     if len(seq) < k:
         raise ValueError(f"Sequence length {len(seq)} is shorter than k={k}.")
+    invalid = sorted(set(seq) - set("ACGTN"))
+    if invalid:
+        raise ValueError(f"Sequence contains unsupported DNA symbols: {invalid}")
     return " ".join(seq[i : i + k] for i in range(len(seq) - k + 1))
 
 
@@ -99,6 +167,7 @@ def seq_to_kmers(seq: str, k: int = 6) -> str:
 # ---------------------------------------------------------------------------
 def get_dnabert(
     freeze: bool = True,
+    device: str | torch.device | None = None,
 ) -> Tuple[PreTrainedTokenizerFast, BertModel]:
     """Load DNABERT-6 tokenizer and model, caching locally.
 
@@ -116,42 +185,56 @@ def get_dnabert(
         ``transformers.BertModel`` with ``output_hidden_states=True``.
         Moved to the best available device (cuda → cpu).
     """
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Determine whether the model is already cached
-    config_path = CACHE_DIR / "config.json"
-    if config_path.exists():
+    if _cache_is_complete(CACHE_DIR):
         log.info("[DNABERT] Loading from local cache  %s ...", CACHE_DIR)
         load_from = str(CACHE_DIR)
     else:
         log.info(
-            "[DNABERT] Cache not found at %s — downloading %s from HuggingFace Hub ...",
+            "[DNABERT] Cache missing weights or tokenizer at %s; downloading exact model %s ...",
             CACHE_DIR,
             HF_MODEL_ID,
         )
-        load_from = HF_MODEL_ID
+        _download_complete_snapshot()
+        load_from = str(CACHE_DIR)
 
     # Load tokenizer -----------------------------------------------------------
     tokenizer: PreTrainedTokenizerFast = AutoTokenizer.from_pretrained(
         load_from,
-        cache_dir=str(CACHE_DIR),
+        local_files_only=True,
         trust_remote_code=True,
     )
 
     # Load model ---------------------------------------------------------------
-    model: BertModel = AutoModel.from_pretrained(
+    model, loading_info = AutoModel.from_pretrained(
         load_from,
-        cache_dir=str(CACHE_DIR),
+        local_files_only=True,
         output_hidden_states=True,
         trust_remote_code=True,
+        output_loading_info=True,
     )
-
-    # Persist to canonical local path so next load is purely offline ----------
-    if load_from != str(CACHE_DIR):
-        log.info("[DNABERT] Saving to local cache %s ...", CACHE_DIR)
-        tokenizer.save_pretrained(str(CACHE_DIR))
-        model.save_pretrained(str(CACHE_DIR))
-        log.info("[DNABERT] Saved.")
+    if loading_info.get("missing_keys") or loading_info.get("mismatched_keys") or loading_info.get("error_msgs"):
+        raise RuntimeError(
+            "DNABERT checkpoint did not fully initialize the requested backbone; "
+            f"missing={loading_info.get('missing_keys')}, "
+            f"mismatched={loading_info.get('mismatched_keys')}, errors={loading_info.get('error_msgs')}. "
+            "Refusing to use random or partially initialized weights."
+        )
+    if loading_info.get("unexpected_keys"):
+        log.info("[DNABERT] Ignoring task-head-only checkpoint keys: %s", loading_info["unexpected_keys"])
+    if getattr(model.config, "hidden_size", None) != 768 or getattr(model.config, "num_hidden_layers", None) != 12:
+        raise RuntimeError(f"Unexpected DNABERT architecture: {model.config}")
+    parameter_count = sum(p.numel() for p in model.parameters())
+    if parameter_count < MIN_EXPECTED_PARAMETERS:
+        raise RuntimeError(
+            f"DNABERT loaded only {parameter_count:,} parameters; expected the 12-layer, "
+            "768-hidden DNABERT-6 encoder (roughly 89M parameters with its 4,101-token vocabulary)."
+        )
+    if len(tokenizer) != model.config.vocab_size:
+        raise RuntimeError(
+            f"Tokenizer/model vocabulary mismatch: {len(tokenizer)} vs {model.config.vocab_size}"
+        )
+    if tokenizer.cls_token_id is None or tokenizer.sep_token_id is None:
+        raise RuntimeError("DNABERT tokenizer is missing required CLS/SEP special tokens")
 
     # Freeze -------------------------------------------------------------------
     if freeze:
@@ -160,8 +243,10 @@ def get_dnabert(
         log.info("[DNABERT] All BERT weights frozen (requires_grad=False).")
 
     # Move to best device ------------------------------------------------------
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
+    target_device = torch.device(device) if device is not None else torch.device(
+        "cuda" if torch.cuda.is_available() else "cpu"
+    )
+    model = model.to(target_device)
 
     # Report -------------------------------------------------------------------
     total_params = sum(p.numel() for p in model.parameters()) / 1e6
@@ -172,7 +257,7 @@ def get_dnabert(
         total_params,
         trainable,
         freeze,
-        device,
+        target_device,
     )
 
     return tokenizer, model

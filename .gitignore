@@ -17,6 +17,7 @@ build/
 models/dnabert-base/*.safetensors
 models/dnabert-base/*.bin
 models/dnabert-base/models--*
+models/hf-cache/
 outputs/*.pt
 outputs/checkpoints/*.pt
 outputs/tensors/*.pt

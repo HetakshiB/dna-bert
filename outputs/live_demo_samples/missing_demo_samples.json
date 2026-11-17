@@ -1,0 +1,448 @@
+{
+  "provenance": {
+    "checkpoint_path": "outputs/model_best.pt",
+    "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+    "test_tensor_path": "outputs/tensors/test.pt",
+    "test_tensor_sha256": "4a6ff663e0556cff4d4427531a09b9abf7f01d8b5d64510a0ae369bbcf6f6fb8",
+    "test_split_size": 2554,
+    "device": "cuda",
+    "api_base_url": "http://127.0.0.1:8000",
+    "input_mode": "missing_feature_demo",
+    "sequence_length_tokens": 256,
+    "selection": "five valid, distinct DNA sequences drawn only from saved held-out test indices; 3 label-0 and 2 label-1 examples when available; varied cleavage-frequency quantiles",
+    "feature_policy": "no epigenetic, genome, or expression values supplied; API zero-filled omitted modalities with explicit consent",
+    "interpretation": "exploratory missing-feature outputs; not full multimodal predictions or experimentally validated results"
+  },
+  "samples": [
+    {
+      "test_position": 491,
+      "source_row_index": 23340,
+      "sample_id": 23437,
+      "recorded_cleavage_freq": 5.7966936604435104e-21,
+      "recorded_high_eff": 0,
+      "request": {
+        "sequence": "GTGATAAGTGGAATAGCACATGTGG",
+        "mode": "missing_feature_demo",
+        "allow_missing_features": true
+      },
+      "api_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": -0.007557338103652,
+        "high_efficiency_probability": 0.0004999251686967909,
+        "high_efficiency_prediction": false,
+        "sequence_nucleotides": 25,
+        "sequence_tokens_used": 22,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      },
+      "direct_application_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": -0.007557338103652,
+        "high_efficiency_probability": 0.0004999251686967909,
+        "high_efficiency_prediction": false,
+        "sequence_nucleotides": 25,
+        "sequence_tokens_used": 22,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      }
+    },
+    {
+      "test_position": 1452,
+      "source_row_index": 15107,
+      "sample_id": 15204,
+      "recorded_cleavage_freq": 0.000112788589852,
+      "recorded_high_eff": 0,
+      "request": {
+        "sequence": "GACGCCATAAAGCATGAGACGCTGG",
+        "mode": "missing_feature_demo",
+        "allow_missing_features": true
+      },
+      "api_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": -0.00902628991752863,
+        "high_efficiency_probability": 0.0031177860219031572,
+        "high_efficiency_prediction": false,
+        "sequence_nucleotides": 25,
+        "sequence_tokens_used": 22,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      },
+      "direct_application_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": -0.00902628991752863,
+        "high_efficiency_probability": 0.0031177860219031572,
+        "high_efficiency_prediction": false,
+        "sequence_nucleotides": 25,
+        "sequence_tokens_used": 22,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      }
+    },
+    {
+      "test_position": 1409,
+      "source_row_index": 7898,
+      "sample_id": 7992,
+      "recorded_cleavage_freq": 0.001121,
+      "recorded_high_eff": 0,
+      "request": {
+        "sequence": "GCAGGAGGGGAATTTGCTCTGGG",
+        "mode": "missing_feature_demo",
+        "allow_missing_features": true
+      },
+      "api_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.03902085870504379,
+        "high_efficiency_probability": 0.8824252486228943,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      },
+      "direct_application_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.03902085870504379,
+        "high_efficiency_probability": 0.8824252486228943,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      }
+    },
+    {
+      "test_position": 873,
+      "source_row_index": 8293,
+      "sample_id": 8387,
+      "recorded_cleavage_freq": 0.003303,
+      "recorded_high_eff": 1,
+      "request": {
+        "sequence": "AATTCCAAGCAGAAGAAAAAGGA",
+        "mode": "missing_feature_demo",
+        "allow_missing_features": true
+      },
+      "api_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.06895653158426285,
+        "high_efficiency_probability": 0.9639143347740173,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      },
+      "direct_application_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.06895653158426285,
+        "high_efficiency_probability": 0.9639143347740173,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      }
+    },
+    {
+      "test_position": 1766,
+      "source_row_index": 993,
+      "sample_id": 1006,
+      "recorded_cleavage_freq": 0.041,
+      "recorded_high_eff": 1,
+      "request": {
+        "sequence": "GACCCCCCCCACCCCGCCCCCGG",
+        "mode": "missing_feature_demo",
+        "allow_missing_features": true
+      },
+      "api_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.07073652744293213,
+        "high_efficiency_probability": 0.944359540939331,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      },
+      "direct_application_response": {
+        "input_mode": "missing_feature_demo",
+        "predicted_cleavage_frequency": 0.07073652744293213,
+        "high_efficiency_probability": 0.944359540939331,
+        "high_efficiency_prediction": true,
+        "sequence_nucleotides": 23,
+        "sequence_tokens_used": 20,
+        "sequence_length_tokens": 256,
+        "model": {
+          "architecture": "MultimodalCRISPR (DNABERT-6 + epigenetic + 3D genome + single-cell)",
+          "pretrained_backbone": "zhihan1996/DNA_bert_6",
+          "checkpoint_path": "outputs/model_best.pt",
+          "checkpoint_sha256": "a12654b360e959a3ee6b9eab47f7a463152dcf813a90ec1e84b9f7f6260b4558",
+          "parameter_count": 89645378,
+          "device": "cuda",
+          "sequence_length_tokens": 256
+        },
+        "feature_availability": {
+          "sequence": {
+            "available": true,
+            "provenance": "user sequence encoded with cached DNABERT-6 tokenizer"
+          },
+          "epigenetic": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "3d_genome": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          },
+          "singlecell_expression": {
+            "available": false,
+            "provenance": "missing; zero placeholder, not measured"
+          }
+        },
+        "warning": "Incomplete-feature demonstration: missing modalities were zero-filled with explicit consent; these are not biological measurements."
+      }
+    }
+  ]
+}

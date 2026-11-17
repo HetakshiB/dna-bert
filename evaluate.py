@@ -26,8 +26,11 @@ import sys
 import json
 import math
 import time
+import hashlib
+import shutil
 import argparse
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
@@ -108,6 +111,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from model.multimodal import MultimodalCRISPR, build_model  # noqa: E402
 from model.losses import MultimodalLoss                    # noqa: E402
 from train import MultimodalCRISPRDataset                  # noqa: E402
+from train import evaluate as training_evaluate             # noqa: E402
 
 
 # ============================================================================
@@ -124,7 +128,9 @@ def load_evaluation_model(device: torch.device) -> Tuple[MultimodalCRISPR, Path]
 
     log.info("[EVAL] Loading model checkpoint from %s ...", ckpt_path)
     model = build_model(load_dnabert=True, freeze_bert=True, device=str(device))
-    ckpt = torch.load(ckpt_path, map_location=device)
+    # Checkpoints also contain optimizer/scheduler state; keep those unused tensors
+    # on host memory to avoid allocating them on the 6 GB evaluation GPU.
+    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
 
     state_dict = ckpt["model_state"] if "model_state" in ckpt else ckpt
     model.load_state_dict(state_dict)
@@ -161,18 +167,15 @@ def run_test_inference(
         reg_label   = batch["reg_label"].to(device)
         cls_label   = batch["cls_label"].to(device)
 
-        cls_emb = batch.get("cls_emb")
-        if cls_emb is not None:
-            cls_emb = cls_emb.to(device)
-
-        reg_out, cls_out, fused = model(
-            input_ids=seq_ids,
-            attention_mask=seq_mask,
-            epigen_vec=epigen_vec,
-            genome_vec=genome_vec,
-            sc_expr_vec=sc_expr_vec,
-            cls_emb=cls_emb,
-        )
+        with torch.amp.autocast(device_type="cuda" if device.type == "cuda" else "cpu",
+                                enabled=device.type == "cuda"):
+            reg_out, cls_out, fused = model(
+                input_ids=seq_ids,
+                attention_mask=seq_mask,
+                epigen_vec=epigen_vec,
+                genome_vec=genome_vec,
+                sc_expr_vec=sc_expr_vec,
+            )
 
         reg_preds = reg_out.squeeze(-1).cpu().numpy()
         cls_logits = cls_out.squeeze(-1).cpu().numpy()
@@ -214,6 +217,7 @@ def compute_metrics_and_plots(
     cls_probs = results["cls_probs"]
     cls_targets = results["cls_targets"]
 
+    # Keep these definitions in lockstep with train.evaluate().
     # 1. Regression Metrics
     rmse = float(np.sqrt(mean_squared_error(reg_targets, reg_preds)))
     try:
@@ -383,7 +387,8 @@ def compute_integrated_gradients(
     plt.close(fig)
     log.info("[ATTRIBUTION] Saved sequence attribution plot to %s", seq_plot_path)
 
-    return {"top_seq_cls_dim": int(top10_idx[0]), "top_seq_cls_attr": float(top10_vals[0])}
+    return {"top_seq_cls_dim": int(top10_idx[0]), "top_seq_cls_attr": float(top10_vals[0]),
+            "samples_used": int(len(seq_ids_t))}
 
 
 # ============================================================================
@@ -507,6 +512,8 @@ def compute_epigen_3d_shap(
     log.info("[SHAP] Saved epigenetic & 3D genome SHAP plot to %s", shap_plot_path)
 
     return {
+        "samples_used": int(len(eval_data)),
+        "background_samples": int(len(bg_data)),
         "top_epigenetic_mark": top_epigen_mark,
         "top_epigenetic_shap": float(epigen_shap[top_epigen_idx]),
         "top_3dgenome_feature": top_genome_feat,
@@ -522,8 +529,24 @@ def compute_epigen_3d_shap(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate Multimodal CRISPR Predictor.")
-    parser.add_argument("--sample", type=int, default=None, help="Evaluate on first N test samples.")
+    parser.add_argument("--sample", type=int, default=None, help="Exploratory evaluation on first N samples; does not replace canonical metrics.")
+    parser.add_argument("--sequence-length", type=int, default=256, help="Truncate seq_ids and seq_mask to this length (training default: 256).")
+    parser.add_argument("--batch-size", type=int, default=2, help="Inference batch size (RTX 4050 6 GB safe default).")
+    parser.add_argument("--output", type=Path, default=None, help="Explicit metrics JSON output path; sampled evaluations require this to target canonical metrics.")
+    parser.add_argument("--ig-samples", type=int, default=50, help="Independent sample count for integrated gradients.")
+    parser.add_argument("--shap-samples", type=int, default=100, help="Independent sample count used to prepare SHAP inputs.")
+    parser.add_argument("--compare-training-evaluator", action="store_true", help="Run train.evaluate() on the same samples and include numerical prediction/metric differences.")
+    parser.add_argument("--skip-attributions", action="store_true", help="Skip IG/SHAP plots while leaving quantitative sample count unchanged.")
     args = parser.parse_args()
+    if args.batch_size < 1 or args.sequence_length < 1:
+        parser.error("--batch-size and --sequence-length must be positive")
+    if args.sample is not None and args.sample < 1:
+        parser.error("--sample must be positive")
+    if args.ig_samples < 1 or args.shap_samples < 1:
+        parser.error("attribution sample counts must be positive")
+    metrics_path = args.output.resolve() if args.output else (
+        METRICS_JSON_PATH if args.sample is None else OUTPUT_DIR / f"metrics.exploratory-{args.sample}.json"
+    )
 
     log.info("=" * 75)
     log.info("Starting Multimodal CRISPR Predictor Full Evaluation & Attribution")
@@ -541,15 +564,52 @@ def main() -> None:
         sys.exit(1)
 
     test_ds = MultimodalCRISPRDataset(test_pt)
+    full_test_count = len(test_ds)
     if args.sample is not None:
         test_ds.data = test_ds.data[:args.sample]
         log.info("[EVAL] Subsampled test split to %d examples.", len(test_ds))
+    for item in test_ds.data:
+        item["seq_ids"] = item["seq_ids"][:args.sequence_length]
+        item["seq_mask"] = item["seq_mask"][:args.sequence_length]
+    log.info("[EVAL] Truncated seq_ids and seq_mask to %d tokens in memory.", args.sequence_length)
+    evaluation_is_full = args.sample is None and len(test_ds) == full_test_count
+    artifact_dir = OUTPUT_DIR if evaluation_is_full or metrics_path == METRICS_JSON_PATH else (
+        metrics_path.parent / f"{metrics_path.stem}_artifacts"
+    )
+    artifact_dir.mkdir(parents=True, exist_ok=True)
 
-    test_loader = DataLoader(test_ds, batch_size=32, shuffle=False)
+    test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False,
+                             pin_memory=device.type == "cuda")
 
     # 3. Run Inference & Compute Quantitative Metrics
     results = run_test_inference(model, test_loader, device)
-    metrics_summary = compute_metrics_and_plots(results, OUTPUT_DIR)
+    metrics_summary = compute_metrics_and_plots(results, artifact_dir)
+
+    if args.compare_training_evaluator:
+        training_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False,
+                                     pin_memory=device.type == "cuda")
+        train_eval = training_evaluate(
+            model, training_loader, MultimodalLoss(epoch_steps=1, pos_weight=3.0).to(device),
+            device, use_amp=device.type == "cuda", return_predictions=True,
+        )
+        train_preds = train_eval.pop("predictions")
+        comparison = {}
+        for key in ("reg_preds", "reg_targets", "cls_logits", "cls_probs", "cls_targets"):
+            left = np.asarray(results[key])
+            right = np.asarray(train_preds[key])
+            comparison[key] = {
+                "max_abs_difference": float(np.max(np.abs(left.astype(np.float64) - right.astype(np.float64)))) if left.size else 0.0,
+                "identical": bool(np.array_equal(left, right)),
+            }
+        comparison["metrics"] = {
+            "rmse_abs_difference": abs(metrics_summary["regression"]["rmse"] - train_eval["rmse"]),
+            "pearson_abs_difference": abs(metrics_summary["regression"]["pearson_r"] - train_eval["pearson_r"]),
+            "roc_auc_abs_difference": abs(metrics_summary["classification"]["auroc"] - train_eval["roc_auc"]),
+            "pr_auc_abs_difference": abs(metrics_summary["classification"]["auprc"] - train_eval["pr_auc"]),
+            "f1_abs_difference": abs(metrics_summary["classification"]["f1_at_0.5"] - train_eval["f1"]),
+        }
+        metrics_summary["training_evaluator_comparison"] = comparison
+        log.info("[COMPARE] Training evaluator numerical differences: %s", json.dumps(comparison, sort_keys=True))
 
     log.info("=" * 75)
     log.info("QUANTITATIVE TEST METRICS:")
@@ -561,20 +621,59 @@ def main() -> None:
     log.info("=" * 75)
 
     # 4. Integrated Gradients Attribution
-    seq_attr_summary = compute_integrated_gradients(model, test_loader, device, OUTPUT_DIR)
-
-    # 5. SHAP Feature Attribution
-    shap_attr_summary = compute_epigen_3d_shap(model, test_loader, device, OUTPUT_DIR)
+    seq_attr_summary = {"samples_used": 0, "skipped": True}
+    shap_attr_summary = {"samples_used": 0, "background_samples": 0, "skipped": True}
+    if not args.skip_attributions:
+        seq_attr_summary = compute_integrated_gradients(
+            model, test_loader, device, artifact_dir, num_samples=args.ig_samples)
+        shap_attr_summary = compute_epigen_3d_shap(
+            model, test_loader, device, artifact_dir, num_samples=args.shap_samples)
 
     # 6. Combine and Export Metrics JSON
-    metrics_summary["checkpoint_used"] = str(ckpt_path)
+    def sha256_file(path: Path) -> str:
+        digest = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    metrics_summary["provenance"] = {
+        "checkpoint_path": ckpt_path.resolve().relative_to(PROJECT_ROOT).as_posix(),
+        "test_tensor_path": test_pt.resolve().relative_to(PROJECT_ROOT).as_posix(),
+        "evaluated_samples": len(test_ds),
+        "full_test_samples": full_test_count,
+        "sequence_length": args.sequence_length,
+        "batch_size": args.batch_size,
+        "evaluation_timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "evaluation_scope": "full_test" if evaluation_is_full else "exploratory_sample",
+        "checkpoint_sha256": sha256_file(ckpt_path),
+        "test_tensor_sha256": sha256_file(test_pt),
+        "metric_definitions": {
+            "rmse": "sqrt(mean_squared_error(regression_targets, regression_predictions))",
+            "pearson_r": "Pearson correlation between regression targets and predictions; undefined/non-finite maps to 0.0",
+            "roc_auc": "sklearn roc_auc_score(classification_targets, sigmoid_logits); undefined maps to 0.5",
+            "pr_auc": "sklearn auc(recall, precision) from precision_recall_curve; undefined maps to 0.0",
+            "f1_at_0.5": "sklearn f1_score(targets, probabilities >= 0.5, zero_division=0)",
+        },
+        "attribution_samples": {
+            "quantitative_metrics": len(test_ds),
+            "integrated_gradients": int(seq_attr_summary.get("samples_used", 0)),
+            "shap_explained": int(shap_attr_summary.get("samples_used", 0)),
+            "shap_background": int(shap_attr_summary.get("background_samples", 0)),
+        },
+    }
     metrics_summary["test_samples"] = len(test_ds)
     metrics_summary["attribution_summary"] = {
         "sequence": seq_attr_summary,
         "epigenetic_3d": shap_attr_summary,
     }
 
-    with open(METRICS_JSON_PATH, "w", encoding="utf-8") as f:
+    metrics_path.parent.mkdir(parents=True, exist_ok=True)
+    if metrics_path == METRICS_JSON_PATH and metrics_path.exists():
+        backup = metrics_path.with_name(f"metrics.backup-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json")
+        shutil.copy2(metrics_path, backup)
+        log.info("[EVAL] Backed up previous canonical metrics to %s", backup.relative_to(PROJECT_ROOT))
+    with open(metrics_path, "w", encoding="utf-8") as f:
         json.dump(metrics_summary, f, indent=2)
 
     # 7. Comprehensive TensorBoard Logging
@@ -595,12 +694,24 @@ def main() -> None:
         log.warning("[TB] Could not log PR curve: %s", e)
 
     # (c) Log Images
-    log_image_to_tb(tb_writer, "Evaluation/Plots/01_Reliability_Diagram", OUTPUT_DIR / "reliability_diagram.png")
-    log_image_to_tb(tb_writer, "Evaluation/Plots/02_Sequence_Integrated_Gradients", OUTPUT_DIR / "attribution_seq.png")
-    log_image_to_tb(tb_writer, "Evaluation/Plots/03_Epigenetic_and_3D_Genome_SHAP", OUTPUT_DIR / "attribution_epigen_3d.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/01_Reliability_Diagram", artifact_dir / "reliability_diagram.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/02_Sequence_Integrated_Gradients", artifact_dir / "attribution_seq.png")
+    log_image_to_tb(tb_writer, "Evaluation/Plots/03_Epigenetic_and_3D_Genome_SHAP", artifact_dir / "attribution_epigen_3d.png")
     log_image_to_tb(tb_writer, "Evaluation/Plots/04_Benchmark_Comparison", OUTPUT_DIR / "benchmark_comparison.png")
 
     # (d) Log Markdown Summaries
+    sequence_attribution_note = (
+        f"Dim {seq_attr_summary['top_seq_cls_dim']} (Mean |Attribution| = {seq_attr_summary['top_seq_cls_attr']:.6f})"
+        if "top_seq_cls_dim" in seq_attr_summary else "Skipped for this evaluation run"
+    )
+    epigen_attribution_note = (
+        f"`{shap_attr_summary['top_epigenetic_mark']}` (Mean |SHAP| = {shap_attr_summary['top_epigenetic_shap']:.6f})"
+        if "top_epigenetic_mark" in shap_attr_summary else "Skipped for this evaluation run"
+    )
+    genome_attribution_note = (
+        f"`{shap_attr_summary['top_3dgenome_feature']}` (Mean |SHAP| = {shap_attr_summary['top_3dgenome_shap']:.6f})"
+        if "top_3dgenome_feature" in shap_attr_summary else "Skipped for this evaluation run"
+    )
     eval_markdown = f"""### Multimodal CRISPR Evaluation Summary
 - **Test Samples**: {len(test_ds)}
 - **Checkpoint Used**: `{ckpt_path.name}`
@@ -615,9 +726,9 @@ def main() -> None:
 | **Calibration** | Brier Score | {metrics_summary['classification']['brier_score']:.4f} |
 
 #### Key Attribution Insights
-- **Top Sequence Hidden Dimension**: Dim {seq_attr_summary['top_seq_cls_dim']} (Mean |Attribution| = {seq_attr_summary['top_seq_cls_attr']:.6f})
-- **Top Epigenetic Mark**: `{shap_attr_summary['top_epigenetic_mark']}` (Mean |SHAP| = {shap_attr_summary['top_epigenetic_shap']:.6f})
-- **Top 3D Structural Feature**: `{shap_attr_summary['top_3dgenome_feature']}` (Mean |SHAP| = {shap_attr_summary['top_3dgenome_shap']:.6f})
+- **Sequence Integrated Gradients**: {sequence_attribution_note}
+- **Epigenetic SHAP**: {epigen_attribution_note}
+- **3D genome SHAP**: {genome_attribution_note}
 """
     tb_writer.add_text("Evaluation/Summary_Report", eval_markdown)
     tb_writer.flush()
@@ -625,11 +736,11 @@ def main() -> None:
     log.info("[TB] Successfully logged metrics, PR curve, images, and text report to TensorBoard (%s)", TB_DIR)
 
     log.info("=" * 75)
-    log.info("Successfully exported evaluation summary to %s", METRICS_JSON_PATH)
+    log.info("Successfully exported evaluation summary to %s", metrics_path)
     log.info("Generated Plots:")
-    log.info("  - %s", OUTPUT_DIR / "reliability_diagram.png")
-    log.info("  - %s", OUTPUT_DIR / "attribution_seq.png")
-    log.info("  - %s", OUTPUT_DIR / "attribution_epigen_3d.png")
+    log.info("  - %s", artifact_dir / "reliability_diagram.png")
+    log.info("  - %s", artifact_dir / "attribution_seq.png")
+    log.info("  - %s", artifact_dir / "attribution_epigen_3d.png")
     log.info("=" * 75)
 
 
